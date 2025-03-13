@@ -2332,8 +2332,8 @@
       "PWLKaYPzQ4XnPp_H_n3LM": {
         "id": "PWLKaYPzQ4XnPp_H_n3LM",
         "tableId": "jRBgTBC2zjBTJiJfXkzLA",
-        "name": "createdAt",
-        "comment": "생성일",
+        "name": "updatedAt",
+        "comment": "수정일",
         "dataType": "DATETIME",
         "default": "CURRENT_TIMESTAMP",
         "options": 8,
@@ -2345,7 +2345,7 @@
           "widthDefault": 122
         },
         "meta": {
-          "updateAt": 1741779773057,
+          "updateAt": 1741861422742,
           "createAt": 1741779771918
         }
       },
@@ -4255,12 +4255,12 @@
       1741779771917,
       -1,
       {
-        "name": 1741779773056,
-        "dataType": 1741779773056,
-        "options(notNull)": 1741779773056,
-        "options(autoIncrement)": 1741779773056,
-        "default": 1741779773056,
-        "comment": 1741779773056
+        "name": 1741861422741,
+        "dataType": 1741861422741,
+        "options(notNull)": 1741861422741,
+        "options(autoIncrement)": 1741861422741,
+        "default": 1741861422741,
+        "comment": 1741861422741
       }
     ],
     "kfblnKsgUbrPRuLVsQuAt": [

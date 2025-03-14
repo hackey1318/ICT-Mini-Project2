@@ -28,7 +28,7 @@ public class Events {
     @Column(nullable = false, length = 20)
     private String contentId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 100)
     private String title;
 
     @Column(nullable = false, length = 100)
@@ -37,6 +37,17 @@ public class Events {
     private int areaCode;
 
     private int sigunguCode;
+
+    @Column(length = 1000)
+    private String tel;
+
+    private String telName;
+
+    @Column(length = 1000)
+    private String homePage;
+
+    @Column(length = 3000)
+    private String overView;
 
     @Column(nullable = false, length = 20)
     private String lat;

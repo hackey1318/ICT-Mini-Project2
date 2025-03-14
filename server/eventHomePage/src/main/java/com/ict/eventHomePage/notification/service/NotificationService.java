@@ -1,11 +1,9 @@
 package com.ict.eventHomePage.notification.service;
 
-import com.ict.eventHomePage.notification.controller.NotificationRequest;
+import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
 import com.ict.eventHomePage.notification.domain.Notification;
 
 import java.util.List;
-
-
 
 public interface NotificationService {
 

@@ -12,13 +12,13 @@ import java.util.List;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
 
-    @Query("SELECT COUNT(n.id) FROM Notification AS n WHERE n.userId = :userNo AND n.status = READABLE")
+    @Query("SELECT COUNT(n.id) FROM Notification AS n WHERE n.userNo = :userNo AND n.status = READABLE")
     int getReadableNotificationCountForUser(@Param("userNo") int userNo);
 
-    @Query("SELECT n FROM Notification AS n WHERE n.userId = :userNo AND n.status = READABLE")
+    @Query("SELECT n FROM Notification AS n WHERE n.userNo = :userNo AND n.status = READABLE")
     List<Notification> getReadableNotificationListForUser(@Param("userNo")int userNo);
 
     @Transactional
-    @Query("UPDATE Notification AS n SET n.status = READ WHERE n.userId = :userNo AND n.id in (:notificationNoList)")
+    @Query("UPDATE Notification AS n SET n.status = READ WHERE n.userNo = :userNo AND n.id in (:notificationNoList)")
     int readNotification(@Param("userNo")int userNo, @Param("notificationNoList") List<Integer> notificationNoList);
 }

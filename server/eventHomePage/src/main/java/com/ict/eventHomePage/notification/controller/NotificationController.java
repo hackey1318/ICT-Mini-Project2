@@ -1,5 +1,6 @@
 package com.ict.eventHomePage.notification.controller;
 
+import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
 import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.service.NotificationService;
 import jakarta.servlet.http.HttpSession;

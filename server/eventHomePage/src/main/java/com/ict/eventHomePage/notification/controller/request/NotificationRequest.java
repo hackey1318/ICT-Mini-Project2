@@ -1,4 +1,4 @@
-package com.ict.eventHomePage.notification.controller;
+package com.ict.eventHomePage.notification.controller.request;
 
 import com.ict.eventHomePage.notification.domain.constant.NotificationType;
 import lombok.AllArgsConstructor;

@@ -20,12 +20,12 @@ public class EventImages {
 
     private int eventNo;
 
+    @Column(nullable = false, length = 100)
+    private String imgName;
+
     @Column(nullable = false, length =200)
     private String originImgurl;
 
     @Column(nullable = false, length = 200)
     private String smallImage;
-
-    @Column(nullable = false, length = 30)
-    private String serial;
 }

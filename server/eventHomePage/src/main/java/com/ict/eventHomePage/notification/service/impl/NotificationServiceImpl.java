@@ -1,6 +1,6 @@
 package com.ict.eventHomePage.notification.service.impl;
 
-import com.ict.eventHomePage.notification.controller.NotificationRequest;
+import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
 import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
 import com.ict.eventHomePage.notification.repository.NotificationRepository;
@@ -45,7 +45,7 @@ public class NotificationServiceImpl implements NotificationService {
         List<Notification> notifications = new ArrayList<>();
         for (Integer userId : request.getUserIdList()) {
             notifications.add(Notification.builder()
-                    .userId(userId)
+                    .userNo(userId)
                     .content(request.getMessage())
                     .status(NotificationStatus.READABLE).build());
         }

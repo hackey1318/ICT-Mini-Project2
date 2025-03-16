@@ -133,7 +133,7 @@ public class PublicDataInit {
 //
 //            // saveAll
 //            List<Events> saveEventList = eventsRepository.saveAll(events);
-////            getImage(saveEventList);
+//            getImage(saveEventList);
 //            getOverView(saveEventList);
 //
 //        } else {
@@ -257,7 +257,16 @@ public class PublicDataInit {
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
 //        List<EventImages> eventImages = new ArrayList<>();
+        int i = 0;
         for (Events event : events) {
+            if (i == 50) {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+
+                }
+                i = 0;
+            }
 
             URI overViewUrl = makeUrl(overviewPath, false, "&contentId=" + event.getContentId(), null, null, "&numOfRows=1000", "&firstImageYN=Y", null, "&defaultYN=Y", "&addrinfoYN=Y", "&overviewYN=Y");
 
@@ -304,6 +313,7 @@ public class PublicDataInit {
             } else {
                 System.out.println("HTTP 요청 실패, 응답 코드: " + response.getStatusCodeValue());
             }
+            i++;
         }
         eventsRepository.saveAllAndFlush(events);
 //        eventImagesRepository.saveAll(eventImages);
@@ -320,8 +330,16 @@ public class PublicDataInit {
 //        headers.set("User-Agent", "Mozilla/5.0");
 //        HttpEntity<String> entity = new HttpEntity<>(headers);
 //
+//        int j = 0;
 //        for (Events event : events) {
+//            if (j == 50) {
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException ex) {
 //
+//                }
+//                j = 0;
+//            }
 //            URI imageUrl = makeUrl(iamgePath, false, "&contentId=" + event.getContentId(), null, null, "&numOfRows=1000", "&imageYN=Y", "&subImageYN=Y", null, null, null);
 //
 //            ResponseEntity<String> response = restTemplate.exchange(imageUrl, HttpMethod.GET, entity, String.class);
@@ -353,6 +371,8 @@ public class PublicDataInit {
 //            } else {
 //                System.out.println("HTTP 요청 실패, 응답 코드: " + response.getStatusCodeValue());
 //            }
+//
+//            j++;
 //        }
 //    }
 }

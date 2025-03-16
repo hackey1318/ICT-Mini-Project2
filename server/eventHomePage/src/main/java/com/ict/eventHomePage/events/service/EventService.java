@@ -20,7 +20,7 @@ public class EventService {
     }
 
     public Events getEventByNo(int no) {
-        return eventsRepository.findById((long) no).orElse(null);
+        return eventsRepository.findById(no).orElse(null);
     }
 
     public List<Events> searchEvents(String searchTerm, LocalDateTime selectedDate) {

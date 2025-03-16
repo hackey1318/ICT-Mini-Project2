@@ -29,7 +29,7 @@ public class Users {
     @Column(nullable = false, length = 50)
     private String userId;
 
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 60)
     private String pw;
 
     @Enumerated(value = EnumType.STRING)

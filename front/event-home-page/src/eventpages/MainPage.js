@@ -1,55 +1,31 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './../eventCss/MainPageStyle.css';
-import i01 from '../img/01.jpg';
-import i02 from '../img/02.jpg';
-import i03 from '../img/03.jpg';
-import i04 from '../img/04.jpg';
+import moment from 'moment';
+import axios from 'axios'; // Import Axios
 
 function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") == "Y"); // 로그인 상태 관리
+    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") === "Y");
+    const [imageData, setImageData] = useState([]); // 이벤트 데이터
     const [filteredImageData, setFilteredImageData] = useState([]);
-    const imageData = [
-        {
-            id: 1,
-            title: '가나다 1',
-            startDate: '2024-01-01', // 시작 날짜 추가
-            endDate: '2024-01-05', // 종료 날짜 추가
-            location: '서울',
-            subtitle: '부제목 1',
-            imageUrl: i01,
-        },
-        {
-            id: 2,
-            title: '다라마 2',
-            startDate: '2024-02-10', // 시작 날짜 추가
-            endDate: '2024-02-15', // 종료 날짜 추가
-            location: '부산',
-            subtitle: '부제목 2',
-            imageUrl: i02,
-        },
-        {
-            id: 3,
-            title: '바사아 3',
-            startDate: '2024-03-20', // 시작 날짜 추가
-            endDate: '2024-03-25', // 종료 날짜 추가
-            location: '대구',
-            subtitle: '부제목 3',
-            imageUrl: i03,
-        },
-        {
-            id: 4,
-            title: '아자차 4',
-            startDate: '2024-04-01', // 시작 날짜 추가
-            endDate: '2024-04-05', // 종료 날짜 추가
-            location: '광주',
-            subtitle: '부제목 4',
-            imageUrl: i04,
-        },
-    ];
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await axios.get('/api/events'); // Replace with your actual API endpoint
+                setImageData(response.data);
+                setFilteredImageData(response.data); // Initialize filtered data with all events
+            } catch (error) {
+                console.error('Error fetching events:', error);
+            }
+        };
+
+        fetchEvents(); // Fetch events when component mounts
+    }, []);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
@@ -60,16 +36,33 @@ function MainPage() {
     }, [imageData.length]);
 
     useEffect(() => {
-        // sessionStorage의 변경을 감지하여 로그인 상태 업데이트
-        setIsLoggedIn(sessionStorage.getItem("logStatus") == "Y");
+        setIsLoggedIn(sessionStorage.getItem("logStatus") === "Y");
     }, []);
+
     useEffect(() => {
-        // 검색어 변경 시 필터링
-        const filtered = imageData.filter(item =>
-            item.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-        setFilteredImageData(filtered);
-    }, [searchTerm, imageData]);
+        const fetchFilteredEvents = async () => {
+            try {
+                let apiUrl = `/api/events/search?`;
+                if (searchTerm) {
+                    apiUrl += `searchTerm=${searchTerm}&`;
+                }
+                if (currentDate) {
+                    apiUrl += `selectedDate=${moment(currentDate).format('YYYY-MM-DDTHH:mm:ss')}&`;
+                }
+                // Remove the trailing "&" if it exists
+                apiUrl = apiUrl.replace(/&$/, '');
+
+                const response = await axios.get(apiUrl);
+                setFilteredImageData(response.data);
+            } catch (error) {
+                console.error('Error fetching filtered events:', error);
+                setFilteredImageData([]); // Ensure filtered data is empty in case of error
+            }
+        };
+
+        fetchFilteredEvents();
+    }, [searchTerm, currentDate]);
+
 
     const goToPrevSlide = () => {
         setCurrentSlide((prevSlide) => (prevSlide - 1 + imageData.length) % imageData.length);
@@ -78,6 +71,7 @@ function MainPage() {
     const goToNextSlide = () => {
         setCurrentSlide((prevSlide) => (prevSlide + 1) % imageData.length);
     };
+
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
     };
@@ -85,11 +79,19 @@ function MainPage() {
     const DatePicker = () => {
         const [date, setDate] = useState(new Date());
 
+        const handleDateChange = (date) => {
+            setDate(date);
+            setCurrentDate(date);
+        };
+
         return (
             <div className="date-picker">
                 <p>{date.toDateString()}</p>
                 <Calendar
-                    onChange={setDate}
+                    onChange={(date) => {
+                        setDate(date);
+                        setCurrentDate(date);
+                    }}
                     value={date}
                     locale="ko-KR"
                     calendarType="hebrew"
@@ -117,11 +119,15 @@ function MainPage() {
             <header className="main-header">
                 <div className="top-banner">
                     <div className="banner-content">
-                        <div className="banner-text">
-                            <h2>{imageData[currentSlide].title}</h2>
-                            <p>{imageData[currentSlide].subtitle}</p>
-                        </div>
-                        <img src={imageData[currentSlide].imageUrl} alt={imageData[currentSlide].title} />
+                        {imageData.length > 0 && ( // Check if imageData is not empty before accessing elements
+                            <>
+                                <div className="banner-text">
+                                    <h2>{imageData[currentSlide % imageData.length].title}</h2>
+                                </div>
+                                {/* 이미지를 어떻게 처리할지에 따라 아래 로직을 변경해야 합니다. */}
+                                {/* <img src={imageData[currentSlide % imageData.length].imageUrl} alt={imageData[currentSlide % imageData.length].title} /> */}
+                            </>
+                        )}
                     </div>
 
                     {/* 페이지네이션 */}
@@ -166,24 +172,17 @@ function MainPage() {
                     {/* 검색 결과에 따라 이미지 목록 렌더링 */}
                     {filteredImageData.length > 0 ? (
                         filteredImageData.map((image) => (
-                            <div key={image.id} className="image-item">
-                                <img src={image.imageUrl} alt={image.title} />
+                            <div key={image.no} className="image-item">
+                                {/* 이미지를 어떻게 처리할지에 따라 아래 로직을 변경해야 합니다. */}
+                                {/* <img src={image.imageUrl} alt={image.title} /> */}
                                 <h3>{image.title}</h3>
-                                <p>{image.startDate} ~ {image.endDate}</p>
-                                <p>행사장소: {image.location}</p>
+                                <p>{moment(image.startDate).format('YYYY-MM-DD')} ~ {moment(image.endDate).format('YYYY-MM-DD')}</p>
+                                <p>행사장소: {image.addr}</p>
                                 <button className="viewButton">자세히 보기</button>
                             </div>
                         ))
                     ) : (
-                        imageData.map((image) => (
-                            <div key={image.id} className="image-item">
-                                <img src={image.imageUrl} alt={image.title} />
-                                <h3>{image.title}</h3>
-                                <p>{image.startDate} ~ {image.endDate}</p>
-                                <p>행사장소: {image.location}</p>
-                                <button className="viewButton">자세히 보기</button>
-                            </div>
-                        ))
+                        <div>선택된 날짜에 해당하는 이벤트가 없습니다.</div>
                     )}
                 </div>
             </div>

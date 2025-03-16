@@ -50,3 +50,4 @@ public class NotificationController {
         return notificationService.generateNotification(request);
     }
 }
+

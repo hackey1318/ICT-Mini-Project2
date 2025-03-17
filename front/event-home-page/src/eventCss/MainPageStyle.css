@@ -1,0 +1,185 @@
+/* MainPageStyle.css */
+.main-page {
+    font-family: Arial, sans-serif;
+}
+
+.main-header {
+    background-color: #eee;
+    padding: 10px;
+    text-align: right;
+    position: relative;
+}
+
+.main-header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.main-header li {
+    display: inline;
+    margin-left: 10px;
+}
+
+/* Header Menu 스타일 */
+.header-menu {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.header-menu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex; /* 가로로 메뉴 배치 */
+}
+
+.header-menu li {
+    margin-left: 10px;
+    cursor: pointer; /* 마우스 오버 시 커서 변경 */
+}
+
+.top-banner {
+    height: 29vh; 
+    position: relative;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.banner-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.banner-text {
+    width: 50%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.banner-text h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+}
+
+.banner-text p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.banner-text a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.banner-content img {
+    width: 50%;
+    height: 95%;
+    object-fit: cover;
+}
+
+.pagination {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.pagination span {
+    margin-right: 10px;
+}
+
+.pagination button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar {
+    margin-left: 10%;
+    align-items: center;
+    width: 80%;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input[type="text"] {
+    flex-grow: 1;
+    margin: 0 10px;
+    padding: 5px;
+}
+
+.content-area {
+    display: flex;
+}
+
+.date-picker-container {
+    width: 22%;
+    padding: 10px;
+}
+
+.date-picker {
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.image-grid {
+    width: 74%;
+    padding: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.image-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.image-item img {
+    width: 100%;
+    height: auto;
+}
+
+.viewButton {
+    background-color: #92AEDB;
+}
+
+.date-picker {
+    padding: 10px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 300px;
+    text-align: center;
+}
+
+.date-picker-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.custom-calendar .sunday {
+    color: red !important;
+}
+
+.custom-calendar .saturday {
+    color: red !important;
+}
+
+.custom-calendar .friday {
+    color: black !important;
+}

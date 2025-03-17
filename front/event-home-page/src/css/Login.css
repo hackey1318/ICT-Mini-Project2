@@ -1,0 +1,68 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang&display=swap');
+
+.login-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #F2EEE5, #E5C1C5, #C3E2DD, #6ECEDA);
+}
+
+.login-container * {
+    font-family: 'Gowun Batang', serif;  /* 모든 자식 요소에 글꼴 상속 */
+}
+
+.login-container h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.login-style{
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 1px 1px 1px 1px #ddd;
+    text-align: center;
+    width: 300px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.input-container label {
+    width: 35%;  /* 레이블의 너비를 지정하여 균형을 맞춤 */
+    text-align: left;  /* 레이블을 왼쪽 정렬 */
+}
+
+.input-style {
+    width: 100%; /* 입력창의 너비를 조정 */
+    height: 8px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 1px 1px 1px 1px #ddd;
+}
+
+.login-btn {
+    width: 300px;
+    padding: 10px;
+    background: #6ECEDA;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px 1px #ddd;
+}
+
+.login-btn:hover {
+    background: #51c8d8;
+}
+
+.link-style{
+    margin-top: 8px;
+}

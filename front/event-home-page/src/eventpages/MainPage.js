@@ -107,7 +107,6 @@ function MainPage() {
                     }
                     formatDay={(locale, date) => `${date.getDate()}`}
                     showNeighboringMonth={false}
-                    tileDisabled={({ date }) => date.getMonth() !== new Date().getMonth()}
                     className="custom-calendar"
                     tileClassName={({ date }) => {
                         const day = date.getDay();
@@ -133,21 +132,24 @@ function MainPage() {
         <div className="main-page">
             <header className="main-header">
                 <div className="top-banner">
-                    <div className="banner-content">
-                        {imageData.length > 0 && (
-                            <>
-                                <img
-                                    src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정
-                                    alt={imageData[currentSlide % imageData.length].title}
-                                    className="banner-image"
-                                />
-                                <div className="banner-text">
-                                    <h2>{imageData[currentSlide % imageData.length].title}</h2>
-                                </div>
-
-                            </>
-                        )}
-                    </div>
+                <div className="banner-content">
+                            {imageData.length > 0 ? (
+                                <>
+                                    <img
+                                        src={imageData[currentSlide % imageData.length]?.img_list && imageData[currentSlide % imageData.length]?.img_list[0]?.originImgurl
+                                            ? imageData[currentSlide % imageData.length].img_list[0].originImgurl
+                                            : ''}
+                                        alt={imageData[currentSlide % imageData.length].title}
+                                        className="banner-image"
+                                    />
+                                    <div className="banner-text">
+                                        <h2>{imageData[currentSlide % imageData.length].title}</h2>
+                                    </div>
+                                </>
+                            ) : (
+                                <div>표시할 이벤트가 없습니다.</div>
+                            )}
+                        </div>
 
                     {/* 페이지네이션 */}
                     <div className="pagination">

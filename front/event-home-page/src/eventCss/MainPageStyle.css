@@ -40,7 +40,7 @@
 }
 
 .top-banner {
-    height: 29vh; 
+    height: 29vh;
     position: relative;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -50,12 +50,14 @@
     display: flex;
     align-items: center;
     height: 100%;
+    flex-direction: row-reverse; /* 이미지와 텍스트 위치를 바꿈 */
 }
 
 .banner-text {
     width: 50%;
     padding: 20px;
     box-sizing: border-box;
+    text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
 .banner-text h2 {

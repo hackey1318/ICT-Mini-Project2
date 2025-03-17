@@ -16,7 +16,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/eventView" element={<EventView/>}></Route>
-        <Route path='/pages/reply' element={<Reply/>}></Route>
+        <Route path="/pages/reply" element={<Reply/>}></Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Admin />}></Route>

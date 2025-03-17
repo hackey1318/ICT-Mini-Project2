@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Table
+@Table(name = "event_images")
 @Entity
 @Builder
 @NoArgsConstructor
@@ -18,14 +18,15 @@ public class EventImages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int no;
 
+    @Column(name = "event_no")
     private int eventNo;
 
     @Column(nullable = false, length = 100)
     private String imgName;
 
-    @Column(nullable = false, length =200)
+    @Column(nullable = false, length =200 , name="origin_imgurl")
     private String originImgurl;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 200 , name="small_image")
     private String smallImage;
 }

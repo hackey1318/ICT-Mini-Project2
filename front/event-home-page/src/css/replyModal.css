@@ -1,0 +1,91 @@
+.container {
+    width: 100%; 
+    margin: 0 5%;
+}
+
+.writeForm {
+    width: 70%;
+    height: 340px;
+    margin: 0 auto;
+    position: absolute;
+    bottom: 5%;
+    left: 10%;
+    border: 2px solid rgb(187, 187, 187);
+    border-radius: 20px;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);;
+}
+
+.writeForm>form>input[type=text], .writeForm>form>textarea {
+    display: block;  
+     
+}
+
+.writeForm>form>input[type=text]:first-child {
+    width: 85%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 1.1em;
+    margin: 15px auto 0;  
+    border: 0;
+}
+
+textarea {
+    width: 85%;
+    height: 150px;
+    border: 1px solid rgb(170, 170, 170);
+    border-radius: 20px;
+    margin: 0 auto;
+    padding: 15px;
+    resize: none;
+}
+
+.writeForm>form>input[type=submit], .writeForm>form>input[type=button] {
+    width: 70px;
+    height: 35px;
+    position: relative;
+    bottom: 15px;
+    margin-right: 20px;
+    border: 0;
+    border-radius: 15px;
+    background-color: #92AEDB;
+    color: #ffffff;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+#addFile {
+    width: 40px;
+    position: absolute;
+    left: 15px;
+    bottom: 10px;
+}
+
+.imgList {
+    display: flex;
+    position: absolute;
+    bottom:8px;
+    left: 60px;
+    
+}
+
+.imgList>div {
+    margin: 0 7px;
+    width: 40px;
+    height: 40px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.imgList>div:hover {
+    transform: rotate(360deg);
+    transition: all 500ms;
+}
+
+@media (max-width: 740px) {
+    .writeForm {
+        min-width: 520px;
+    }
+}
+
+

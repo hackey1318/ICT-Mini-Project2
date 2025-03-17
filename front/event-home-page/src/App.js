@@ -9,9 +9,7 @@ import CreateBanner from './pages/admin/CreateBanner';
 import MainPage from './pages/MainPage';
 import Mainpage from './eventpages/MainPage';
 import EventView from './eventpages/EventView';
-
-
-
+import Reply from './pages/Reply';
 
 function App() {
   return (
@@ -19,6 +17,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/eventView" element={<EventView/>}></Route>
+        <Route path='/pages/reply' element={<Reply/>}></Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Admin />}></Route>

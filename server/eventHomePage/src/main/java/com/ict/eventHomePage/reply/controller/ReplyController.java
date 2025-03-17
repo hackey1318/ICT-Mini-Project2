@@ -1,12 +1,11 @@
 package com.ict.eventHomePage.reply.controller;
 
 import com.ict.eventHomePage.domain.Replies;
+import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 import com.ict.eventHomePage.reply.service.ReplyService;
+import com.ict.eventHomePage.reply.service.impl.ReplyServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +15,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReplyController {
 
-    private final ReplyService service;
+    private final ReplyServiceImpl replyService;
 
     @PostMapping("/addReply")
-    public List<Replies> addReply(@RequestBody Replies repl) {
+    public List<Replies> addReply(@RequestBody ReplyRequest request) {
 
-        //List<Replies> rep = new ArrayList(repl);
-        return null;
+        return replyService.addReply(request.getUserNo());
     }
 }
 

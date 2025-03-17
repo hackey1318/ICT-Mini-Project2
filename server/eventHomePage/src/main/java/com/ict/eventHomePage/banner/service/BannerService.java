@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface BannerService {
 
-    List<Banners> searchEvents(String name, String eventDate, String eventCity, String eventGu);
+//    List<Banners> searchEvents(String name, String eventDate, String eventCity, String eventGu);
 }

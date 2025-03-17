@@ -6,8 +6,8 @@ import MemberList from './pages/admin/MemberList';
 import WithdrawalList from './pages/admin/WithdrawalList';
 import BannerList from './pages/admin/BannerList';
 import CreateBanner from './pages/admin/CreateBanner';
-import MainPage from './pages/MainPage';
-import Mainpage from './eventpages/MainPage';
+// import MainPage from './pages/MainPage';
+import MainPage from './eventpages/MainPage';
 import EventView from './eventpages/EventView';
 import Reply from './pages/Reply';
 

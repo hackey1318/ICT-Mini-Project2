@@ -37,7 +37,7 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Users idFind(Users usersVO) {
-        return usersRepository.findByNameAndEmail(usersVO.getName(), usersVO.getEmail());
+        return usersRepository.findByNameAndEmail(usersVO.getName(), usersVO.getEmail()).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
     }
 
 

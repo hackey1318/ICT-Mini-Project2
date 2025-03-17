@@ -16,7 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +50,7 @@ public class SecurityConfig {
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/auth/login"),
                 mvc.pattern("/api/**"),
+                mvc.pattern("/member/**"),
                 mvc.pattern("/auth/sign-up"),
                 mvc.pattern("/auth/token-refresh"),
                 mvc.pattern("/swagger-ui/index.html")
@@ -54,6 +58,15 @@ public class SecurityConfig {
 
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(request -> {
+                    CorsConfiguration config = new CorsConfiguration();
+                    config.setAllowedOrigins(List.of("http://localhost:3000"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedHeaders(List.of("*"));
+                    config.setExposedHeaders(List.of("accessToken")); // accessToken 노출
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

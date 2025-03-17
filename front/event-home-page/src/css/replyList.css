@@ -1,0 +1,43 @@
+.replies {
+    width: 100%;
+}
+
+#openWriteForm {
+    width: 90px;
+    height: 35px;
+    margin-right: 20px;
+    border: 0;
+    border-radius: 15px;
+    background-color: #D7E6FF;
+    color: #507ABF;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+.replyList {
+    overflow: auto;
+}
+
+.replyList>ul {
+    padding: 0;
+    margin: 15px 0;
+}
+
+.replyList>ul>li {
+    float: left;
+    list-style-type: none;
+}
+
+.replyList>ul>li:first-child {
+    width: 5%;
+}
+
+.replyList>ul>li:nth-of-type(2) {
+    width: 60%;
+}
+
+.editor {
+    cursor: pointer;
+}
+
+

@@ -1,0 +1,43 @@
+ul, li{
+    margin:0;
+    padding:0;
+    list-style-type:none;
+}
+
+section {
+	display: grid;
+	grid-template-columns: auto auto;
+	gap: 10px;
+	padding-left: 10px;
+	align-items: center;
+}
+
+section .left ul {
+	list-style-type: none;
+	padding-left: 120px;
+	margin: 0;
+}
+
+section .right ul {
+	list-style-type: none;
+	padding-right: 200px; 
+	margin: 0;
+}
+
+section .right input {
+	width : 300px;
+}
+
+section .left ul li, section .right ul li {
+	display: flex;
+	align-items: center;
+	height: 50px;
+	font-size: 15px;
+}
+
+.button-container {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 20px;
+	gap: 10px;
+}

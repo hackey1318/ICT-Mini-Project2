@@ -76,9 +76,9 @@ function WithdrawalList() {
             <div style={{ display: "flex" }}>
                 <div className="left" style={{ backgroundColor: "#E7F0FF", width: "250px", height: "200px" }}>
                     <ul>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/memberList">회원 정보 조회</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/withdrawalList">회원 탈퇴 명단</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/bannerList">배너관리</StyledLink></li>
+                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/memberList">회원 정보 조회</StyledLink></li>
+                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/withdrawalList">회원 탈퇴 명단</StyledLink></li>
+                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/bannerList">배너관리</StyledLink></li>
                     </ul>
                 </div>
 

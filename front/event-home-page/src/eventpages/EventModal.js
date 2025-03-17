@@ -37,7 +37,10 @@ function EventModal({ event, onClose }) {
     // EventView로 이동하면서 event 객체를 state로 넘겨줌
     navigate('/eventview', { state: { event: event } });
   };
-
+  //br태그제거
+  const removeBrTags = (text) => {
+    return text.replace(/<br\s*\/?>/gi, '');
+  };
   return (
     <div className="modal-overlay">
       <div className="modal-contents">
@@ -61,7 +64,7 @@ function EventModal({ event, onClose }) {
           </p>
           <div className="overview-container">
             <div className={`overview ${isExpanded ? 'expanded' : ''}`} ref={textRef}>
-              {event.overView}
+            {removeBrTags(event.overView)}
             </div>
             {isOverflowing && (
               <button onClick={toggleExpand} className="arrow-button">

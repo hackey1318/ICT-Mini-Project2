@@ -28,6 +28,9 @@ public class Banners {
     @Column(nullable = false, length = 16)
     private String fileId;
 
+    @Column(name = "event_no")
+    private int eventNo;
+
     @Column(nullable = false, length = 8)
     private String color;
 

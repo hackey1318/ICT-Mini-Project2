@@ -2,6 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import './../eventCss/EventView.css';
+import '../css/replyList.css';
+import ReviewEdit from '../js/event/ReviewEdit'
+import ReviewDelete from '../js/event/ReviewDelete';
+import ReviewWrite from '../js/event/ReviewWrite';
 
 function EventView() {
   const location = useLocation();
@@ -67,8 +71,34 @@ function EventView() {
         </div>
 
         <div id="kakao-map" ref={mapRef}></div>
-      </div>
     </div>
+
+    <div className="replies">
+          <p style={{fontSize: '1.8em'}}>Review</p>
+          <div>  
+              {
+                  //const list = map() => 
+                  <div className='replyList'>
+                      <ul>
+                            <li id='username'></li>
+                            <li id='title'>제목</li>
+
+                            {
+                                <div>
+                                    <label className='editor' onClick={ReviewEdit} style={{marginRight: '20px'}}>수정</label>
+                                    <label className='editor' onClick={ReviewDelete}>삭제</label>
+                                </div>
+                            }
+                        </ul>
+                  </div>
+                }
+          </div>
+
+          <div>
+              <input type='button' id='openWriteForm' value='후기쓰기' onClick={ReviewWrite}/>
+          </div>
+    </div>
+  </div>
   );
 }
 

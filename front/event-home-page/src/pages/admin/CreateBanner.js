@@ -41,10 +41,10 @@ function CreateBanner() {
     const [searchResults, setSearchResults] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [searchParams, setSearchParams] = useState({
-        name: '',
-        eventdate: '',
-        eventcity: '',
-        eventgu: ''
+        title: '',
+        startDate: '',
+        addr: '',
+        areaCode: ''
     });
 
     const handleImageChange = (e) => {
@@ -56,8 +56,9 @@ function CreateBanner() {
     };
 
     const handleSearchClickModal = async () => {
+        console.log("검색어=>", searchParams);
         try {
-            const response = await fetch('/banner/searchEvents', {
+            const response = await fetch('http://localhost:9988/banner/searchEvents', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,10 +97,10 @@ function CreateBanner() {
 
     const handleReset = () => {
         setSearchParams({
-            name: '',
-            eventdate: '',
-            eventcity: '',
-            eventgu: ''
+            title: '',
+            startDate: '',
+            addr: '',
+            areaCode: ''
         });
     };
 
@@ -181,20 +182,20 @@ function CreateBanner() {
                                                 <ul>
                                                     <li>이벤트이름</li>
                                                     <li>시작 날짜</li>
-                                                    <li>지역(시/도)</li>
-                                                    <li>지역(구/군)</li>
+                                                    <li>주소</li>
+                                                    <li>지역코드</li>
                                                 </ul>
                                             </div>
                                             <div className="right">
                                                 <ul>
-                                                    <li><input type="text" name="name" value={searchParams.name} onChange={handleSearchInputChange}
+                                                    <li><input type="text" name="title" value={searchParams.title} onChange={handleSearchInputChange}
                                                         placeholder="잠실 벛꽃 축제" /></li>
-                                                    <li><input type="text" name="eventdate" value={searchParams.eventdate} onChange={handleSearchInputChange}
+                                                    <li><input type="text" name="startDate" value={searchParams.startDate} onChange={handleSearchInputChange}
                                                         placeholder="2025-04-01" /></li>
-                                                    <li><input type="text" name="eventcity" value={searchParams.eventcity} onChange={handleSearchInputChange}
+                                                    <li><input type="text" name="addr" value={searchParams.addr} onChange={handleSearchInputChange}
                                                         placeholder="서울시" /></li>
-                                                    <li><input type="text" name="eventgu" value={searchParams.eventgu} onChange={handleSearchInputChange}
-                                                        placeholder="성동구" /></li>
+                                                    <li><input type="text" name="areaCode" value={searchParams.areaCode} onChange={handleSearchInputChange}
+                                                        placeholder="1" /></li>
                                                 </ul>
                                             </div>
                                         </section>
@@ -203,24 +204,21 @@ function CreateBanner() {
                                             <button type="button" className="btn btn-warning" onClick={handleReset}>취소</button>
                                         </div>
                                     </form>
-                                    {searchResults.length > 0 && (
-                                        <div style={{ marginTop: '20px' }}>
-                                            <h3>검색 결과</h3>
-                                            <ul>
-                                                {searchResults.map(event => (
-                                                    <li key={event.no}>
-                                                        {event.title}
-                                                        {event.eventdate}
-                                                        {event.name}
 
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </div>
-                                    )}
-                                    {searchResults.length === 0 && (
+                                    {searchResults.length > 0 ? (
+                                        <ul>
+                                            {searchResults.map((event) => (
+                                                <li key={event.no} onClick={() => handleSelectEvent(event)}>
+                                                    {event.title} - {event.startDate} - {event.addr}
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    ) : (
                                         <p>검색 결과가 없습니다.</p>
                                     )}
+
+                                    <input type="text" name="eventInfo" readOnly
+                                        value={selectedEvent ? selectedEvent.title : ''} />
                                 </div>
                             </div>
                         </div>
@@ -230,5 +228,4 @@ function CreateBanner() {
         </div>
     );
 }
-
 export default CreateBanner;

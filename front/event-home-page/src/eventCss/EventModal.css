@@ -1,0 +1,100 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 600px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-body {
+    text-align: left;
+}
+
+.modal-image {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.modal-body p {
+    margin-bottom: 0.5em; /* 간격 조정 */
+  }
+  
+  .overview {
+    max-height: 4.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: pre-line;
+    line-height: 1.5em;
+  }
+  
+  .overview.expanded {
+    max-height: none;
+  }
+  .overview-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로 정렬 */
+  }
+  .overview-container button {
+    margin-top: 0.5em; 
+  }
+  .arrow-button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-top: 0.5em;
+    cursor: pointer;
+    font-size: 1.5em; 
+    color: #333; 
+}
+ 
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 10px;
+  }
+  
+  
+  .view-details-button {
+    background-color: #92AEDB; 
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .view-details-button:hover {
+    background-color: #3e8e41;
+  }

@@ -46,6 +46,7 @@ public class SecurityConfig {
         // white list (Spring Security 체크 제외 목록)
         MvcRequestMatcher[] permitAllWhiteList = {
                 mvc.pattern("/auth/login"),
+                mvc.pattern("/api/**"),
                 mvc.pattern("/auth/sign-up"),
                 mvc.pattern("/auth/token-refresh"),
                 mvc.pattern("/swagger-ui/index.html")

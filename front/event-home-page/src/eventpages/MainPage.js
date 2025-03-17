@@ -3,28 +3,31 @@ import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './../eventCss/MainPageStyle.css';
 import moment from 'moment';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
+import EventModal from './EventModal'; // 모달 컴포넌트 import
 
 function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") === "Y");
-    const [imageData, setImageData] = useState([]); // 이벤트 데이터
+    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") == "Y");
+    const [imageData, setImageData] = useState([]);
     const [filteredImageData, setFilteredImageData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedEvent, setSelectedEvent] = useState(null); // 선택된 이벤트 상태
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('/api/events'); // Replace with your actual API endpoint
+                //const response = await axios.get('http://localhost:9988/api/events'); // 전체 이벤트 가져오기
+                const response = await axios.get('http://localhost:9988/api/events/ongoing'); // 진행 중인 이벤트만 가져오기
                 setImageData(response.data);
-                setFilteredImageData(response.data); // Initialize filtered data with all events
+                setFilteredImageData(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
             }
         };
 
-        fetchEvents(); // Fetch events when component mounts
+        fetchEvents();
     }, []);
 
     useEffect(() => {
@@ -36,7 +39,7 @@ function MainPage() {
     }, [imageData.length]);
 
     useEffect(() => {
-        setIsLoggedIn(sessionStorage.getItem("logStatus") === "Y");
+        setIsLoggedIn(sessionStorage.getItem("logStatus") == "Y");
     }, []);
 
     useEffect(() => {
@@ -49,20 +52,19 @@ function MainPage() {
                 if (currentDate) {
                     apiUrl += `selectedDate=${moment(currentDate).format('YYYY-MM-DDTHH:mm:ss')}&`;
                 }
-                // Remove the trailing "&" if it exists
+
                 apiUrl = apiUrl.replace(/&$/, '');
 
-                const response = await axios.get(apiUrl);
+                const response = await axios.get('http://localhost:9988' + apiUrl);
                 setFilteredImageData(response.data);
             } catch (error) {
                 console.error('Error fetching filtered events:', error);
-                setFilteredImageData([]); // Ensure filtered data is empty in case of error
+                setFilteredImageData([]);
             }
         };
 
         fetchFilteredEvents();
     }, [searchTerm, currentDate]);
-
 
     const goToPrevSlide = () => {
         setCurrentSlide((prevSlide) => (prevSlide - 1 + imageData.length) % imageData.length);
@@ -76,22 +78,27 @@ function MainPage() {
         setSearchTerm(e.target.value);
     };
 
-    const DatePicker = () => {
-        const [date, setDate] = useState(new Date());
+    const DatePicker = ({ currentDate, setCurrentDate }) => {
+        const [date, setDate] = useState(currentDate);
+
+        useEffect(() => {
+            setDate(currentDate);
+        }, [currentDate]);
 
         const handleDateChange = (date) => {
             setDate(date);
             setCurrentDate(date);
         };
 
+        const formatDate = (date) => {
+            return moment(date).format('YYYY년 MM월 DD일');
+        };
+
         return (
             <div className="date-picker">
-                <p>{date.toDateString()}</p>
+                <p>{formatDate(date)}</p>
                 <Calendar
-                    onChange={(date) => {
-                        setDate(date);
-                        setCurrentDate(date);
-                    }}
+                    onChange={handleDateChange}
                     value={date}
                     locale="ko-KR"
                     calendarType="hebrew"
@@ -114,18 +121,30 @@ function MainPage() {
         );
     };
 
+    const openModal = (event) => {
+        setSelectedEvent(event);
+    };
+
+    const closeModal = () => {
+        setSelectedEvent(null);
+    };
+
     return (
         <div className="main-page">
             <header className="main-header">
                 <div className="top-banner">
                     <div className="banner-content">
-                        {imageData.length > 0 && ( // Check if imageData is not empty before accessing elements
+                        {imageData.length > 0 && (
                             <>
+                                <img
+                                    src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정
+                                    alt={imageData[currentSlide % imageData.length].title}
+                                    className="banner-image"
+                                />
                                 <div className="banner-text">
                                     <h2>{imageData[currentSlide % imageData.length].title}</h2>
                                 </div>
-                                {/* 이미지를 어떻게 처리할지에 따라 아래 로직을 변경해야 합니다. */}
-                                {/* <img src={imageData[currentSlide % imageData.length].imageUrl} alt={imageData[currentSlide % imageData.length].title} /> */}
+
                             </>
                         )}
                     </div>
@@ -165,27 +184,36 @@ function MainPage() {
 
             <div className="content-area">
                 <div className="date-picker-container">
-                    <DatePicker />
+                    <DatePicker
+                        currentDate={currentDate}
+                        setCurrentDate={setCurrentDate}
+                    />
                 </div>
 
                 <div className="image-grid">
-                    {/* 검색 결과에 따라 이미지 목록 렌더링 */}
                     {filteredImageData.length > 0 ? (
                         filteredImageData.map((image) => (
                             <div key={image.no} className="image-item">
-                                {/* 이미지를 어떻게 처리할지에 따라 아래 로직을 변경해야 합니다. */}
-                                {/* <img src={image.imageUrl} alt={image.title} /> */}
+                                  <img
+                                    src={ image.img_list && image.img_list[0].originImgurl} 
+                                    alt={image.title}
+                                    className="grid-image"
+                                />
                                 <h3>{image.title}</h3>
                                 <p>{moment(image.startDate).format('YYYY-MM-DD')} ~ {moment(image.endDate).format('YYYY-MM-DD')}</p>
                                 <p>행사장소: {image.addr}</p>
-                                <button className="viewButton">자세히 보기</button>
+                                <button className="viewButton" onClick={() => openModal(image)}>자세히 보기</button>
                             </div>
                         ))
                     ) : (
-                        <div>선택된 날짜에 해당하는 이벤트가 없습니다.</div>
+                        <div>입력한 검색어와 연관된 검색어가 없습니다.</div>
                     )}
                 </div>
             </div>
+             {/* 모달 */}
+            {selectedEvent && (
+                <EventModal event={selectedEvent} onClose={closeModal} />
+            )}
         </div>
     );
 }

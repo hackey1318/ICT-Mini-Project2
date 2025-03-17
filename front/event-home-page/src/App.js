@@ -7,12 +7,18 @@ import WithdrawalList from './pages/admin/WithdrawalList';
 import BannerList from './pages/admin/BannerList';
 import CreateBanner from './pages/admin/CreateBanner';
 import MainPage from './pages/MainPage';
+import Mainpage from './eventpages/MainPage';
+import EventView from './eventpages/EventView';
+
+
+
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
+        <Route path="/eventView" element={<EventView/>}></Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Admin />}></Route>
@@ -25,4 +31,5 @@ function App() {
     </BrowserRouter>
   );
 }
+
 export default App;

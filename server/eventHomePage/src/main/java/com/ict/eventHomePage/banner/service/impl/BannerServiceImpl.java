@@ -11,15 +11,15 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BannerServiceImpl implements BannerService {
-
-    private final BannerRepository bannerRepository;
-
-    public List<Banners> searchEvents(String name, String eventDate, String eventCity, String eventGu) {
-        name = (name != null) ? name : "";
-        eventDate = (eventDate != null) ? eventDate : "";
-        eventCity = (eventCity != null) ? eventCity : "";
-        eventGu = (eventGu != null) ? eventGu : "";
-
-        return bannerRepository.findByTitleContainingAndStartDateAndCityAndGu(name, eventDate, eventCity, eventGu);
-    }
+//
+//    private final BannerRepository bannerRepository;
+//
+//    public List<Banners> searchEvents(String name, String eventDate, String eventCity, String eventGu) {
+//        name = (name != null) ? name : "";
+//        eventDate = (eventDate != null) ? eventDate : "";
+//        eventCity = (eventCity != null) ? eventCity : "";
+//        eventGu = (eventGu != null) ? eventGu : "";
+//
+//        return bannerRepository.findByTitleContainingAndStartDateAndCityAndGu(name, eventDate, eventCity, eventGu);
+//    }
 }

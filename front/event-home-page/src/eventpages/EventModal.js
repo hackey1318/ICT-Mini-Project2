@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './../eventCss/EventModal.css';
+import '../eventCss/EventModal.css';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom'; // React Router v6 사용
 
@@ -40,7 +40,7 @@ function EventModal({ event, onClose }) {
 
   return (
     <div className="modal-overlay">
-      <div className="modal-content">
+      <div className="modal-contents">
         <div className="modal-header">
           <h2>{event.title}</h2>
           <button className="close-button" onClick={onClose}>

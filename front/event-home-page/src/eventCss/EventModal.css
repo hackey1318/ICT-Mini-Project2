@@ -11,7 +11,7 @@
     z-index: 1000; /* 다른 요소 위에 표시 */
 }
 
-.modal-content {
+.modal-contents {
     background: white;
     padding: 20px;
     border-radius: 8px;

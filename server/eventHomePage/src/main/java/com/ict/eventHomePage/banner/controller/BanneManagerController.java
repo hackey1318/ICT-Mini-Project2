@@ -16,20 +16,20 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BanneManagerController {
 
-    private final BannerService bannerService;
-
-    @PostMapping("/searchEvents")
-    public ResponseEntity<Map<String, List<Banners>>> searchEventsFromDb(@RequestBody Map<String, String> searchParams) {
-        String name = searchParams.get("name");
-        String eventDate = searchParams.get("eventdate");
-        String eventCity = searchParams.get("eventcity");
-        String eventGu = searchParams.get("eventgu");
-
-        List<Banners> events = bannerService.searchEvents(name, eventDate, eventCity, eventGu);
-
-        Map<String, List<Banners>> response = new HashMap<>();
-        response.put("list", events);
-
-        return ResponseEntity.ok(response);
-    }
+//    private final BannerService bannerService;
+//
+//    @PostMapping("/searchEvents")
+//    public ResponseEntity<Map<String, List<Banners>>> searchEventsFromDb(@RequestBody Map<String, String> searchParams) {
+//        String name = searchParams.get("name");
+//        String eventDate = searchParams.get("eventdate");
+//        String eventCity = searchParams.get("eventcity");
+//        String eventGu = searchParams.get("eventgu");
+//
+//        List<Banners> events = bannerService.searchEvents(name, eventDate, eventCity, eventGu);
+//
+//        Map<String, List<Banners>> response = new HashMap<>();
+//        response.put("list", events);
+//
+//        return ResponseEntity.ok(response);
+//    }
 }

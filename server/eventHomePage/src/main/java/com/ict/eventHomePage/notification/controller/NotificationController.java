@@ -4,7 +4,6 @@ import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.config.AuthRequired;
 import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
 import com.ict.eventHomePage.notification.controller.response.NotificationResponse;
-import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -35,7 +34,8 @@ public class NotificationController {
     @AuthRequired({USER, ADMIN})
     public List<NotificationResponse> getNotification() {
         String userId = AuthCheck.getUserId(USER, ADMIN);
-        return modelMapper.map(notificationService.getNotificationList(userId), new TypeToken<List<NotificationResponse>>(){}.getType());
+        return modelMapper.map(notificationService.getNotificationList(userId), new TypeToken<List<NotificationResponse>>() {
+        }.getType());
     }
 
 
@@ -50,7 +50,8 @@ public class NotificationController {
     @AuthRequired(ADMIN)
     public List<NotificationResponse> postNotification(@RequestBody NotificationRequest request) {
 
-        return modelMapper.map(notificationService.generateNotification(request), new TypeToken<List<NotificationResponse>>(){}.getType());
+        return modelMapper.map(notificationService.generateNotification(request), new TypeToken<List<NotificationResponse>>() {
+        }.getType());
     }
 }
 

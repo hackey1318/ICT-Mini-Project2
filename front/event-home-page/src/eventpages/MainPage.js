@@ -5,11 +5,28 @@ import './../eventCss/MainPageStyle.css';
 import moment from 'moment';
 import axios from 'axios';
 import EventModal from './EventModal'; // 모달 컴포넌트 import
+import styled from 'styled-components';
+import { Link } from "react-router-dom";
+import myIcon from '../img/user.png';
+import NotificationSystem from "../js/notification/notificationInfo";
+import likeIcon from '../img/heart.png';
 
 function MainPage() {
+    const StyledLink = styled(Link)`
+        text-decoration:none;
+
+        &:link, &:visited, &:active{
+            color:black;
+        }
+
+        &:hover{
+            color:cyan;        
+        }
+    `;
+
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") == "Y");
+    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [imageData, setImageData] = useState([]);
     const [filteredImageData, setFilteredImageData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -39,7 +56,7 @@ function MainPage() {
     }, [imageData.length]);
 
     useEffect(() => {
-        setIsLoggedIn(sessionStorage.getItem("logStatus") == "Y");
+        setIsLoggedIn(!!sessionStorage.getItem('accessToken'));
     }, []);
 
     useEffect(() => {
@@ -137,12 +154,15 @@ function MainPage() {
                         {imageData.length > 0 && (
                             <>
                                 <img
-                                    src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정
-                                    alt={imageData[currentSlide % imageData.length].title}
+                                    // src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정
+                                    src={myIcon} // originImgurl을 사용하여 이미지 경로 설정
+                                    // alt={imageData[currentSlide % imageData.length].title}
+                                    alt={"Test"}
                                     className="banner-image"
                                 />
                                 <div className="banner-text">
-                                    <h2>{imageData[currentSlide % imageData.length].title}</h2>
+                                    {/* <h2>{imageData[currentSlide % imageData.length].title}</h2> */}
+                                    <h2>{"test"}</h2>
                                 </div>
 
                             </>
@@ -158,18 +178,20 @@ function MainPage() {
                 </div>
                 {/* 로그인 상태에 따라 메뉴 변경 */}
                 <div className="header-menu">
-                    {isLoggedIn ? (
-                        <ul>
-                            <li>마이페이지</li>
-                            <li>공지사항</li>
-                            <li>찜목록</li>
-                        </ul>
-                    ) : (
-                        <ul>
-                            <li>회원가입</li>
-                            <li>로그인</li>
-                        </ul>
-                    )}
+                    <ul>
+                        <Link to={isLoggedIn ? `/mypage` : `/login`}>
+                            <img src={myIcon} alt="My Page" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                        </Link>
+                        {isLoggedIn? (
+                            <>
+                            <NotificationSystem />
+                            <Link to={`/like`}>
+                                <img src={likeIcon} alt="Like" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                            </Link>
+                            </>
+                        ): null
+                        }
+                    </ul>
                 </div>
             </header>
 

@@ -37,8 +37,20 @@ public class LoginServiceImpl implements LoginService {
 
     @Override
     public Users idFind(Users usersVO) {
-        return usersRepository.findByNameAndEmail(usersVO.getName(), usersVO.getEmail()).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+        return usersRepository.findByNameAndEmail(usersVO.getName(), usersVO.getEmail());
     }
 
+    @Override
+    public Users pwFind(Users usersVO) {
+        return usersRepository.findByUserIdAndEmail(usersVO.getUserId(), usersVO.getEmail());
+    }
+
+    @Override
+    public Users usersUpdate(Users usersVO) {
+        usersVO.setPw(bCryptPasswordEncoder.encode(usersVO.getPw()));
+        System.out.println("데이터넣기전 최종 데이터 확인 ====> "+usersVO);
+
+        return usersRepository.save(usersVO);
+    }
 
 }

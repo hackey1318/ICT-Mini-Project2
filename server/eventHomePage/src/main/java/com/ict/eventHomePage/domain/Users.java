@@ -44,6 +44,9 @@ public class Users {
     @Column(nullable = false, length = 20)
     private String tel;
 
+    @Column(nullable = false, length = 5)
+    private String postalCode;
+
     @Column(nullable = false, length = 200)
     private String addr;
 

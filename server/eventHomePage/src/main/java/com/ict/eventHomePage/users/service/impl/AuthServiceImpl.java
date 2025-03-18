@@ -36,4 +36,9 @@ public class AuthServiceImpl implements AuthService {
 
         return jwtTokenProvider.generateAccessToken(request.getUserId(), userInfo.getRole().name());
     }
+
+    @Override
+    public Users getUser(String userId) {
+        return usersRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+    }
 }

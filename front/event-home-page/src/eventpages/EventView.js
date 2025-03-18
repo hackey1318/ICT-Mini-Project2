@@ -1,17 +1,24 @@
-import React, { useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
-import './../eventCss/EventView.css';
+import '../eventCss/EventView.css';
 import '../css/replyList.css';
 import ReviewEdit from '../js/event/ReviewEdit'
 import ReviewDelete from '../js/event/ReviewDelete';
-import ReviewWrite from '../js/event/ReviewWrite';
+import ReplyModal from './ReplyModal';
+import styled from 'styled-components';
+import axios from 'axios';
+import addFile from '../img/plus.jpg';
 
 function EventView() {
   const location = useLocation();
   const event = location.state.event;
   const navigate = useNavigate();
   const mapRef = useRef(null);
+  let [title, setTitle] = useState('');
+  let [content, setContent] = useState('');
+  let [isModalOpen, setIsModalOpen] = useState(false);
+  const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
 
   useEffect(() => {
     if (event && mapRef.current) {
@@ -43,63 +50,163 @@ function EventView() {
     return <div>이벤트 정보를 찾을 수 없습니다.</div>;
   }
 
+  //모달창 함수
+  //후기 제목 함수
+  function setTitleValue(event) {
+    setTitle(event.target.value);
+    console.log(title);
+}
+
+//후기 내용 함수
+function setContentValue(event) {
+    setContent(event.target.value);
+    console.log(content);
+}
+
+function addReply(event) {
+    event.preventDefault();
+
+    axios.post("http://localhost:9988/reply/addReply")
+    .then(function(response) {
+        console.log(response.data);
+
+        if(response.data.content=="") {
+            alert("내용을 입력해주세요.")
+        }             
+    })
+    .catch(function(error) {
+        console.log(error);
+    })
+}
+
+function runInputFile() {  //type=file 실행
+    if(runfile.current) {
+        runfile.current.click();  //file 선택창 열기
+    }
+
+    if(!runfile.current.hasChangeListener) {
+        runfile.current.addEventListener('change', (event) => {
+            const files = event.target.files;
+            const imgList = document.querySelector('.imgList');
+            const maxImage = 3;
+
+            const existingImages = imgList.querySelectorAll('div').length;
+            for(let i=0; i<files.length; i++) {
+                if(existingImages + i >= maxImage) {
+                    alert('이미지는 3개까지 첨부해주세요.');
+                    event.target.value = "";
+                    break;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {   //div에 이미지 추가
+                    const div = document.createElement('div');
+                    div.style.backgroundImage = `url(${e.target.result})`;
+                    div.style.cursor = 'pointer';
+                    div.addEventListener('click', delImg);
+
+                    imgList.appendChild(div);  
+                };
+                reader.readAsDataURL(files[i]);
+            }
+        })
+        runfile.current.hasChangeListener = true;
+    }
+}
+
+function delImg(event) {  //올리는 이미지 클릭시 제거
+    const imgDiv = event.target;
+    const imgList = document.querySelector('.imgList');
+
+    if(imgList.contains(imgDiv)) {
+        imgList.removeChild(imgDiv);
+    }
+}
+
   return (
     <div className="event-view-container">
-      <div className="content-wrapper">
-        <div className="event-title">
-          {event.title}
-        </div>
-        <div className="event-image">
-          <img src={event.img_list[0].originImgurl} alt={event.title} />
-        </div>
-        <div className="small-images">
-          {
-            event.img_list.map((item, idx) => {
-              return (
-                idx !== 0 && <img key={item.no} src={item.originImgurl} alt={`small_${idx}`} />
-              )
-            })
-          }
-        </div>
-
-        <div className="event-info">
-          <p><strong>{moment(event.startDate).format('YYYY.MM.DD')} ~ {moment(event.endDate).format('YYYY.MM.DD')}</strong></p>
-          <p><strong>{event.addr}</strong></p>
-          <p>{event.overView}</p>
-          <p>주최 : {event.telName}</p>
-          <p>전화번호 : {event.tel}</p>
-        </div>
-
-        <div id="kakao-map" ref={mapRef}></div>
-    </div>
-
-    <div className="replies">
-          <p style={{fontSize: '1.8em'}}>Review</p>
-          <div>  
+        <div>
+          <div className="content-wrapper">
+            <div className="event-title">
+              {event.title}
+            </div>
+            <div className="event-image">
+              <img src={event.img_list[0].originImgurl} alt={event.title} />
+            </div>
+            <div className="small-images">
               {
-                  //const list = map() => 
-                  <div className='replyList'>
-                      <ul>
-                            <li id='username'></li>
-                            <li id='title'>제목</li>
+                event.img_list.map((item, idx) => {
+                  return (
+                    idx !== 0 && <img key={item.no} src={item.originImgurl} alt={`small_${idx}`} />
+                  )
+                })
+              }
+            </div>
 
-                            {
-                                <div>
-                                    <label className='editor' onClick={ReviewEdit} style={{marginRight: '20px'}}>수정</label>
-                                    <label className='editor' onClick={ReviewDelete}>삭제</label>
-                                </div>
-                            }
-                        </ul>
-                  </div>
-                }
-          </div>
+            <div className="event-info">
+              <p><strong>{moment(event.startDate).format('YYYY.MM.DD')} ~ {moment(event.endDate).format('YYYY.MM.DD')}</strong></p>
+              <p><strong>{event.addr}</strong></p>
+              <p>{event.overView}</p>
+              <p>주최 : {event.telName}</p>
+              <p>전화번호 : {event.tel}</p>
+            </div>
 
-          <div>
-              <input type='button' id='openWriteForm' value='후기쓰기' onClick={ReviewWrite}/>
+            <div id="kakao-map" ref={mapRef}></div>
+          </div><hr/>
+
+          <div className="replies">
+              <p style={{fontSize: '1.8em'}}>Review</p>
+              <div>  
+                  {
+                      //const list = map() => 
+                      <div className='replyList'>
+                          <ul>
+                                <li id='username'></li>
+                                <li id='title'>제목</li>
+
+                                {
+                                    <div>
+                                        <label className='editor' onClick={ReviewEdit} style={{marginRight: '20px'}}>수정</label>
+                                        <label className='editor' onClick={ReviewDelete}>삭제</label>
+                                    </div>
+                                }
+                            </ul>
+                      </div>
+                    }
+              </div>
+
+              <div>
+                  <input type='button' id='openWriteForm' value='후기쓰기' onClick={() => setIsModalOpen(true)}/>
+              </div>
+
+              <div id="modalSpace">
+                  {isModalOpen && (
+                      <div className='modalContainer' style={{width: '100%', margin: "10% 10% 0"}}>            
+                          <div className='writeForm'>
+                              <form onSubmit={addReply}>
+                                  <input type='text' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue}/><br/>
+                                  <textarea type='text' className='class="form-control"' placeholder='후기를 입력해주세요.' name='content'  
+                                                        value={content} onChange={setContentValue}/><br/>
+                          
+                                  <label style={{fontSize: '0.7em', position: 'relative', left: '10px', top: '-5px'}}>사진첨부(최대 3장)</label><br/>
+                                  <input type='file' multiple ref={runfile}
+                                        style={{position: 'relative', left: '10px', top: '-5px', opacity: '0', width: '65%' }}/>
+                                  <img src={addFile} id='addFile' style={{cursor: 'pointer'}} onClick={runInputFile}/>
+              
+                                  <div className='imgList'></div>
+              
+                                  <input type='submit' value='등 록'/>
+                                  <input type='button' value='취 소' onClick={() => setIsModalOpen(false)}/>
+                              </form>
+                          </div>
+                      </div>
+                  )}
+              </div>
           </div>
-    </div>
+      </div>            
   </div>
   );
 }
 
 export default EventView;
+

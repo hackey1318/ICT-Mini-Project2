@@ -8,7 +8,6 @@ import BannerList from './pages/admin/BannerList';
 import CreateBanner from './pages/admin/CreateBanner';
 import MainPage from './eventpages/MainPage';
 import EventView from './eventpages/EventView';
-import Reply from './pages/Reply';
 import JoinEdit from './pages/JoinEdit';
 import Login from './pages/Login';
 import Join from './pages/Join';
@@ -22,7 +21,6 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/eventView" element={<EventView/>}></Route>
-        <Route path='/pages/reply' element={<Reply/>}></Route>
         <Route path='/login' element={<Login/>}></Route>
         <Route path='/join' element={<Join/>}></Route>
 
@@ -33,9 +31,9 @@ function App() {
           <Route path="bannerList" element={<BannerList />}></Route>
           <Route path="createBanner" element={<CreateBanner />}></Route>
         </Route>
-        
-        <Route path="/joinEdit" element={<JoinEdit/>}></Route> 
-        <Route path="/idFind" element={<IdFind/>}></Route> 
+
+        <Route path="/joinEdit" element={<JoinEdit/>}></Route>
+        <Route path="/idFind" element={<IdFind/>}></Route>
         <Route path="/pwFind" element={<PwFind/>}></Route>
 
       </Routes>

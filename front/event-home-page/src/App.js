@@ -10,6 +10,8 @@ import MainPage from './eventpages/MainPage';
 import EventView from './eventpages/EventView';
 import Reply from './pages/Reply';
 import JoinEdit from './pages/JoinEdit';
+import Login from './pages/Login';
+import Join from './pages/Join';
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/eventView" element={<EventView/>}></Route>
         <Route path='/pages/reply' element={<Reply/>}></Route>
+        <Route path='/login' element={<Login/>}></Route>
+        <Route path='/join' element={<Join/>}></Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Admin />}></Route>

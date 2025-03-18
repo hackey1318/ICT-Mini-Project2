@@ -1,6 +1,8 @@
 package com.ict.eventHomePage.users.service.impl;
 
 import com.ict.eventHomePage.domain.Users;
+import com.ict.eventHomePage.domain.constant.StatusInfo;
+import com.ict.eventHomePage.domain.constant.UserRole;
 import com.ict.eventHomePage.users.repository.UsersRepository;
 import com.ict.eventHomePage.users.service.JoinService;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,9 @@ public class JoinServiceImpl implements JoinService {
     //회원가입
     @Override
     public Users createJoin(Users users) {
+        users.setRole(UserRole.USER); //enum 값 사용
+        users.setStatus(StatusInfo.ACTIVE); //enum 값 사용
+
         return usersRepository.save(users);
     }
 
@@ -24,7 +29,4 @@ public class JoinServiceImpl implements JoinService {
     public Optional<Users> joinSelect(Users users) {
         return usersRepository.findByUserId(users.getUserId());
     }
-
-
-
 }

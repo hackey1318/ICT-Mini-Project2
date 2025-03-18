@@ -5,8 +5,22 @@ import './../eventCss/MainPageStyle.css';
 import moment from 'moment';
 import axios from 'axios';
 import EventModal from './EventModal'; // 모달 컴포넌트 import
+import styled from 'styled-components';
+import { Link } from "react-router-dom";
 
 function MainPage() {
+    const StyledLink = styled(Link)`
+        text-decoration:none;
+
+        &:link, &:visited, &:active{
+            color:black;
+        }
+
+        &:hover{
+            color:cyan;        
+        }
+    `;
+
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") == "Y");

@@ -9,7 +9,26 @@
 }
 
 .login-container * {
-    font-family: 'Gowun Batang', serif;  /* 모든 자식 요소에 글꼴 상속 */
+    font-family: 'Gowun Batang', serif;
+}
+
+.back-button {
+    font-size: 20px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.back-arrow {
+    font-size: 24px;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    cursor: pointer;
+    color: #333;  /* 원하는 색상으로 변경 가능 */
 }
 
 .login-container h1 {
@@ -23,7 +42,21 @@
     border-radius: 15px;
     box-shadow: 1px 1px 1px 1px #ddd;
     text-align: center;
-    width: 300px;
+    width: 350px;
+}
+
+.login-style a {
+    text-decoration: none;
+    color: #444444;
+    font-size: 13px;
+}
+
+.login-style a:hover {
+    color: #6ECEDA;
+}
+
+.login-link:hover {
+    color: #B8DFDD;
 }
 
 .input-container {
@@ -40,15 +73,15 @@
 
 .input-style {
     width: 100%; /* 입력창의 너비를 조정 */
-    height: 8px;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 1px 1px 1px 1px #ddd;
+    font-size: 12px;
 }
 
 .login-btn {
-    width: 300px;
+    width: 100%;
     padding: 10px;
     background: #6ECEDA;
     border: none;

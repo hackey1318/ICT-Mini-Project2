@@ -11,6 +11,9 @@ import EventView from './eventpages/EventView';
 import JoinEdit from './pages/JoinEdit';
 import Login from './pages/Login';
 import Join from './pages/Join';
+import IdFind from './pages/IdFind';
+import PwFind from './pages/PwFind';
+
 
 function App() {
   return (
@@ -28,7 +31,11 @@ function App() {
           <Route path="bannerList" element={<BannerList />}></Route>
           <Route path="createBanner" element={<CreateBanner />}></Route>
         </Route>
-        <Route path="/member/joinEdit" element={<JoinEdit/>}></Route>
+
+        <Route path="/joinEdit" element={<JoinEdit/>}></Route>
+        <Route path="/idFind" element={<IdFind/>}></Route>
+        <Route path="/pwFind" element={<PwFind/>}></Route>
+
       </Routes>
     </BrowserRouter>
   );

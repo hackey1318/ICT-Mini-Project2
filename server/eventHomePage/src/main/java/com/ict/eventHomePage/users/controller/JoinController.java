@@ -11,13 +11,14 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
-@RequestMapping("/join")
+@RequestMapping("/member")
 @RequiredArgsConstructor
 public class JoinController {
     private final JoinService service;
 
-    @PostMapping("/formOk")
-    public String formOk(@RequestBody Users users){
+    //회원가입 페이지
+    @PostMapping("/joinFormOk")
+    public String joinFormOk(@RequestBody Users users){
         System.out.println(users.toString());
 
         Users result = service.createJoin(users);
@@ -29,11 +30,22 @@ public class JoinController {
         }
     }
 
-    //회원선택
+    //회원정보수정 페이지
     @PostMapping("/joinEdit")
     public Optional<Users> joinEdit(@RequestBody Users users){
         System.out.println(users.toString());
 
         return service.joinSelect(users);
+    }
+
+    //회원정보수정(DB)
+    @PostMapping("/joinEditOk")
+    public String joinEditOk(@RequestBody Users users){
+        System.out.println(users);
+
+        Optional<Users> checkUser = service.joinSelect(users);
+        Users result = service.createJoin(users);
+
+        return null;
     }
 }

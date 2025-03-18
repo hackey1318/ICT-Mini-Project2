@@ -9,6 +9,7 @@ import CreateBanner from './pages/admin/CreateBanner';
 import MainPage from './eventpages/MainPage';
 import EventView from './eventpages/EventView';
 import Reply from './pages/Reply';
+import JoinEdit from './pages/JoinEdit';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="bannerList" element={<BannerList />}></Route>
           <Route path="createBanner" element={<CreateBanner />}></Route>
         </Route>
+        <Route path="/member/joinEdit" element={<JoinEdit/>}></Route> 
       </Routes>
     </BrowserRouter>
   );

@@ -3,23 +3,39 @@ package com.ict.eventHomePage.banner.service.impl;
 import com.ict.eventHomePage.banner.repository.BannerRepository;
 import com.ict.eventHomePage.banner.service.BannerService;
 import com.ict.eventHomePage.domain.Banners;
+import com.ict.eventHomePage.domain.Events;
+import com.ict.eventHomePage.domain.constant.StatusInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BannerServiceImpl implements BannerService {
 
-//    private final BannerRepository bannerRepository;
-//
-//    public List<Banners> searchEvents(String name, String eventDate, String eventCity, String eventGu) {
-//        name = (name != null) ? name : "";
-//        eventDate = (eventDate != null) ? eventDate : "";
-//        eventCity = (eventCity != null) ? eventCity : "";
-//        eventGu = (eventGu != null) ? eventGu : "";
-//
-//        return bannerRepository.findByTitleContainingAndStartDateAndCityAndGu(name, eventDate, eventCity, eventGu);
-//    }
+    private final BannerRepository bannerRepository;
+
+    @Override
+    public List<Events> searchEvents(String title, LocalDateTime startDate, String addr) {
+        title = (title == null || title.isEmpty()) ? null : "%" + title + "%";
+        addr = (addr == null || addr.isEmpty()) ? null : "%" + addr + "%";
+        return bannerRepository.findByTitleContainingAndStartDateAndAddr(title, startDate, addr);
+    }
+
+    @Override
+    public void createBanner(Integer eventNo, String fileId, String color, LocalDateTime startDate, LocalDateTime endDate) {
+        Banners banner = new Banners();
+        banner.setEventNo(eventNo);
+        banner.setFileId(fileId);
+        banner.setColor(color);
+        banner.setStatus(StatusInfo.ACTIVE); // enum 값 사용 (StatusInfo.ACTIVE)
+        banner.setStartDate(startDate);
+        banner.setEndDate(endDate);
+        banner.setCreatedAt(LocalDateTime.now());
+        banner.setUpdatedAt(LocalDateTime.now());
+
+        bannerRepository.save(banner);
+    }
 }

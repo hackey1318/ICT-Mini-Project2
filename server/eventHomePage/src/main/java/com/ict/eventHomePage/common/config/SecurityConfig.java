@@ -51,6 +51,7 @@ public class SecurityConfig {
                 mvc.pattern("/auth/login"),
                 mvc.pattern("/api/**"),
                 mvc.pattern("/member/**"),
+                mvc.pattern("/banner/**"),
                 mvc.pattern("/auth/sign-up"),
                 mvc.pattern("/auth/token-refresh"),
                 mvc.pattern("/swagger-ui/index.html")

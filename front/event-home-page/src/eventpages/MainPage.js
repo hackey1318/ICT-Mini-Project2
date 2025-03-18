@@ -5,11 +5,27 @@ import './../eventCss/MainPageStyle.css';
 import moment from 'moment';
 import axios from 'axios';
 import EventModal from './EventModal'; // 모달 컴포넌트 import
+import styled from 'styled-components';
+import { Link } from "react-router-dom";
+import myIcon from '../img/user.png';
+import likeIcon from '../img/heart.png';
 
 function MainPage() {
+    const StyledLink = styled(Link)`
+        text-decoration:none;
+
+        &:link, &:visited, &:active{
+            color:black;
+        }
+
+        &:hover{
+            color:cyan;        
+        }
+    `;
+
     const [searchTerm, setSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(sessionStorage.getItem("logStatus") == "Y");
+    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [imageData, setImageData] = useState([]);
     const [filteredImageData, setFilteredImageData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -166,8 +182,12 @@ function MainPage() {
                         </ul>
                     ) : (
                         <ul>
-                            <li>회원가입</li>
-                            <li>로그인</li>
+                            <Link to={isLoggedIn ? `/mypage` : `/login`}>
+                                <img src={myIcon} alt="My Page" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                            </Link>
+                            <Link to={isLoggedIn ? `/like` : `/login`}>
+                                <img src={likeIcon} alt="Like" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                            </Link>
                         </ul>
                     )}
                 </div>

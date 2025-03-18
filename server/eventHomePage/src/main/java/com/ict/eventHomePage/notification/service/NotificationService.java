@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface NotificationService {
 
-    int getNotificationCount(int userNo);
+    int getNotificationCount(String userId);
 
-    List<Notification> getNotificationList(int userNo);
+    List<Notification> getNotificationList(String userId);
 
-    int readNotification(int userNo, List<Integer> notificationNoList);
+    int readNotification(String userId, List<Integer> notificationNoList);
 
     List<Notification> generateNotification(NotificationRequest request);
 }

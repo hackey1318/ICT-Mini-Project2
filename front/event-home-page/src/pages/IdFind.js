@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import axios from "axios";
 
@@ -6,6 +6,16 @@ function IdFind(){
 
     // 폼의 이름과 이메일과 연락처를 보관할 변수
     let [idFindForm, setIdFindForm] = useState({});
+
+    // 아이디 찾기 성공 여부를 저장할 상태
+    let [idFound, setIdFound] = useState(false);
+    // 찾은 아이디를 저장할 상태
+    let [userId, setUserId] = useState("");
+
+    // input 요소들에 대한 ref 생성
+    const nameRef = useRef(null);
+    const emailRef = useRef(null);
+
 
     //form의 값 유효성검사 
     function setFormData(event){
@@ -23,78 +33,67 @@ function IdFind(){
         // 이름 존재 유무 확인
         if(idFindForm.name==null || idFindForm.name==""){
             alert('이름을 입력하세요.');
-            document.getElementById("name").focus(); // 아이디 필드로 포커스 이동
+            nameRef.current.focus(); // 이름 필드로 포커스 이동
             return false;
         }
 
         // 이메일 존재 유무 확인
         if(idFindForm.email==null || idFindForm.email==""){
             alert('이메일을 입력하세요.');
-            document.getElementById("email").focus(); // 아이디 필드로 포커스 이동
+            emailRef.current.focus(); // 이메일 필드로 포커스 이동
             return false;
         }
 
-        // 연락처 존재 유무 확인
-        // if (idFindForm.tel1 == null || idFindForm.tel1 == "") {
-        //     alert('연락처를 입력하세요.');
-        //     document.getElementById("tel1").focus(); 
-        //     return false;
-        // }
-        // if (idFindForm.tel2 == null || idFindForm.tel2 == "") {
-        //     alert('연락처를 입력하세요.');
-        //     document.getElementById("tel2").focus();
-        //     return false;
-        // }
-        // if (idFindForm.tel3 == null || idFindForm.tel3 == "") {
-        //     alert('연락처를 입력하세요.');
-        //     document.getElementById("tel3").focus();
-        //     return false;
-        // }
-        //let tel = `${idFindForm.tel1}-${idFindForm.tel2}-${idFindForm.tel3}`;
-
         // 비동기식으로 백엔드 
         axios.post("http://localhost:9988/member/idFindOk", {
-            name:idFindForm.name
-            , email:idFindForm.email
-            // , tel:tel
+            name: idFindForm.name,
+            email: idFindForm.email
         })
-        .then(function(response){
-            if(response.data=="idFindFail"){
-                alert("아이디찾기실패");
-            }else{
-                console.log(response.data);
-                alert("찾은 아이디 : "+response.data);
+        .then(function(response) {
+            console.log("Response:", response.data.result);  // 응답 데이터 확인
+
+            // 응답의 result가 "idFindFail"인지 "idFindSuccess"인지 확인
+            if (response.data.result === "idFindFail") {
+                alert("아이디 찾기 실패하였습니다. 다시 입력해주세요.");
+            } else if (response.data.result === "idFindSuccess") {
+                // alert("찾은 아이디 : " + response.data.userId);
+                setUserId(response.data.userId);  // 찾은 아이디 저장
+                setIdFound(true);  // 아이디 찾기 성공 상태로 변경
             }
+
         })
-        .catch(function(error){
+        .catch(function(error) {
             console.log(error);
-        })
+        });
 
     }
 
     return(
+
         <div className="id-find-container">
             <div className="id-find-form">
-                <form onSubmit={formCheck}>
-                    <h2>아이디 찾기</h2>
-                    <div className="id-find-input">
-                        <label htmlFor="name">이름</label>
-                        <input type="text" id="name" name="name" style={{width:'30%'}} placeholder="이름을 입력하세요." onChange={setFormData}/>
-                    </div>
-                    <div className="id-find-input">
-                        <label htmlFor="email">이메일</label>
-                        <input type="text" id="email" name="email" style={{width:'70%'}} placeholder="이메일을 입력하세요." onChange={setFormData}/>
-                    </div>
-                    {/* <div className="id-find-input">
-                        <label htmlFor="tel1">연락처</label>
-                        <div style={{ display: 'flex' }}>
-                            <input type="Number" min="01" max="999" id="tel1" name="tel1" style={{ width: '15%' }} onChange={setFormData}/>-
-                            <input type="Number" min="1000" max="9999" id="tel2" name="tel2" style={{ width: '15%' }} onChange={setFormData}/>-
-                            <input type="Number" min="1000" max="9999" id="tel3" name="tel3" style={{ width: '15%' }} onChange={setFormData}/>
+                {!idFound ? (
+                    <form onSubmit={formCheck}>
+                        <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
+                        <h2>아이디 찾기</h2>
+                        <div className="id-find-input">
+                            <label htmlFor="name">이름</label>
+                            <input type="text" id="name" name="name" style={{ width: '50%' }} placeholder="이름을 입력하세요." onChange={setFormData} ref={nameRef}/>
                         </div>
-                    </div> */}
-                    <button type="submit" className="idfind-btn">아이디 찾기</button>
-                </form>
+                        <div className="id-find-input">
+                            <label htmlFor="email">이메일</label>
+                            <input type="email" id="email" name="email" placeholder="이메일을 입력하세요." onChange={setFormData} ref={emailRef}/>
+                        </div>
+                        <button type="submit" className="idfind-btn">아이디 찾기</button>
+                    </form>
+                ) : (
+                    <div>
+                        <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
+                        <h2>아이디 찾기 <span style={{color:'blue'}}>성공</span></h2>
+                        <div style={{marginTop:'30px'}}>찾은 아이디: <b>{userId}</b></div>
+                        <div style={{textAlign:'right'}}><a href="/login">→로그인하러가기</a></div>
+                    </div>
+                )}
             </div>
         </div>
     )

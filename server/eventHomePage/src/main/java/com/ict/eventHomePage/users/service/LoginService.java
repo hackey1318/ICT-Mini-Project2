@@ -9,4 +9,8 @@ public interface LoginService {
     String loginSelect(LoginRequest request);
 
     Users idFind(Users usersVO);
+
+    Users pwFind(Users usersVO);
+
+    Users usersUpdate(Users usersVO);
 }

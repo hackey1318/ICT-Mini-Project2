@@ -5,6 +5,14 @@
     height: 100vh;
     background: linear-gradient(135deg, #F2EEE5, #E5C1C5, #C3E2DD, #6ECEDA);
 }
+.back{
+    font-size: 22px;
+    font-weight: bold;
+    display: inline-block;
+}
+.back:hover{
+    cursor: pointer;
+}
 .join-form{
     width: 650px;
     background: #fff;
@@ -57,7 +65,7 @@
     float: left;
 }
 .join-form .id-check, .zipcode-btn, .join-btn{
-    width: 65px;
+    width: 77px;
     color: #fff;
     background: #6ECEDA;
 }

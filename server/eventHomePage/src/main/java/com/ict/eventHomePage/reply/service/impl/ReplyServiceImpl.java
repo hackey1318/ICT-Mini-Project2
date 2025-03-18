@@ -28,4 +28,14 @@ public class ReplyServiceImpl implements ReplyService {
         }
         return result;
     }
+
+    @Override
+    public List<Replies> getReplies(String userId, String content) {
+        return List.of();
+    }
+
+    @Override
+    public Replies dataInsert(Replies replies) {
+        return null;
+    }
 }

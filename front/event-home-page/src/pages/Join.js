@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import '../css/Join.css';
+import axios from 'axios';
 
 function Join(){
     //회원정보를 보관할 변수
@@ -147,7 +148,6 @@ function Join(){
         if(joinData.user_id==null || !regex_id.test(joinData.user_id)){
             alert_id.innerHTML = "5~10자 영어소문자, 숫자 가능";
             id_ok = 0;
-            return false;
         }else{
             alert_id.innerHTML = "ok";
             id_ok = 1; 
@@ -157,7 +157,6 @@ function Join(){
         if(joinData.user_pw == null || !regex_pw.test(joinData.user_pw)){
             alert_pw.innerHTML = "7~10자 영어대소문자, 숫자, 특수문자 !@#$% 가능";
             pw_ok = 0;
-            return false;
         }else if(joinData.user_pw != null || regex_pw.test(joinData.user_pw)){
             alert_pw.innerHTML = "ok";
             pw_ok = 1;
@@ -165,7 +164,6 @@ function Join(){
         if(joinData.pw_check != joinData.user_pw){
             alert_pwChk.innerHTML = "비밀번호가 일치하지 않습니다.";
             pw_ok = 0;
-            return false;
         }else if(joinData.pw_check == joinData.user_pw){
             alert_pwChk.innerHTML = "ok";
             pwChk_ok = 1;
@@ -175,7 +173,6 @@ function Join(){
         if(joinData.user_name == null || joinData.user_name == '' || !regex_username.test(joinData.user_name)){
             alert_username.innerHTML = "이름을 입력하세요.";
             username_ok = 0;
-            return false;
         }else{
             alert_username.innerHTML = "ok";
             username_ok = 1;
@@ -184,7 +181,6 @@ function Join(){
         if(year == null || year == '' || month == null || month == "" || day == null || day == ''){
             alert_birth.innerHTML = "생년월일을 선택하세요.";
             birth_ok = 0;
-            return false;
         }else{
             alert_birth.innerHTML = "ok";
             birth_ok = 1;
@@ -194,12 +190,9 @@ function Join(){
         if(joinData.email==null || joinData.email==''){
             alert_email.innerHTML = "이메일을 입력하세요.";
             email_ok = 0;
-            return false;
         }else if(!regex_email.test(joinData.email)){
-            alert("!!!!!");
             alert_email.innerHTML = "이메일 형식에 맞지 않습니다.";
             email_ok = 0;
-            return false;
         }else{
             alert_email.innerHTML = "ok";
             email_ok = 1;
@@ -211,11 +204,9 @@ function Join(){
         if((tel1 == null || tel2 == null || tel3 == null) || !(tel1.length == 3 || (tel2.length == 3 || tel2.length == 4) || tel3.length ==4)){
             alert_tel.innerHTML = "전화번호를 입력하세요.";
             tel_ok = 0;
-            return false;
         }else if(!regex_tel1.test(tel1) || !regex_tel2.test(tel2) || !regex_tel3.test(tel3)){
             alert_tel.innerHTML = "전화번호 형식이 올바르지 않습니다.";
             tel_ok = 0;
-            return false;
         }else{
             alert_tel.innerHTML = "ok";
             tel_ok = 1;
@@ -224,7 +215,6 @@ function Join(){
         if(joinData.zipcode == null || joinData.zipcode == ''){
             alert_zipcode.innerHTML = "우편번호를 검색하세요.";
             zipcode_ok = 0;
-            return false;
         }else{
             alert_zipcode.innerHTML = "ok";
             zipcode_ok = 1;
@@ -257,12 +247,39 @@ function Join(){
         } else {
             alert("입력값을 다시 확인해주세요.");
         }
+
+
+        //비동기식으로 회원가입 요청
+        axios.post("http://127.0.0.1:9988/member/joinFormOk",
+            {
+                userId: joinData.user_id,
+                pw: joinData.user_pw,
+                name: joinData.user_name,
+                birth: joinData.birth,
+                email: joinData.email,
+                tel: joinData.tel,
+                postalCode: joinData.zipcode,
+                addr: joinData.addr
+                
+            }
+        ).then(function(reponse){
+            console.log(reponse.data);
+            if(reponse.data === "ok"){
+                alert("회원등록 성공! 로그인 페이지로 이동!");
+                window.location.href = '/member/login';
+            }else{
+                alert("회원등록 실패!!");
+            }
+        }).catch(function(error){
+            console.log(error);
+        });
     }
 
     return(
         <div id='wrap'>
             <div className='join-form'>
                 <form onSubmit={formCheck}>
+                    <div className='back'>←</div>
                     <h2 id="join-form-title">회원가입</h2>
                     <div className='join-form-inner'>
                         <div className='join-form-line'>

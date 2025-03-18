@@ -2,230 +2,272 @@ import { Link } from "react-router-dom";
 import { useState, useRef } from "react";
 import './../../css/adminStyle.css';
 import styled from 'styled-components';
+import { HexColorPicker } from "react-colorful";
+import axios from "axios";
 
 const StyledLink = styled(Link)`
-    text-decoration:none;
-    &:link, &:visited, &:active{
-    color:black;
-    }
-    &:hover{
-        color:blue;
-    }
+  text-decoration: none;
+  &:link, &:visited, &:active { color: black; }
+  &:hover { color: blue; }
 `;
+
 const ModalOverlay = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: ${props => props.isOpen ? 'flex' : 'none'}; /* 모달 표시 여부 설정 */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: ${props => props.isOpen ? 'flex' : 'none'};
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 `;
 
 const ModalContent = styled.div`
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 70%;
-    max-width: 800px;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 70%;
+  max-width: 800px;
 `;
 
 function CreateBanner() {
-    const [selectedImage, setSelectedImage] = useState(null);
-    const fileInputRef = useRef(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [searchResults, setSearchResults] = useState([]);
-    const [selectedEvent, setSelectedEvent] = useState(null);
-    const [searchParams, setSearchParams] = useState({
-        title: '',
-        startDate: '',
-        addr: '',
-        areaCode: ''
-    });
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [bannerInfo, setBannerInfo] = useState({
+    eventInfo: '',
+    startDate: '',
+    endDate: '',
+    bannerColor: '#ffffff',
+    file: null,
+    eventNo: null,
+  });
+  const [searchParams, setSearchParams] = useState({
+    title: '',
+    startDate: '',
+    addr: '',
+  });
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
-    const handleImageChange = (e) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const imageUrl = URL.createObjectURL(file);
-            setSelectedImage(imageUrl);
-        }
-    };
+  const handleImageChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 업로드 가능합니다.');
+        return;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        alert('파일 크기는 5MB를 초과할 수 없습니다.');
+        return;
+      }
+      const imageUrl = URL.createObjectURL(file);
+      setSelectedImage(imageUrl);
+      setBannerInfo(prev => ({ ...prev, file }));
+    }
+  };
 
-    const handleSearchClickModal = async () => {
-        console.log("검색어=>", searchParams);
-        try {
-            const response = await fetch('http://localhost:9988/banner/searchEvents', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(searchParams),
-            });
+  const handleSearchClickModal = async () => {
+    setIsLoading(true);
+    console.log("검색어=>", searchParams);
+    try {
+      const response = await axios.post('http://localhost:9988/banner/searchEvents', searchParams);
+      console.log("응답 데이터=>", response.data);
+      setSearchResults(response.data.list || []);
+      if (!response.data.list || response.data.list.length === 0) {
+        alert('검색 결과가 없습니다.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('행사 정보 검색 중 오류가 발생했습니다.');
+      setSearchResults([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            if (response.ok) {
-                const data = await response.json();
-                setSearchResults(data.list);
-            } else {
-                console.error('행사 정보 검색 실패:', response.status);
-                setSearchResults([]);
-                alert('행사 정보 검색에 실패했습니다.');
-            }
-        } catch (error) {
-            console.error('행사 정보 검색 오류:', error);
-            setSearchResults([]);
-            alert('행사 정보 검색 중 오류가 발생했습니다.');
-        }
-    };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!bannerInfo.eventInfo || !bannerInfo.startDate || !bannerInfo.endDate || !bannerInfo.file) {
+        alert('모든 필수 필드를 입력해주세요.');
+        return;
+    }
 
-    const handleOpenModal = () => {
-        setIsModalOpen(true);
-        setSearchResults([]); // 모달 열 때 검색 결과 초기화
-    };
+    const formData = new FormData();
+    formData.append('eventNo', bannerInfo.eventNo || '');
+    formData.append('startDate', `${bannerInfo.startDate}T00:00:00`);
+    formData.append('endDate', `${bannerInfo.endDate}T00:00:00`);
+    formData.append('color', bannerInfo.bannerColor);
+    formData.append('file', bannerInfo.file);
 
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleSearchInputChange = (e) => {
-        const { name, value } = e.target;
-        setSearchParams(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleReset = () => {
-        setSearchParams({
-            title: '',
-            startDate: '',
-            addr: '',
-            areaCode: ''
+    try {
+        const response = await axios.post('http://localhost:9988/banner/create', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' },
         });
-    };
+        if (response.status === 200) {
+            alert('배너가 성공적으로 등록되었습니다.');
+            setBannerInfo({ eventInfo: '', startDate: '', endDate: '', bannerColor: '#ffffff', file: null, eventNo: null });
+            setSelectedImage(null);
+        }
+    } catch (error) {
+        console.error('Submit error:', error.response ? error.response.data : error.message);
+        alert('배너 등록 중 오류가 발생했습니다: ' + (error.response?.data || error.message));
+    }
+};
 
-    const handleSelectEvent = (event) => {
-        setSelectedEvent(event);
-        setIsModalOpen(false);
-    };
 
-    return (
-        <div className="container">
-            <h1>관리자 페이지</h1>
-            <div style={{ display: "flex" }}>
-                <div className="left" style={{ backgroundColor: "#E7F0FF", width: "250px", height: "200px" }}>
-                    <ul>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/memberList">회원 정보 조회</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/withdrawalList">회원 탈퇴 명단</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/bannerList">배너관리</StyledLink></li>
-                    </ul>
-                </div>
-                <div className="right" style={{ flex: 1, padding: "30px" }}>
-                    <form onSubmit={''} className="BannerForm">
-                        <ul>
-                            <li style={{ margin: "10px" }}>행사 정보
-                                <span style={{ marginLeft: "50px", marginRight: "50px" }}> | </span>
-                                <input type="text" name="eventInfo" style={{ width: "350px" }} readOnly value={searchResults.length > 0 ? searchResults[0].title : ''}></input>
-                                <button type="button" name="searchEvent" className="btn btn-primary" style={{ width: "60px", marginLeft: "10px" }} onClick={handleOpenModal}>검색</button>
-                            </li>
-                            <li style={{ margin: "10px" }}>배너 대표색
-                                <span style={{ marginLeft: "34px", marginRight: "50px" }}> | </span>
-                                <input type="text" name="bannerColor" placeholder="#" style={{ width: "350px" }}></input>
-                            </li>
-                            <li style={{ margin: "10px" }}>시작일
-                                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
-                                <input type="text" name="startDate" placeholder="2025-05-01" style={{ width: "350px" }}></input>
-                            </li>
-                            <li style={{ margin: "10px" }}>종료일
-                                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
-                                <input type="text" name="endDate" placeholder="2025-05-15" style={{ width: "350px" }}></input>
-                            </li>
-                            <li style={{ margin: "10px" }}>이미지
-                                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    className="hidden"
-                                    accept="image/*"
-                                    onChange={handleImageChange}
-                                /></li>
-                            {selectedImage && (
-                                <div className="relative w-12 h-12 border rounded-md overflow-hidden">
-                                    <img
-                                        src={selectedImage || "/placeholder.svg"}
-                                        alt="Selected"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                            )}
-                        </ul>
-                        <div style={{ display: "flex", justifyContent: "flex-center" }}>
-                            <button type="button" className="btn btn-primary" style={{ marginLeft: '10px' }}>등록</button>
-                            <button type="reset" className="btn btn-warning" style={{ marginLeft: '10px' }}>취소</button>
-                        </div>
-                    </form>
-                </div>
+  const handleOpenModal = () => setIsModalOpen(true);
+  const handleCloseModal = () => setIsModalOpen(false);
 
-                <ModalOverlay isOpen={isModalOpen} onClick={handleCloseModal}>
-                    <ModalContent onClick={(e) => e.stopPropagation()}>
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div className="modal-header">
-                                    <h4 className="modal-title" id="modalheadText">행사 검색</h4>
-                                    <button type="button" className="btn-close" onClick={handleCloseModal} style={{ marginLeft: "auto" }}></button>
-                                </div>
-                                <div className="modal-body">
-                                    <p id="modalbodyText">검색 조건을 입력해주세요.</p>
-                                    <form id="eventSearchForm">
-                                        <section>
-                                            <div className="left">
-                                                <ul>
-                                                    <li>이벤트이름</li>
-                                                    <li>시작 날짜</li>
-                                                    <li>주소</li>
-                                                    <li>지역코드</li>
-                                                </ul>
-                                            </div>
-                                            <div className="right">
-                                                <ul>
-                                                    <li><input type="text" name="title" value={searchParams.title} onChange={handleSearchInputChange}
-                                                        placeholder="잠실 벛꽃 축제" /></li>
-                                                    <li><input type="text" name="startDate" value={searchParams.startDate} onChange={handleSearchInputChange}
-                                                        placeholder="2025-04-01" /></li>
-                                                    <li><input type="text" name="addr" value={searchParams.addr} onChange={handleSearchInputChange}
-                                                        placeholder="서울시" /></li>
-                                                    <li><input type="text" name="areaCode" value={searchParams.areaCode} onChange={handleSearchInputChange}
-                                                        placeholder="1" /></li>
-                                                </ul>
-                                            </div>
-                                        </section>
-                                        <div className="button-container">
-                                            <button type="button" className="btn btn-primary" onClick={handleSearchClickModal}>검색</button>
-                                            <button type="button" className="btn btn-warning" onClick={handleReset}>취소</button>
-                                        </div>
-                                    </form>
+  const handleSearchInputChange = (e) => {
+    const { name, value } = e.target;
+    setSearchParams(prev => ({ ...prev, [name]: value }));
+  };
 
-                                    {searchResults.length > 0 ? (
-                                        <ul>
-                                            {searchResults.map((event) => (
-                                                <li key={event.no} onClick={() => handleSelectEvent(event)}>
-                                                    {event.title} - {event.startDate} - {event.addr}
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    ) : (
-                                        <p>검색 결과가 없습니다.</p>
-                                    )}
+  const handleReset = () => {
+    setSearchParams({ title: '', startDate: '', addr: '' });
+    setSearchResults([]);
+  };
 
-                                    <input type="text" name="eventInfo" readOnly
-                                        value={selectedEvent ? selectedEvent.title : ''} />
-                                </div>
-                            </div>
-                        </div>
-                    </ModalContent>
-                </ModalOverlay>
-            </div>
+  const handleSelectEvent = (event) => {
+    setBannerInfo(prev => ({
+      ...prev,
+      eventInfo: event.title,
+      eventNo: event.no
+    }));
+    setIsModalOpen(false);
+  };
+
+  const formatDate = (dateTimeString) => dateTimeString?.split('T')[0] || '';
+
+  const handleBannerInputChange = (e) => {
+    const { name, value } = e.target;
+    setBannerInfo(prev => ({ ...prev, [name]: value }));
+  };  
+
+  const handleColorChange = (color) => {
+    setBannerInfo(prev => ({ ...prev, bannerColor: color }));
+  };
+
+  const toggleColorPicker = () => setShowColorPicker(!showColorPicker);
+
+  const inputStyle = { margin: '10px', width: '350px', height: '35px' };
+  const buttonStyle = { margin: '10px', height: '35px' };
+
+  return (
+    <div className="container">
+      <h1>관리자 페이지</h1>
+      <div style={{ display: "flex" }}>
+        <div className="left" style={{ backgroundColor: "#E7F0FF", width: "250px", height: "200px" }}>
+          <ul>
+            <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/memberList">회원 정보 조회</StyledLink></li>
+            <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/withdrawalList">회원 탈퇴 명단</StyledLink></li>
+            <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/bannerList">배너관리</StyledLink></li>
+          </ul>
         </div>
-    );
+        <div className="right" style={{ flex: 1, padding: "30px" }}>
+          <form onSubmit={handleSubmit} className="BannerForm">
+            <ul>
+              <li style={{ margin: "10px" }}>
+                행사 정보
+                <span style={{ marginLeft: "50px", marginRight: "50px" }}> | </span>
+                <input type="text" name="eventInfo" style={inputStyle} readOnly value={bannerInfo.eventInfo} />
+                <button type="button" className="btn btn-primary" style={buttonStyle} onClick={handleOpenModal}>검색</button>
+              </li>
+              <li style={{ margin: "10px" }}>
+                배너 대표색
+                <span style={{ marginLeft: "34px", marginRight: "50px" }}> | </span>
+                <div style={{ position: "relative", display: "inline-block" }}>
+                  <input type="text" name="bannerColor" style={inputStyle} value={bannerInfo.bannerColor} onChange={handleBannerInputChange} />
+                  <button type="button" className="btn btn-primary" style={{ ...buttonStyle, backgroundColor: bannerInfo.bannerColor }} onClick={toggleColorPicker}>색상</button>
+                  {showColorPicker && (
+                    <div style={{ position: "absolute", zIndex: 1000, marginTop: "5px", left: "380px" }}>
+                      <HexColorPicker color={bannerInfo.bannerColor} onChange={handleColorChange} />
+                      <button onClick={toggleColorPicker} style={{ marginTop: '10px', width: '100%' }}>닫기</button>
+                    </div>
+                  )}
+                </div>
+              </li>
+              <li style={{ margin: "10px" }}>
+                시작일
+                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
+                <input type="date" name="startDate" style={inputStyle} value={bannerInfo.startDate} onChange={handleBannerInputChange}/>
+              </li>
+              <li style={{ margin: "10px" }}>
+                종료일
+                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
+                <input type="date" name="endDate" style={inputStyle} value={bannerInfo.endDate} onChange={handleBannerInputChange}/>
+              </li>
+              <li style={{ margin: "10px" }}>
+                이미지
+                <span style={{ marginLeft: "72px", marginRight: "50px" }}> | </span>
+                <input type="file" ref={fileInputRef} accept="image/*" onChange={handleImageChange} />
+                {selectedImage && (
+                  <div style={{ marginTop: "10px" }}>
+                    <img src={selectedImage} alt="Preview" style={{ maxWidth: "200px", maxHeight: "200px" }} />
+                  </div>
+                )}
+              </li>
+            </ul>
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <button type="submit" className="btn btn-primary" style={buttonStyle}>등록</button>
+              <button type="reset" className="btn btn-warning" style={buttonStyle} onClick={() => setBannerInfo({ eventInfo: '', startDate: '', endDate: '', bannerColor: '#ffffff', file: null, eventNo: null })}>취소</button>
+            </div>
+          </form>
+        </div>
+
+        <ModalOverlay isOpen={isModalOpen} onClick={handleCloseModal}>
+          <ModalContent onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h4>행사 검색</h4>
+              <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+            </div>
+            <div className="modal-body">
+              <form>
+                <section style={{ display: "flex" }}>
+                  <div className="left">
+                    <ul>
+                      <li>이벤트이름</li>
+                      <li>시작 날짜</li>
+                      <li>주소</li>
+                    </ul>
+                  </div>
+                  <div className="right">
+                    <ul>
+                      <li><input type="text" name="title" value={searchParams.title} onChange={handleSearchInputChange} placeholder="잠실 벛꽃 축제" /></li>
+                      <li><input type="date" name="startDate" value={searchParams.startDate} onChange={handleSearchInputChange} /></li>
+                      <li><input type="text" name="addr" value={searchParams.addr} onChange={handleSearchInputChange} placeholder="서울시" /></li>
+                    </ul>
+                  </div>
+                </section>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "10px" }}>
+                  <button type="button" className="btn btn-primary" onClick={handleSearchClickModal} disabled={isLoading}>
+                    {isLoading ? '검색 중...' : '검색'}
+                  </button>
+                  <button type="button" className="btn btn-warning" onClick={handleReset} style={{ marginLeft: "10px" }}>초기화</button>
+                </div>
+              </form>
+              {searchResults.length > 0 ? (
+                <ul style={{ marginTop: "20px", maxHeight: "200px", overflowY: "auto" }}>
+                  {searchResults.map((event) => (
+                    <li key={event.no} onClick={() => handleSelectEvent(event)} style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ccc" }}>
+                      {event.no} - {event.title} - {formatDate(event.startDate)} - {event.addr}
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p style={{ marginTop: "20px" }}>{isLoading ? '로딩 중...' : '검색 결과가 없습니다.'}</p>
+              )}
+            </div>
+          </ModalContent>
+        </ModalOverlay>
+      </div>
+    </div>
+  );
 }
+
 export default CreateBanner;

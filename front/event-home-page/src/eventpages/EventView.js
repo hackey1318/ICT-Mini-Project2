@@ -142,7 +142,7 @@ function EventView() {
     const div = document.getElementById("plus-container");
     div.style.opacity = 0.3;
     div.style.transition = 'all, 500ms';
-}
+  }
 
   function delImg(event) {  //올리는 이미지 클릭시 제거
       const imgDiv = event.target;
@@ -209,7 +209,7 @@ function EventView() {
               </div>
 
               {isModalOpen && (                  
-                  <div className='modalContainer' style={{width: '100%', margin: "10% 10% 0"}}>            
+                  <div className='modalContainer' style={{width: '100%', height: '100%', margin: "10% 10% 0", backgroundColor: '#gray', opacity: '1' }}>            
                       <div className='writeForm' >
                           <form onSubmit={addReply}>
                               <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue}/><br/>

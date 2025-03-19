@@ -23,6 +23,38 @@ function Join(){
         birth: ''
     });
 
+    // start : 아이디 중복확인 -----------------------------
+    const [idCheckMessage, setIdCheckMessage] = useState(''); //중복확인 메시지
+    const [idChecked, setIdChecked] = useState(false); //아이디 중복확인 상태(중복확인 했으면 true, 안했으면 false)
+    // end ------------------------------------------------
+
+    //아이디 중복확인 함수
+    const handleIdCheck = () => {
+        console.log(joinData.user_id);
+
+        //아이디가 비어있으면 중복확인 X
+        if(joinData.user_id==null || joinData.user_id=="") return;
+        
+        axios.post("http://127.0.0.1:9988/member/checkId", {userId : joinData.user_id}).then(response =>{
+            console.log(response.data); //중복이면 true, 중복이 아니면 false를 반환.
+            const isExist = response.data; 
+            if (isExist) {
+                setIdChecked(true); //아이디 중복확인을 했으면 true
+                setIdValid(false);
+                setIdCheckMessage('이미 사용 중인 아이디입니다.');
+            } else {
+                setIdChecked(true); //아이디 중복확인을 했으면 true
+                setIdValid(true);
+                setIdCheckMessage('사용 가능한 아이디입니다.');
+            }
+        }).catch(error => {
+            console.error("아이디 중복 확인 실패", error);
+            setIdCheckMessage("아이디 중복 확인 실패. 다시 시도해주세요.");
+        });
+    }
+    // end ----------------------------------------------
+
+
     // start : 생년월일 관련 상태 추가 ---------------
     const [startDate, setStartDate] = useState(null); // 생년월일을 저장할 상태
     const handleDateChange = (date) => {
@@ -88,6 +120,15 @@ function Join(){
 
     function setFormData(event) {
         const { name, value } = event.target;
+
+        // 아이디가 변경되면 중복확인 상태 초기화 ----------
+        if (name === 'user_id') {
+            setIdValid(false);  //중복확인 상태 초기화
+            setIdChecked(false);
+            setIdCheckMessage('');  //중복확인 메시지 초기화
+            
+        }
+        // ----------------------------------------------
 
         // start : onChange할때마다 아이디와 비밀번호, 비밀번호 확인값 유효성 검사 ---------
         if (name === 'user_id') {
@@ -197,7 +238,7 @@ function Join(){
             document.querySelector('input[name="zipcode"]').focus();
             return false;
         }
-        
+
         //비동기식으로 회원가입 요청
         axios.post("http://127.0.0.1:9988/member/joinFormOk",
             {
@@ -232,14 +273,22 @@ function Join(){
                     <div className='join-form-inner'>
                         <div className='join-form-line'>
                             <div className='join-title'>아이디</div><div className='join-input-box'><input type="text" name="user_id" className='text-box' onChange={setFormData} ref={userIdRef}/></div>
-                            {idValid === false && (
+                            {idValid === false && !idChecked && (
                                 <div id='alert-id' className='alert-text'>아이디는 영어소문자와 숫자만 가능하며 5~10글자여야 합니다.</div>
                             )}
-                            {idValid === true && (
+                            {idValid === true && !idChecked && (
+                                <div id='alert-id' className='alert-text' style={{ color: 'orange' }}>중복확인을 해주세요.</div>
+                            )}
+                            {idChecked ===true && idValid === false && (
+                                <div id='alert-id' className='alert-text' style={{ color: 'red' }}>
+                                    {idCheckMessage} {/* 아이디 중복인 경우 문구 출력 */}
+                                </div>
+                            )}
+                            {idValid === true && idChecked &&(
                                 <div id='alert-id' className='alert-text' style={{ color: 'green' }}>OK</div>
                             )}
                         </div>
-                        <input type="button" value="중복확인" className='id-check'/>
+                        <input type="button" value="중복확인" className='id-check' onClick={handleIdCheck}/>
                         <div className='join-form-line'>
                             <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box' onChange={setFormData} ref={userPwRef} /></div>
                             {pwValid === false && (

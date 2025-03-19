@@ -8,4 +8,6 @@ public interface JoinService {
     Users createJoin(Users users);
 
     Optional<Users> joinSelect(Users users);
+
+    boolean checkId(Users users);
 }

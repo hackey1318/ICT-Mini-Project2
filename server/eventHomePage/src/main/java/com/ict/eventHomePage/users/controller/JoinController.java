@@ -26,6 +26,13 @@ public class JoinController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder; //비밀번호 암호화를 위한 객체 생성
     private final AuthService authService;
 
+    //아이디 중복확인
+    @PostMapping("/checkId")
+    public boolean checkId(@RequestBody Users users){
+        //System.out.println("중복확인/입력한 아이디 =>"+userid);
+        return service.checkId(users);
+    }
+
     //회원가입 페이지
     @PostMapping("/joinFormOk")
     public String joinFormOk(@RequestBody Users users){

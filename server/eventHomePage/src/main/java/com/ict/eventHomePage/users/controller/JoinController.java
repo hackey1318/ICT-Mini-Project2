@@ -2,7 +2,6 @@ package com.ict.eventHomePage.users.controller;
 
 import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.config.AuthRequired;
-import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.users.service.AuthService;
 import com.ict.eventHomePage.users.service.JoinService;
@@ -16,7 +15,6 @@ import java.util.Optional;
 import static com.ict.eventHomePage.domain.constant.UserRole.ADMIN;
 import static com.ict.eventHomePage.domain.constant.UserRole.USER;
 
-@CrossOrigin(origins = "http://localhost:3000")
 @Slf4j
 @RestController
 @RequestMapping("/member")
@@ -29,15 +27,12 @@ public class JoinController {
     //아이디 중복확인
     @PostMapping("/checkId")
     public boolean checkId(@RequestBody Users users){
-        //System.out.println("중복확인/입력한 아이디 =>"+userid);
         return service.checkId(users);
     }
 
     //회원가입 페이지
     @PostMapping("/joinFormOk")
     public String joinFormOk(@RequestBody Users users){
-        System.out.println(users.toString());
-
         //비밀번호 암호화
         String encodedPassword = bCryptPasswordEncoder.encode(users.getPw());
         users.setPw(encodedPassword);  //암호화된 비밀번호를 설정
@@ -56,7 +51,6 @@ public class JoinController {
     @PostMapping("/joinEdit")
     @AuthRequired({USER, ADMIN})
     public Optional<Users> joinEdit(@RequestBody Users users){
-        //System.out.println(users.toString());
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
 
         System.out.println("user=> "+user);

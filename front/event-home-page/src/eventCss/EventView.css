@@ -3,28 +3,36 @@
     font-family: Arial, sans-serif;
     color: #333;
     padding: 20px;
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    min-height: 100vh; 
-}
-.content-wrapper {
-    max-width: 800px; 
-    width: 100%;
-    text-align: center; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
+.content-wrapper {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+}
 
 .event-title {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 10px;
-    text-align: center; 
+    text-align: center;
 }
 
-
 .event-image {
+    width: 100%;
     margin-bottom: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+}
+
+.event-image .image-slider {
+    display: flex;
 }
 
 .event-image img {
@@ -32,29 +40,35 @@
     max-height: 400px;
     object-fit: cover;
     border-radius: 8px;
+    
 }
-
 
 .small-images {
     display: flex;
-    justify-content: flex-start; 
+    overflow-x: auto;
+    white-space: nowrap;
     margin-bottom: 20px;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+    cursor: grab; 
 }
+
 
 .small-images img {
-    width: 80px;
+    width: 80px; 
     height: 80px;
     margin-right: 10px;
-    border-radius: 4px; 
+    border-radius: 4px;
     object-fit: cover;
+    display: inline-block; 
+    scroll-snap-align: start; 
 }
-
 
 .event-actions {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
 
 .event-actions img {
@@ -64,7 +78,6 @@
     cursor: pointer;
 }
 
-
 .event-info {
     margin-bottom: 20px;
     line-height: 1.6;
@@ -72,15 +85,110 @@
 }
 
 .event-info p {
-    margin-bottom: 10px; 
+    margin-bottom: 10px;
 }
-.map{
+
+.map {
     width: 100%;
     height: 30vh;
-    background-color:beige;
+    background-color: beige;
 }
 
 #kakao-map {
     width: 100%;
     height: 400px;
-  }
+}
+
+.overview-container {
+    margin-bottom: 10px;
+}
+
+.overview-text {
+    white-space: pre-line;
+}
+
+.overview-toggle-button {
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.3em;
+}
+
+.overview-toggle-button:hover {
+    background-color: #ddd;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.modal-content {
+    position: relative;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    cursor: auto;
+    display: flex;
+    flex-direction: column; /* flex 방향 column으로 변경 */
+    align-items: center; /* 중앙 정렬 */
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    margin: 10px 0; /* 이미지 상하 간격 추가 */
+}
+
+.modal-nav-button {
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-nav-button:hover {
+    color: #333;
+}
+
+
+
+
+
+
+.modal-nav-button{
+    color:black;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.modal-nav-button:hover {
+    color: #333;
+}
+
+.modal-navigation {
+    justify-content: center; 
+    margin-top: 10px;     
+}
+
+/* 버튼 스타일 */
+.modal-nav-button{
+    margin: 0 100px;    
+}

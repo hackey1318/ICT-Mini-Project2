@@ -39,8 +39,8 @@ function EventModal({ event, onClose }) {
   }
 
   const handleViewDetailsClick = () => {
-    
-    navigate('/eventview', { state: { event: event } });
+    console.log(event);
+    navigate(`/eventview/${event.no}`, );
   };
   
   const removeBrTags = (text) => {

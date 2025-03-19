@@ -28,6 +28,8 @@ public class Replies {
 
     private int userNo;
 
+    private int eventNo;
+
     @Column(nullable = false, length = 30)
     private String title;
 

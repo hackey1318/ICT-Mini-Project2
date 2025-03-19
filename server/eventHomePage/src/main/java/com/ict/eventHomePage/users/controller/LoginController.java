@@ -28,7 +28,7 @@ public class LoginController {
     @PostMapping("/loginOk")
     public SuccessOfFailResponse loginOk(@RequestBody LoginRequest request, HttpServletResponse response, HttpServletRequest requestHttp){
         try {
-            System.out.println("로그인 정보====> " + request);
+            // System.out.println("로그인 정보====> " + request);
 
             String accessToken = loginService.loginSelect(request);
             if (accessToken == null || accessToken.trim().isEmpty()) {
@@ -55,7 +55,7 @@ public class LoginController {
 
     @PostMapping("/idFindOk")
     public ResponseEntity<Map<String, Object>> idFindOk(@RequestBody Users usersVO){
-        System.out.println("id찾기 정보====> " + usersVO);
+        // System.out.println("id찾기 정보====> " + usersVO);
 
         Users result = loginService.idFind(usersVO);
         Map<String, Object> response = new HashMap<>();
@@ -73,7 +73,7 @@ public class LoginController {
 
     @PostMapping("/pwFindOk")
     public ResponseEntity<Map<String, Object>> pwFindOk(@RequestBody Users usersVO){
-        System.out.println("pw찾기 정보====> " + usersVO);
+        // System.out.println("pw찾기 정보====> " + usersVO);
 
         Users result = loginService.pwFind(usersVO);
         System.out.println("result=========>" + result);
@@ -91,7 +91,7 @@ public class LoginController {
 
     @PostMapping("/pwResetOk")
     public ResponseEntity<Map<String, Object>> pwResetOk(@RequestBody Users usersVO){
-        System.out.println("pw재설정 정보====> " + usersVO);
+        // System.out.println("pw재설정 정보====> " + usersVO);
 
         // 기존 회원정보를 가져와서 pw정보를 재설정한다.
         Users selectUserInfo = loginService.pwFind(usersVO);

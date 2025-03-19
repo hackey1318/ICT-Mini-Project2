@@ -14,15 +14,15 @@
     text-align: center; 
 }
 
-/* 제목 스타일 */
+
 .event-title {
     font-size: 30px;
     font-weight: bold;
     margin-bottom: 10px;
-    text-align: center; /* 왼쪽 정렬 */
+    text-align: center; 
 }
 
-/* 이미지 스타일 */
+
 .event-image {
     margin-bottom: 20px;
 }

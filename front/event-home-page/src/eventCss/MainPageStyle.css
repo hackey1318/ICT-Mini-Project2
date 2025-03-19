@@ -20,7 +20,7 @@
     margin-left: 10px;
 }
 
-/* Header Menu 스타일 */
+
 .header-menu {
     position: absolute;
     top: 10px;
@@ -50,7 +50,7 @@
     display: flex;
     align-items: center;
     height: 100%;
-    flex-direction: row-reverse; /* 이미지와 텍스트 위치를 바꿈 */
+    flex-direction: row-reverse;
 }
 
 .banner-text {
@@ -131,11 +131,13 @@
     width: 22%;
     padding: 10px;
     height: 42vh;
+    
 }
 
 .date-picker {
     border: 1px solid #ccc;
     padding: 10px;
+    
 }
 
 .image-grid {
@@ -154,8 +156,8 @@
 
 .image-item img {
     width: 100%;
-    height: 200px; /* 원하는 높이로 설정 */
-    object-fit: cover;
+    height: 250px; 
+    object-fit: fill;
 }
 
 @media (max-width: 768px) {
@@ -201,27 +203,31 @@
 .custom-calendar .friday {
     color: black !important;
 }
+.react-calendar {
+    background-color: #E8F0FE;
+    border: none; 
+}
 
-/* 반응형 디자인 */
 @media (max-width: 768px) {
   .date-picker-container {
-    width: 100%; /* 화면 전체 너비 사용 */
-    height: auto; /* 높이를 자동으로 설정 */
-    max-width: none; /* 최대 너비 제한 제거 */
+    width: 100%; 
+    height: auto; 
+    max-width: none; 
     padding: 10px;
   }
 
   .date-picker {
-    max-width: 100%; /* 달력이 컨테이너에 맞게 확장되도록 설정 */
-    box-sizing: border-box; /* padding이 너비에 포함되도록 설정 */
+    max-width: 100%; 
+    box-sizing: border-box; 
   }
 
   .content-area {
-    flex-direction: column; /* 세로로 정렬 */
+    flex-direction: column; 
   }
 
   .image-grid {
     width: 100%;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
+  
 }

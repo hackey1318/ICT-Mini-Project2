@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './../eventCss/MainPageStyle.css';
@@ -13,12 +13,12 @@ function MainPage() {
     const [imageData, setImageData] = useState([]);
     const [filteredImageData, setFilteredImageData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());
-    const [selectedEvent, setSelectedEvent] = useState(null); // 선택된 이벤트 상태
+    const [selectedEvent, setSelectedEvent] = useState(null); 
+    const [calendarKey, setCalendarKey] = useState(Date.now()); 
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                //const response = await axios.get('http://localhost:9988/api/events'); // 전체 이벤트 가져오기
                 const response = await axios.get('http://localhost:9988/api/events/ongoing'); // 진행 중인 이벤트만 가져오기
                 setImageData(response.data);
                 setFilteredImageData(response.data);
@@ -33,8 +33,9 @@ function MainPage() {
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentSlide((prevSlide) => (prevSlide + 1) % imageData.length);
-        }, 3000);
+        }, 5000); //5초마다 배너전환 
 
+        // 배너가 변경될 때 달력 초기화 방지
         return () => clearInterval(intervalId);
     }, [imageData.length]);
 
@@ -98,6 +99,7 @@ function MainPage() {
             <div className="date-picker">
                 <p>{formatDate(date)}</p>
                 <Calendar
+                    key={calendarKey}
                     onChange={handleDateChange}
                     value={date}
                     locale="ko-KR"
@@ -132,33 +134,33 @@ function MainPage() {
         <div className="main-page">
             <header className="main-header">
                 <div className="top-banner">
-                <div className="banner-content">
-                            {imageData.length > 0 ? (
-                                <>
-                                    <img
-                                        src={imageData[currentSlide % imageData.length]?.img_list && imageData[currentSlide % imageData.length]?.img_list[0]?.originImgurl
-                                            ? imageData[currentSlide % imageData.length].img_list[0].originImgurl
-                                            : ''}
-                                        alt={imageData[currentSlide % imageData.length].title}
-                                        className="banner-image"
-                                    />
-                                    <div className="banner-text">
-                                        <h2>{imageData[currentSlide % imageData.length].title}</h2>
-                                    </div>
-                                </>
-                            ) : (
-                                <div>표시할 이벤트가 없습니다.</div>
-                            )}
-                        </div>
+                    <div className="banner-content">
+                        {imageData.length > 0 ? (
+                            <>
+                                <img
+                                    src={imageData[currentSlide % imageData.length]?.img_list && imageData[currentSlide % imageData.length]?.img_list[0]?.originImgurl
+                                        ? imageData[currentSlide % imageData.length].img_list[0].originImgurl
+                                        : ''}
+                                    alt={imageData[currentSlide % imageData.length].title}
+                                    className="banner-image"
+                                />
+                                <div className="banner-text">
+                                    <h2>{imageData[currentSlide % imageData.length].title}</h2>
+                                </div>
+                            </>
+                        ) : (
+                            <div>표시할 이벤트가 없습니다.</div>
+                        )}
+                    </div>
 
-                    {/* 페이지네이션 */}
+                    {/* 탑배너 페이지네이션 */}
                     <div className="pagination">
                         <span>{currentSlide + 1} / {imageData.length}</span>
                         <button onClick={goToPrevSlide}>←</button>
                         <button onClick={goToNextSlide}>→</button>
                     </div>
                 </div>
-                {/* 로그인 상태에 따라 메뉴 변경 */}
+              
                 <div className="header-menu">
                     {isLoggedIn ? (
                         <ul>
@@ -196,8 +198,8 @@ function MainPage() {
                     {filteredImageData.length > 0 ? (
                         filteredImageData.map((image) => (
                             <div key={image.no} className="image-item">
-                                  <img
-                                    src={ image.img_list && image.img_list[0].originImgurl} 
+                                <img
+                                    src={image.img_list && image.img_list[0].originImgurl}
                                     alt={image.title}
                                     className="grid-image"
                                 />
@@ -212,7 +214,7 @@ function MainPage() {
                     )}
                 </div>
             </div>
-             {/* 모달 */}
+          
             {selectedEvent && (
                 <EventModal event={selectedEvent} onClose={closeModal} />
             )}

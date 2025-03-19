@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../eventCss/EventModal.css';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom'; // React Router v6 사용
+import { useNavigate } from 'react-router-dom'; 
 
 function EventModal({ event, onClose }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const textRef = useRef(null);
-  const navigate = useNavigate(); // React Router v6 Hook
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     console.log(event);
@@ -20,23 +19,35 @@ function EventModal({ event, onClose }) {
     checkOverflow();
     window.addEventListener('resize', checkOverflow);
 
+    
+    const handleEscClose = (event) => {
+      if (event.keyCode === 27) { 
+        onClose(); 
+      }
+    };
+
+    window.addEventListener('keydown', handleEscClose);
+
     return () => {
       window.removeEventListener('resize', checkOverflow);
+      window.removeEventListener('keydown', handleEscClose); 
     };
-  }, []);
+  }, [onClose]); 
 
   if (!event) {
     return null;
   }
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   const handleViewDetailsClick = () => {
-    // EventView로 이동하면서 event 객체를 state로 넘겨줌
+    
     navigate('/eventview', { state: { event: event } });
   };
+  
+  const removeBrTags = (text) => {
+    return text.replace(/<br\s*\/?>/gi, '');
+  };
+
+  const overviewText = removeBrTags(event.overView);
 
   return (
     <div className="modal-overlay">
@@ -60,17 +71,16 @@ function EventModal({ event, onClose }) {
             <strong>행사 장소:</strong> {event.addr}
           </p>
           <div className="overview-container">
-            <div className={`overview ${isExpanded ? 'expanded' : ''}`} ref={textRef}>
-              {event.overView}
+            <div
+              className="overview"
+              ref={textRef}
+            >
+              {overviewText}
             </div>
-            {isOverflowing && (
-              <button onClick={toggleExpand} className="arrow-button">
-                {isExpanded ? '▲' : '▼'}
-              </button>
-            )}
+
           </div>
         </div>
-        <div className="modal-footer">  
+        <div className="modal-footer">
           <button className="view-details-button" onClick={handleViewDetailsClick}>
             상세 보기
           </button>

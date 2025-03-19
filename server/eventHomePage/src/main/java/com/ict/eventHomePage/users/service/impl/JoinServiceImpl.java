@@ -8,7 +8,6 @@ import com.ict.eventHomePage.users.service.JoinService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -19,7 +18,6 @@ public class JoinServiceImpl implements JoinService {
     //아이디 중복확인
     @Override
     public boolean checkId(Users users) {
-        //System.out.println("userId=>"+users.getUserId());
         Optional<Users> userInfo = usersRepository.findByUserId(users.getUserId());
 
         System.out.println("userInfo=>"+userInfo);
@@ -46,5 +44,11 @@ public class JoinServiceImpl implements JoinService {
     @Override
     public Optional<Users> joinSelect(Users users) {
         return usersRepository.findByUserId(users.getUserId());
+    }
+
+    //회원정보 수정
+    @Override
+    public int joinUpdate(Users users) {
+        return usersRepository.joinUpdate(users.getNo(), users.getEmail(), users.getTel(), users.getPostalCode(), users.getAddr());
     }
 }

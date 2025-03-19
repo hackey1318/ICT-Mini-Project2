@@ -53,19 +53,17 @@ public class JoinController {
     public Optional<Users> joinEdit(@RequestBody Users users){
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
 
-        System.out.println("user=> "+user);
-
         return service.joinSelect(user);
     }
 
     //회원정보수정(DB)
     @PostMapping("/joinEditOk")
+    @AuthRequired({USER, ADMIN})
     public String joinEditOk(@RequestBody Users users){
-        System.out.println(users);
+        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
+        users.setNo(user.getNo());
+        int result = service.joinUpdate(users);
 
-        Optional<Users> checkUser = service.joinSelect(users);
-        Users result = service.createJoin(users);
-
-        return null;
+        return "ok";
     }
 }

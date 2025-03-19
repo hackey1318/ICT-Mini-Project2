@@ -10,4 +10,6 @@ public interface JoinService {
     Optional<Users> joinSelect(Users users);
 
     boolean checkId(Users users);
+
+    int joinUpdate(Users users);
 }

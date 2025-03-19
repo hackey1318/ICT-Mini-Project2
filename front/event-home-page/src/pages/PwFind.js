@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import axios from "axios";
+import arrow from '../img/arrow.png';
 
 function PwFind(){
 
@@ -78,9 +79,34 @@ function PwFind(){
     const pwRef = useRef(null);
     const pwCheckRef = useRef(null);
 
+    const [pwValid, setPwValid] = useState(null);  // 비밀번호 유효성 상태
+    const [pwCheckValid, setPwCheckValid] = useState(null); // 비밀번호 확인 상태
+
     function setPwResetFormCheck(event){
         let name = event.target.name;
         let value = event.target.value;
+
+        if (name === 'pw') {
+            let regPw = /^[A-Za-z0-9!@#$%]{7,10}$/;
+            setPwValid(value === '' ? null : regPw.test(value));
+            // 비밀번호가 비어 있을 경우 pwCheckValid도 null로 설정
+            if (value === '') {
+                setPwResetForm(null); // 비밀번호가 비어 있으면 확인값도 유효하지 않다고 처리
+            } else if (pwResetForm.pwCheck !== '' && pwResetForm.pwCheck !== value) {
+                // 비밀번호 확인값과 비밀번호가 다르면 false 처리
+                setPwResetForm(false);
+            } else if (pwResetForm.pwCheck === value) {
+                // 비밀번호 확인값과 비밀번호가 같으면 true 처리
+                setPwResetForm(true);
+            }
+        }else if( name === 'pwCheck'){
+            // 비밀번호와 확인값이 일치하면 true, 일치하지 않으면 false
+            if (pwResetForm.pw === '' || value === '') {
+                setPwCheckValid(null); // 비밀번호나 확인값이 비어 있으면 OK가 안 뜨게 null로 설정
+            } else {
+                setPwCheckValid(value === pwResetForm.pw ? true : false);
+            }
+        }
 
         setPwResetForm(previous=>{ //한개일경우는 안써도되는데 데이터가 두개이상이면 데이터 보존을 위해 써준다.
             return {...previous, [name]:value};
@@ -130,9 +156,9 @@ function PwFind(){
 
             // 응답의 result가 "pwResetFail"인지 "pwResetSuccess"인지 확인
             if (response.data.result === "pwResetFail") {
-                alert("비밀번호 재설정이 실패하였습니다. 다시 설정해주세요.");
+                alert("비밀번호 재설정에에 실패하였습니다. 다시 설정해주세요.");
             } else if (response.data.result === "pwResetSuccess") {
-                alert("비밀번호 재설정이 성공하였습니다. 로그인페이지로 넘어갑니다.");
+                alert("비밀번호 재설정에 성공하였습니다. 로그인페이지로 넘어갑니다.");
                 window.location.href="/login"; // 홈으로 이동 
             }
 
@@ -147,9 +173,12 @@ function PwFind(){
         <div className="id-find-container">
             <div className="id-find-form">
                 {!pwFound ? (
+                    <>
+                    <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                        <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                    </button>
                     <form onSubmit={formCheck}>
-                        <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
-                        <h2>비밀번호 찾기</h2>
+                        <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 찾기</h2>
                         <div className="id-find-input">
                             <label htmlFor="userId">아이디</label>
                             <input type="text" id="userId" name="userId" style={{width:'50%'}} placeholder="아이디를 입력하세요." onChange={setFormData} ref={userIdRef} />
@@ -160,18 +189,33 @@ function PwFind(){
                         </div>
                         <button className="idfind-btn">비밀번호 찾기</button>
                     </form>
+                    </>
                 ) : (
                     <div>
+                        <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                            <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                        </button>
                         <form onSubmit={pwFormCheck}>
-                            <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
-                            <h2>비밀번호 <span style={{color:'blue'}}>재설정</span></h2>
+                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'blue'}}>재설정</span></h2>
                             <div className="id-find-input">
                                 <label htmlFor="pw">비밀번호</label>
-                                <input type="password" id="pw" name="pw" placeholder="비밀번호를 입력하세요." onChange={setPwResetFormCheck} ref={pwRef} />
+                                <input type="password" id="pw" name="pw" className="pw-style" onChange={setPwResetFormCheck} ref={pwRef} />
+                                {pwValid === false && (
+                                    <div style={{ color: 'red', fontSize: '12px' }}>영문 대소문자, 숫자, !@#$% 포함 7~10글자여야 합니다.</div>
+                                )}
+                                {pwValid === true && (
+                                    <div style={{ color: 'green', fontSize: '12px' }}>OK</div>
+                                )}
                             </div>
                             <div className="id-find-input">
                                 <label htmlFor="pwCheck">비밀번호 재입력</label>
-                                <input type="password" id="pwCheck" name="pwCheck" placeholder="비밀번호를 다시 입력하세요." onChange={setPwResetFormCheck} ref={pwCheckRef} />
+                                <input type="password" id="pwCheck" name="pwCheck" className="pw-style" onChange={setPwResetFormCheck} ref={pwCheckRef} />
+                                {pwCheckValid === false && (
+                                    <div style={{ color: 'red', fontSize: '12px' }}>비밀번호가 일치하지 않습니다.</div>
+                                )}
+                                {pwCheckValid === true && (
+                                    <div style={{ color: 'green', fontSize: '12px' }}>OK</div>
+                                )}
                             </div>
                             <button className="idfind-btn">비밀번호 재설정하기</button>
                         </form>

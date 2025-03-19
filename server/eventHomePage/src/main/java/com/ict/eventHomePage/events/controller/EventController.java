@@ -1,6 +1,5 @@
 package com.ict.eventHomePage.events.controller;
 
-import com.ict.eventHomePage.domain.EventImages;
 import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.EventsVO;
 import com.ict.eventHomePage.events.service.EventService;
@@ -16,22 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/events")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class EventController {
 
     private final EventService eventService;
-
     private final ModelMapper modelMapper;
 
-    @GetMapping("/events")
+    @GetMapping
     public ResponseEntity<List<Events>> getAllEvents() {
         List<Events> events = eventService.getAllEvents();
         return new ResponseEntity<>(events, HttpStatus.OK);
     }
 
-    @GetMapping("/events/ongoing") // 현재날 기준 상단 배너 노출
+    @GetMapping("/ongoing") // 현재날 기준 상단 배너 노출
     public ResponseEntity<List<EventsVO>> getOngoingEvents() {
         List<Events> events = eventService.getOngoingEvents();
         List<EventsVO> result = new ArrayList<>();
@@ -44,16 +42,18 @@ public class EventController {
     }
 
     @GetMapping("/{no}")
-    public ResponseEntity<Events> getEventByNo(@PathVariable int no) {
+    public ResponseEntity<EventsVO> getEventByNo(@PathVariable("no") Integer no) {
         Events event = eventService.getEventByNo(no);
         if (event != null) {
-            return new ResponseEntity<>(event, HttpStatus.OK);
+            EventsVO evo = modelMapper.map(event, EventsVO.class);
+            evo.setImg_list(eventService.selectImages(event.getNo()));
+            return new ResponseEntity<>(evo, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @GetMapping("/events/search")
+    @GetMapping("/search")
     public ResponseEntity<List<EventsVO>> searchEvents(
             @RequestParam(required = false, value = "searchTerm") String searchTerm,
             @RequestParam(required = false, value = "selectedDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime selectedDate) {

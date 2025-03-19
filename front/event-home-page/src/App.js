@@ -15,7 +15,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
-        <Route path="/eventView" element={<EventView/>}></Route>
+        <Route path="/eventView/:no" element={<EventView/>}></Route>
         <Route path="/pages/reply" element={<Reply/>}></Route>
 
         <Route path="/admin" element={<Layout />}>

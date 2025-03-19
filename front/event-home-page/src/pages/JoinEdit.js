@@ -220,12 +220,6 @@ function JoinEdit(){
             alert_zipcode.innerHTML = "ok";
             zipcode_ok = 1;
         }
-
-        /*
-        if((id_ok+pw_ok+pwChk_ok+username_ok+birth_ok+email_ok+tel_ok+zipcode_ok)==8){
-            alert("회원가입 성공!");
-        }
-        */
     }
 
     //회원수정 버튼 클릭시 호출
@@ -253,7 +247,6 @@ function JoinEdit(){
         axios.post("http://127.0.0.1:9988/member/joinEditOk",
             {
                 userId: "admin",
-                /*pw: joinData.user_pw,*/
                 name: joinData.user_name,
                 birth: joinData.birth,
                 email: joinData.email,
@@ -279,11 +272,20 @@ function JoinEdit(){
         });
     }
 
-    function getJoinEdit(){
+    async function getJoinEdit(){
         //현재 로그인한 회원정보 가져오기
-        //                                                 ??세션말고 토큰값 가져오기??
-        axios.post("http://localhost:9988/member/joinEdit", {/*userid : sessionStorage.getItem("logId")*/userId:"qqqq1111"})
-        .then(function(response){
+        try{
+            const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
+
+            const response = await axios.post(
+                "http://localhost:9988/member/joinEdit",
+                {},
+                {
+                    headers: {
+                            Authorization: `Bearer ${accessToken}`
+                    }
+            });
+
             console.log(response.data);
 
             setJoinData({
@@ -297,18 +299,27 @@ function JoinEdit(){
                 birth: response.data.birth
             });
             
-            //전화번호 나눠서 셋팅
-            setTel1(response.data.tel.substring(0,3));
-            setTel2(response.data.tel.substring(3,7));
-            setTel3(response.data.tel.substring(7,11));
-
             //생년월일 나눠서 셋팅
-            setYear(response.data.birth.substring(0,4));
-            setMonth(response.data.birth.substring(4,6));
-            setDay(response.data.birth.substring(6,8));
-        }).catch(function(error){
-            console.log(error);
-        })
+            const birthParts = response.data.birth.split('.');
+            setYear(birthParts[0]);
+            setMonth(birthParts[1]);
+            setDay(birthParts[2]);  
+
+            //전화번호 tel1, tel2, tel3로 나눠서 셋팅
+            const telParts = response.data.tel.split('-');
+            //전화번호 길이에 따라 처리
+            if (telParts[0].length === 3) { //전화번호가 031, 010 등으로 시작할 때
+                setTel1(telParts[0]);
+                setTel2(telParts[1]);
+                setTel3(telParts[2]);
+            } else if (telParts[0].length === 2) { //전화번호가 02로 시작할 때
+                setTel1(telParts[0]);
+                setTel2(telParts[1]);
+                setTel3(telParts[2]);
+            }
+        }catch(error){
+            console.error("회원정보수정 페이지에서 데이터 가져오기 실패", error);
+        }
     }
 
     return(

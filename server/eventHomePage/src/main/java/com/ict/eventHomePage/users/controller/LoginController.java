@@ -7,9 +7,15 @@ import com.ict.eventHomePage.users.controller.request.LoginRequest;
 import com.ict.eventHomePage.users.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -48,24 +54,71 @@ public class LoginController {
     }
 
     @PostMapping("/idFindOk")
-    public String idFindOk(@RequestBody Users usersVO){
+    public ResponseEntity<Map<String, Object>> idFindOk(@RequestBody Users usersVO){
         System.out.println("id찾기 정보====> " + usersVO);
 
         Users result = loginService.idFind(usersVO);
-        if(result==null){
-            // System.out.println("id 찾기 실패: 해당하는 사용자가 없습니다.");
-            return "idFindFail";
-        }else{
-            // System.out.println("id 찾기 정상적으로 되나요? " + result.getUserId());
-            return result.getUserId();
+        Map<String, Object> response = new HashMap<>();
+
+        if (result == null) {
+            response.put("result", "idFindFail");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.put("result", "idFindSuccess");
+            response.put("userId", result.getUserId());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
     }
 
     @PostMapping("/pwFindOk")
-    public String pwFindOk(@RequestBody Users usersVO){
+    public ResponseEntity<Map<String, Object>> pwFindOk(@RequestBody Users usersVO){
         System.out.println("pw찾기 정보====> " + usersVO);
-        return null;
+
+        Users result = loginService.pwFind(usersVO);
+        System.out.println("result=========>" + result);
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (result == null) {
+            response.put("result", "pwFindFail");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.put("result", "pwFindSuccess");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+
+    @PostMapping("/pwResetOk")
+    public ResponseEntity<Map<String, Object>> pwResetOk(@RequestBody Users usersVO){
+        System.out.println("pw재설정 정보====> " + usersVO);
+
+        // 기존 회원정보를 가져와서 pw정보를 재설정한다.
+        Users selectUserInfo = loginService.pwFind(usersVO);
+        //System.out.println("선택한 회원정보 ====> " + selectUserInfo);
+        usersVO.setNo(selectUserInfo.getNo());
+        usersVO.setAddr(selectUserInfo.getAddr());
+        usersVO.setBirth(selectUserInfo.getBirth());
+        usersVO.setCreatedAt(selectUserInfo.getCreatedAt());
+        usersVO.setName(selectUserInfo.getName());
+        usersVO.setRole(selectUserInfo.getRole());
+        usersVO.setStatus(selectUserInfo.getStatus());
+        usersVO.setTel(selectUserInfo.getTel());
+        usersVO.setUpdatedAt(LocalDateTime.now());
+        usersVO.setPostalCode(selectUserInfo.getPostalCode());
+        //System.out.println("넣을 회원정보 ====> " + usersVO);
+
+        Users result = loginService.usersUpdate(usersVO);
+
+        Map<String, Object> response = new HashMap<>();
+
+        if (result == null) {
+            response.put("result", "pwResetFail");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } else {
+            response.put("result", "pwResetSuccess");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
     }
 
 

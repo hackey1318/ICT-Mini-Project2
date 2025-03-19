@@ -28,7 +28,7 @@
 .id-find-input {
     display: flex;
     flex-direction: column;
-    margin-bottom: 15px; /* 각 입력 필드 사이 간격 추가 */
+    margin-bottom: 5px; /* 각 입력 필드 사이 간격 추가 */
 }
 
 .id-find-input label {
@@ -37,16 +37,12 @@
     color: #333;
 }
 
-.id-find-form input:nth-of-type(1), 
-.id-find-form input:nth-of-type(2), 
-.id-find-form input:nth-of-type(3)   {
-    height: 8px;
+.id-find-form input {
     margin-bottom: 5px;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 14px;
-    width: 100%;
+    font-size: 12px;
     box-shadow: 1px 1px 1px 1px #ddd;  /* 진하고 작은 범위의 그림자 추가 */
 }
 
@@ -59,7 +55,7 @@
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 8px;
     width: 100%;
     box-shadow: 1px 1px 1px 1px #ddd;  /* 진하고 작은 범위의 그림자 추가 */
 }

@@ -1,11 +1,13 @@
 package com.ict.eventHomePage.notification.service.impl;
 
+import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
 import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
 import com.ict.eventHomePage.notification.repository.NotificationRepository;
 
 import com.ict.eventHomePage.notification.service.NotificationService;
+import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +18,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-//    private final MemberService memberService;
+    private final AuthService authService;
     private final NotificationRepository notificationRepository;
 
     @Override
-    public int getNotificationCount(int userNo) {
+    public int getNotificationCount(String userId) {
 
-//        MemberVO user = this.getMember(userNo);
-        return notificationRepository.getReadableNotificationCountForUser(userNo);
+        Users user = this.getMember(userId);
+        return notificationRepository.getReadableNotificationCountForUser(user.getNo());
     }
 
     @Override
-    public List<Notification> getNotificationList(int userNo) {
+    public List<Notification> getNotificationList(String userId) {
 
-//        MemberVO user = this.getMember(userNo);
-        return notificationRepository.getReadableNotificationListForUser(userNo);
+        Users user = this.getMember(userId);
+        return notificationRepository.getReadableNotificationListForUser(user.getNo());
     }
 
     @Override
-    public int readNotification(int userNo, List<Integer> notificationNoList) {
-//        MemberVO user = this.getMember(userNo);
-        return notificationRepository.readNotification(userNo, notificationNoList);
+    public int readNotification(String userId, List<Integer> notificationNoList) {
+        Users user = this.getMember(userId);
+        return notificationRepository.readNotification(user.getNo(), notificationNoList);
     }
 
     @Override
@@ -53,10 +55,9 @@ public class NotificationServiceImpl implements NotificationService {
         return notificationRepository.saveAll(notifications);
     }
 
-    private String getMember(int userNo) {
+    private Users getMember(String userId) {
 
-        String user = "test1";
-//        MemberVO user = memberService.getUser(userNo);
+        Users user = authService.getUser(userId);
         if (user == null) {
             throw new RuntimeException("사용자가 없습니다.");
         }

@@ -3,10 +3,11 @@ package com.ict.eventHomePage.notification.controller;
 import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.config.AuthRequired;
 import com.ict.eventHomePage.notification.controller.request.NotificationRequest;
-import com.ict.eventHomePage.notification.domain.Notification;
+import com.ict.eventHomePage.notification.controller.response.NotificationResponse;
 import com.ict.eventHomePage.notification.service.NotificationService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,35 +20,38 @@ import static com.ict.eventHomePage.domain.constant.UserRole.USER;
 @RequestMapping("/noti")
 public class NotificationController {
 
+    private final ModelMapper modelMapper;
     private final NotificationService notificationService;
 
-    @AuthRequired({USER, ADMIN})
     @GetMapping("/count")
-    public int countNotification(HttpSession session) {
-        int userNo = (int) session.getAttribute("userNo");
+    @AuthRequired({USER, ADMIN})
+    public int countNotification() {
         String userId = AuthCheck.getUserId(USER, ADMIN);
-        return notificationService.getNotificationCount(userNo);
+        return notificationService.getNotificationCount(userId);
     }
 
-    @AuthRequired(USER)
     @GetMapping
-    public List<Notification> getNotification(HttpSession session) {
-        int userNo = (int) session.getAttribute("userNo");
-        return notificationService.getNotificationList(userNo);
+    @AuthRequired({USER, ADMIN})
+    public List<NotificationResponse> getNotification() {
+        String userId = AuthCheck.getUserId(USER, ADMIN);
+        return modelMapper.map(notificationService.getNotificationList(userId), new TypeToken<List<NotificationResponse>>() {
+        }.getType());
     }
 
-    @AuthRequired(USER)
+
     @PatchMapping
-    public int readNotification(@RequestBody List<Integer> notificationList, HttpSession session) {
-        int userNo = (int) session.getAttribute("userNo");
-        return notificationService.readNotification(userNo, notificationList);
+    @AuthRequired({USER, ADMIN})
+    public int readNotification(@RequestBody List<Integer> notificationList) {
+        String userId = AuthCheck.getUserId(USER, ADMIN);
+        return notificationService.readNotification(userId, notificationList);
     }
 
-    @AuthRequired(ADMIN)
     @PostMapping
-    public List<Notification> postNotification(@RequestBody NotificationRequest request) {
+    @AuthRequired(ADMIN)
+    public List<NotificationResponse> postNotification(@RequestBody NotificationRequest request) {
 
-        return notificationService.generateNotification(request);
+        return modelMapper.map(notificationService.generateNotification(request), new TypeToken<List<NotificationResponse>>() {
+        }.getType());
     }
 }
 

@@ -40,8 +40,8 @@
     max-height: 400px;
     object-fit: cover;
     border-radius: 8px;
-    
 }
+
 
 .small-images {
     display: flex;
@@ -50,18 +50,17 @@
     margin-bottom: 20px;
     padding-bottom: 10px;
     scroll-snap-type: x mandatory;
-    cursor: grab; 
+    cursor: grab;
 }
 
-
 .small-images img {
-    width: 80px; 
+    width: 80px;
     height: 80px;
     margin-right: 10px;
     border-radius: 4px;
     object-fit: cover;
-    display: inline-block; 
-    scroll-snap-align: start; 
+    display: inline-block;
+    scroll-snap-align: start;
 }
 
 .event-actions {
@@ -97,6 +96,7 @@
 #kakao-map {
     width: 100%;
     height: 400px;
+    margin-bottom: 40px;
 }
 
 .overview-container {
@@ -184,11 +184,11 @@
 }
 
 .modal-navigation {
-    justify-content: center; 
-    margin-top: 10px;     
+    justify-content: center;
+    margin-top: 10px;
 }
 
 /* 버튼 스타일 */
 .modal-nav-button{
-    margin: 0 100px;    
+    margin: 0 100px;
 }

@@ -45,7 +45,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private UsernamePasswordAuthenticationToken getUserAuth(String userId) {
         Users userInfo = usersRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
 
-        return new UsernamePasswordAuthenticationToken(userInfo.getEmail(), userInfo.getPw(),
+        return new UsernamePasswordAuthenticationToken(userInfo.getUserId(), userInfo.getPw(),
                 Collections.singleton(new SimpleGrantedAuthority(userInfo.getRole().name())));
     }
 }

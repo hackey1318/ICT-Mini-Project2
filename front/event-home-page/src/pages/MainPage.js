@@ -17,8 +17,11 @@ function MainPage() {
             <ul>
                 <li><StyledLink to="/">홈</StyledLink></li>
                 <li><StyledLink to="/admin">Admin</StyledLink></li>
+                <li><StyledLink to="/eventView">Event</StyledLink></li>
             </ul>
         </div>
     );
 }
 export default MainPage;
+
+

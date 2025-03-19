@@ -1,17 +1,30 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {  useParams, useLocation } from 'react-router-dom';
 import moment from 'moment';
-import './../eventCss/EventView.css';
+import '../eventCss/EventView.css';
 import axios from 'axios';
+import '../eventCss/EventView.css';
+import '../css/replyList.css';
+import ReviewEdit from '../js/event/ReviewEdit'
+import ReviewDelete from '../js/event/ReviewDelete';
+import axios from 'axios';
+import addFile from '../img/plus.jpg';
+import '../css/replyModal.css';
+
 
 function EventView() {
   const [event, setEvent] = useState({});
   const { no } = useParams();
   const mapRef = useRef(null);
+  let [title, setTitle] = useState('');
+  let [content, setContent] = useState('');
+  let [isModalOpen, setIsModalOpen] = useState(false);
+  const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
+  let [replies, setReplies] = useState([]);
   const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [uniqueImages, setUniqueImages] = useState([]);
-  
+
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -26,7 +39,7 @@ function EventView() {
           closeModal();
         }
       };
-  
+
       const uniqueImageUrls = new Set();
       const newUniqueImages = [];
       if (event?.img_list) {
@@ -43,7 +56,7 @@ function EventView() {
         window.removeEventListener('keydown', handleEscClose);
       };
     };
-  
+
     fetchEvent();
   }, [no, selectedImageIndex]);
 
@@ -99,14 +112,14 @@ function EventView() {
   const toggleOverview = () => {
     setIsOverviewExpanded(!isOverviewExpanded);
   };
-  
+
   //홈페이지 태그제거거
   const removeTags = (str) => {
     if ((str===null) || (str===''))
         return false;
     else
         str = str.toString();
-          
+
     return str.replace( /(<([^>]+)>)/ig, '');
   }
   //overview 부분 br태그제거
@@ -116,17 +129,17 @@ function EventView() {
 
    // 홈페이지 URL
    const extractUrl = (str) => {
-    const cleanedString = removeTags(str); 
+    const cleanedString = removeTags(str);
     try {
       //url생성
       new URL(cleanedString);
-      return cleanedString; 
+      return cleanedString;
     } catch (e) {
-     
+
       return null;
     }
   }
-  
+
   const openModal = (index) => {
     setSelectedImageIndex(index);
   };
@@ -134,7 +147,7 @@ function EventView() {
   const closeModal = () => {
     setSelectedImageIndex(null);
   };
- 
+
   const Previous = () => {
     setSelectedImageIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : uniqueImages.length-1));
   };
@@ -142,9 +155,9 @@ function EventView() {
   const Next = () => {
     setSelectedImageIndex((prevIndex) => (prevIndex < uniqueImages.length-1 ? prevIndex + 1 : 1));
   };
-  
-  
- 
+
+
+
    return (
     <div className="event-view-container">
       <div className="content-wrapper">
@@ -158,7 +171,7 @@ function EventView() {
             <div>No Image</div>
           )}
         </div>
-        <div className="small-images"> 
+        <div className="small-images">
           {event.img_list &&
              uniqueImages.map((item, idx) => {
               return (
@@ -214,7 +227,7 @@ function EventView() {
              🠖
             </button>
             </div>
-           
+
           </div>
         </div>
       )}

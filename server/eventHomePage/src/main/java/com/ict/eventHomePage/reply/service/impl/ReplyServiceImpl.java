@@ -40,41 +40,35 @@ public class ReplyServiceImpl implements ReplyService {
         return result;
     }
 
-//    @Override
-//    public List<Replies> getReplies(String userId, String content) {
-//        return List.of();
-//    }
+@Override
+public List<Replies> getReplyList() {
+    Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
+    int currentUserNo = user.getNo();
+    List<Map<String, Object>> replyData = replyRepository.getReplyListByUserNo(currentUserNo, StatusInfo.ACTIVE.name());
+    List<Replies> replyList = new ArrayList<>();
 
-    @Override
-    public List<Replies> getReplyList() {
-        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-        int currentUserNo = user.getNo();
-        // List<Map<String, Object>> 데이터 가져오기
-        List<Map<String, Object>> replyData = replyRepository.getReplyListByUserNo(currentUserNo);
-        List<Replies> replyList = new ArrayList<>();
+    for (Map<String, Object> record : replyData) {
+        Replies reply = new Replies();
+        reply.setNo(((Number) record.get("no")).intValue());
+        reply.setUserNo(((Number) record.get("userNo")).intValue());
+        reply.setEventNo(((Number) record.get("eventNo")).intValue());
+        reply.setTitle((String) record.get("joinedTitle"));
+        reply.setContent((String) record.get("content"));
 
-        // Map 데이터를 Replies 객체로 변환
-        for (Map<String, Object> record : replyData) {
-            Replies reply = new Replies();
-            reply.setNo((int) record.get("no"));
-            reply.setUserNo((int) record.get("userNo"));
-            reply.setEventNo((int) record.get("eventNo"));
-            reply.setTitle((String) record.get("joinedTitle"));
-            reply.setContent((String) record.get("content"));
-
-            // createdAt 변환 (Timestamp -> LocalDateTime)
-            Object createdAtObj = record.get("createdAt");
-            if (createdAtObj instanceof java.sql.Timestamp) {
-                reply.setCreatedAt(((java.sql.Timestamp) createdAtObj).toLocalDateTime());
-            } else if (createdAtObj instanceof java.time.LocalDateTime) {
-                reply.setCreatedAt((LocalDateTime) createdAtObj);
-            } else {
-                reply.setCreatedAt(null); // 변환 불가능한 경우 null 설정
-            }
-            replyList.add(reply);
+        // createdAt 변환 (Timestamp -> LocalDateTime)
+        Object createdAtObj = record.get("createdAt");
+        if (createdAtObj instanceof java.sql.Timestamp) {
+            reply.setCreatedAt(((java.sql.Timestamp) createdAtObj).toLocalDateTime());
+        } else if (createdAtObj instanceof String) {
+            reply.setCreatedAt(LocalDateTime.parse((String) createdAtObj));
+        } else {
+            reply.setCreatedAt(null);
         }
-        return replyList;
+
+        replyList.add(reply);
     }
+    return replyList;
+}
 
     @Override
     public Replies dataInsert(Replies replies) {

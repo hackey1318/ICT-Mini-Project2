@@ -179,7 +179,7 @@ function MainPage() {
                 {/* 로그인 상태에 따라 메뉴 변경 */}
                 <div className="header-menu">
                     <ul>
-                        <Link to={isLoggedIn ? `/mypage` : `/login`}>
+                        <Link to={isLoggedIn ? `/my` : `/login`}>
                             <img src={myIcon} alt="My Page" style={{margin: '5px', width:'40px', height:'40px'}}/>
                         </Link>
                         {isLoggedIn? (

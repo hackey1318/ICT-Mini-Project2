@@ -165,7 +165,9 @@ function EventView() {
         </div>
         <div className="event-image">
           {event.img_list && event.img_list[0] && event.img_list[0].originImgurl ? (
-          <img src={event.img_list[0].originImgurl} alt={event.title} />
+          <img src={event.img_list[0].originImgurl} 
+          onClick={() => openModal(0)} 
+          style={{ cursor: 'pointer' }} />
           ) : (
             <div>No Image</div>
           )}

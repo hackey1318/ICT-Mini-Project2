@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import myIcon from '../img/user.png';
 import NotificationSystem from "../js/notification/notificationInfo";
 import likeIcon from '../img/heart.png';
+import BannerInfo from "../pages/banner/bannerInfo";
 
 function MainPage() {
     const StyledLink = styled(Link)`
@@ -149,33 +150,7 @@ function MainPage() {
     return (
         <div className="main-page">
             <header className="main-header">
-                <div className="top-banner">
-                    <div className="banner-content">
-                        {imageData.length > 0 && (
-                            <>
-                                <img
-                                    // src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정
-                                    src={myIcon} // originImgurl을 사용하여 이미지 경로 설정
-                                    // alt={imageData[currentSlide % imageData.length].title}
-                                    alt={"Test"}
-                                    className="banner-image"
-                                />
-                                <div className="banner-text">
-                                    {/* <h2>{imageData[currentSlide % imageData.length].title}</h2> */}
-                                    <h2>{"test"}</h2>
-                                </div>
-
-                            </>
-                        )}
-                    </div>
-
-                    {/* 페이지네이션 */}
-                    <div className="pagination">
-                        <span>{currentSlide + 1} / {imageData.length}</span>
-                        <button onClick={goToPrevSlide}>←</button>
-                        <button onClick={goToNextSlide}>→</button>
-                    </div>
-                </div>
+                <BannerInfo/>
                 {/* 로그인 상태에 따라 메뉴 변경 */}
                 <div className="header-menu">
                     <ul>

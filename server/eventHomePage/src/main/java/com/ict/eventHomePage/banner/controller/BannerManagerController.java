@@ -1,5 +1,6 @@
 package com.ict.eventHomePage.banner.controller;
 
+import com.ict.eventHomePage.banner.controller.response.BannerResponse;
 import com.ict.eventHomePage.banner.service.BannerService;
 import com.ict.eventHomePage.domain.Events;
 import lombok.RequiredArgsConstructor;
@@ -76,5 +77,11 @@ public class BannerManagerController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error creating banner: " + e.getMessage());
         }
+    }
+
+    @GetMapping
+    public List<BannerResponse> homeBannerList() {
+
+        return bannerService.getHomeBannerList();
     }
 }

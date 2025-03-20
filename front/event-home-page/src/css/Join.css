@@ -20,11 +20,13 @@
     box-shadow: 1px 1px 1px 1px #ddd;
     margin: 0 auto;
     margin-top: 50px;
-    padding: 10px;
+    padding: 50px 10px;
     overflow: auto;
+    position: relative;
 }
 #join-form-title{
     text-align: center;
+    margin-bottom: 30px;
 }
 .join-form-inner{
     width: 90%;
@@ -36,11 +38,11 @@
     margin-left: 50px;
     margin-bottom: 20px;
     float: left;
+    height: 30px;
 }
 .join-input-box{
     width: 400px;
 }
-
 .text-box, .id-check, .addr-input, .join-btn{
     width: 250px;
     height: 25px;
@@ -51,6 +53,7 @@
 }
 .id-check{
     float: left;
+    margin-left: -14px;
 }
 .join-title{
     width: 132px;
@@ -105,7 +108,7 @@
 .alert-text{
     text-align: left;
     color: red;
-    font-size: 13px;
+    font-size: 12px;
     height: 15px;
     line-height: 15px;
     padding-left: 130px;

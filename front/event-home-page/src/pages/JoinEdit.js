@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import '../css/Join.css';
 import axios from 'axios';
+import arrow from '../img/arrow.png';
 
 function JoinEdit(){
     //회원정보를 보관할 변수
@@ -133,7 +134,7 @@ function JoinEdit(){
             document.querySelector('input[name="tel1"]').focus();
             return false;
         }
-        if (!/^0[1-9]{1}[0-9]{1,2}$/.test(tel1) || !/^[1-9]{3,4}$/.test(tel2) || !/^[0-9]{4}$/.test(tel3)) {
+        if (!/^\d+$/.test(tel1) || !/^\d+$/.test(tel2) || !/^\d+$/.test(tel3)) {
             alert('연락처는 숫자만 입력 가능합니다.');
             document.querySelector('input[name="tel1"]').focus();
             return false;
@@ -229,7 +230,9 @@ function JoinEdit(){
         <div id='wrap'>
             <div className='join-form'>
                 <form onSubmit={formCheck}>
-                    <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer', display: 'inline-block'}} onClick={() => window.history.back()}>←</div>
+                    <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                        <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                    </button>
                     <h2 id="join-form-title">회원정보수정</h2>
                     <div className='join-form-inner'>
                         <div className='join-form-line'>
@@ -255,9 +258,9 @@ function JoinEdit(){
                         <div className='join-form-line'>
                             <div className='join-title'>연락처</div>
                             <div className='join-input-box'>
-                                <input type="text" name="tel1" value={tel1} className='text-box tel' onChange={(event)=>handleTelChange('tel1',event.target.value)} maxLength={3}/>
-                                -<input type="text" name="tel2" value={tel2} className='text-box tel' onChange={(event)=>handleTelChange('tel2',event.target.value)} maxLength={4}/>
-                                -<input type="text" name="tel3" value={tel3} className='text-box tel' onChange={(event)=>handleTelChange('tel3',event.target.value)} maxLength={4}/>
+                                <input type="text" name="tel1" value={tel1} className='text-box tel' minLength={2} maxLength={3} onChange={(event)=>handleTelChange('tel1',event.target.value)}/>
+                                -<input type="text" name="tel2" value={tel2} className='text-box tel' minLength={3} maxLength={4} onChange={(event)=>handleTelChange('tel2',event.target.value)}/>
+                                -<input type="text" name="tel3" value={tel3} className='text-box tel' maxLength={4} minLength={4} onChange={(event)=>handleTelChange('tel3',event.target.value)}/>
                                 <div id='alert-tel' className='alert-text'></div>
                             </div>
                         </div>

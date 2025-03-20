@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import '../css/Join.css';
+import arrow from '../img/arrow.png';
 
 //생년월일 관련
 import DatePicker from 'react-datepicker';
@@ -34,6 +35,13 @@ function Join(){
 
         //아이디가 비어있으면 중복확인 X
         if(joinData.user_id==null || joinData.user_id=="") return;
+
+        //아이디 길이 검사 추가
+        if (joinData.user_id.length < 5) {
+            setIdCheckMessage('아이디는 최소 5자 이상이어야 합니다.');
+            setIdChecked(false); // 중복확인 상태 초기화
+            return;
+        }
         
         axios.post("http://127.0.0.1:9988/member/checkId", {userId : joinData.user_id}).then(response =>{
             console.log(response.data); //중복이면 true, 중복이 아니면 false를 반환.
@@ -53,7 +61,6 @@ function Join(){
         });
     }
     // end ----------------------------------------------
-
 
     // start : 생년월일 관련 상태 추가 ---------------
     const [startDate, setStartDate] = useState(null); // 생년월일을 저장할 상태
@@ -82,7 +89,6 @@ function Join(){
         }
     };
     // ----------------------------------------------
-
 
     // start : onChange할때마다 유효성 검사 ---------
     const [idValid, setIdValid] = useState(null);  // 아이디 유효성 상태
@@ -239,6 +245,12 @@ function Join(){
             return false;
         }
 
+        //아이디 중복확인 여부 확인
+        if(idChecked==false){
+            alert('아이디 중복확인을 해주세요');
+            return false;
+        }
+
         //비동기식으로 회원가입 요청
         axios.post("http://127.0.0.1:9988/member/joinFormOk",
             {
@@ -267,14 +279,17 @@ function Join(){
     return(
         <div id='wrap'>
             <div className='join-form'>
+                <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
                 <form onSubmit={formCheck}>
-                    <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
+                    
                     <h2 id="join-form-title">회원가입</h2>
                     <div className='join-form-inner'>
                         <div className='join-form-line'>
                             <div className='join-title'>아이디</div><div className='join-input-box'><input type="text" name="user_id" className='text-box' onChange={setFormData} ref={userIdRef}/></div>
                             {idValid === false && !idChecked && (
-                                <div id='alert-id' className='alert-text'>아이디는 영어소문자와 숫자만 가능하며 5~10글자여야 합니다.</div>
+                                <div id='alert-id' className='alert-text'>5~10자의 영어소문자, 숫자만 가능</div>
                             )}
                             {idValid === true && !idChecked && (
                                 <div id='alert-id' className='alert-text' style={{ color: 'orange' }}>중복확인을 해주세요.</div>
@@ -292,7 +307,7 @@ function Join(){
                         <div className='join-form-line'>
                             <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box' onChange={setFormData} ref={userPwRef} /></div>
                             {pwValid === false && (
-                                <div className='alert-text' style={{ color: 'red' }}>영문 대소문자, 숫자, !@#$% 포함 7~10글자여야 합니다.</div>
+                                <div className='alert-text' style={{ color: 'red' }}>7~10자의 영문 대소문자, 숫자, !@#$% 가능</div>
                             )}
                             {pwValid === true && (
                                 <div className='alert-text' style={{ color: 'green' }}>OK</div>
@@ -317,7 +332,7 @@ function Join(){
                                 selected={startDate}
                                 onChange={handleDateChange}
                                 dateFormat="yyyy-MM-dd"
-                                placeholderText="생년월일을 선택하세요------------"
+                                placeholderText="생년월일을 선택하세요."
                                 maxDate={new Date()} // 오늘 날짜 이후로는 선택 불가
                                 className='text-box'
                                 ref={dateInputRef}  // DatePicker input에 ref 추가
@@ -334,8 +349,8 @@ function Join(){
                             <div className='join-title'>연락처</div>
                             <div className='join-input-box'>
                                 <input type="text" name="tel1" className='text-box tel'  minLength={2} maxLength={3} onChange={setFormData} />
-                                -<input type="text" name="tel2" className='text-box tel' maxLength={4} minLength={4} onChange={setFormData} />
-                                -<input type="text" name="tel3" className='text-box tel'maxLength={4} minLength={4} onChange={setFormData} />
+                                -<input type="text" name="tel2" className='text-box tel' minLength={3} maxLength={4} onChange={setFormData} />
+                                -<input type="text" name="tel3" className='text-box tel' maxLength={4} minLength={4} onChange={setFormData} />
                             </div>
                         </div>
                         <div className='join-form-line addr-zipcode'>

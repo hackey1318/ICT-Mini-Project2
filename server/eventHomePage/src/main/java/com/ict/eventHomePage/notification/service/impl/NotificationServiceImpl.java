@@ -25,20 +25,20 @@ public class NotificationServiceImpl implements NotificationService {
     public int getNotificationCount(String userId) {
 
         Users user = this.getMember(userId);
-        return notificationRepository.getReadableNotificationCountForUser(user.getNo());
+        return notificationRepository.getReadableNotificationCountForUser(user.getNo(), NotificationStatus.READABLE);
     }
 
     @Override
     public List<Notification> getNotificationList(String userId) {
 
         Users user = this.getMember(userId);
-        return notificationRepository.getReadableNotificationListForUser(user.getNo());
+        return notificationRepository.getReadableNotificationListForUser(user.getNo(), NotificationStatus.READABLE);
     }
 
     @Override
     public int readNotification(String userId, List<Integer> notificationNoList) {
         Users user = this.getMember(userId);
-        return notificationRepository.readNotification(user.getNo(), notificationNoList);
+        return notificationRepository.readNotification(NotificationStatus.READ, user.getNo(), notificationNoList);
     }
 
     @Override

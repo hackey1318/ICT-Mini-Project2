@@ -15,7 +15,11 @@ public class ReplyRequest {
 
     private int userNo;
 
-    private List<Integer> replyList;
+    private int eventNo;
 
+    private String title;
 
+    private String content;
+
+    private List<String> imageIdList;
 }

@@ -53,6 +53,7 @@ public class SecurityConfig {
                 mvc.pattern("/member/**"),
                 mvc.pattern("/banner/**"),
                 mvc.pattern("/banner"),
+                mvc.pattern("/reply/**"),
                 mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/auth/sign-up"),
                 mvc.pattern("/auth/token-refresh"),

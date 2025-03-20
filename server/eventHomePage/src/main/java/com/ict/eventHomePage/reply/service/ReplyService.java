@@ -1,12 +1,13 @@
 package com.ict.eventHomePage.reply.service;
 
 import com.ict.eventHomePage.domain.Replies;
+import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 
 import java.util.List;
 
 public interface ReplyService {
 
-    List<Replies> addReply(int userNo);
+    boolean addReply(ReplyRequest request);
 
     List<Replies> getReplies(String userId, String content);
 

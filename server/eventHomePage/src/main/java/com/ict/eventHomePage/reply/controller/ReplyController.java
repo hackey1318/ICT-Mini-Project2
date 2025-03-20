@@ -1,8 +1,11 @@
 package com.ict.eventHomePage.reply.controller;
 
 import com.ict.eventHomePage.common.config.AuthCheck;
+import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
+import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.Replies;
 //import com.ict.eventHomePage.reply.controller.request.UserRequest;
+import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 import com.ict.eventHomePage.reply.service.impl.ReplyServiceImpl;
 import com.ict.eventHomePage.users.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,45 +27,14 @@ public class ReplyController {
 
     private final ReplyServiceImpl replyService;
     private final AuthService authService;
-    private static String FILE_PATH = null;
 
     @PostMapping("/addReply")
-    public List<Replies> addReply(@RequestBody Replies replies, MultipartFile[] files, HttpServletRequest request) {
+    public SuccessOfFailResponse addReply(@RequestBody ReplyRequest request) {
 
-        String userId = AuthCheck.getUserId(USER, ADMIN);
-        FILE_PATH = request.getServletContext().getRealPath("/uploads");
-        List<File> fileList = new ArrayList<File>();
+        int userNo =  authService.getUser(AuthCheck.getUserId(USER, ADMIN)).getNo();
+        request.setUserNo(userNo);
 
-        try {
-            Replies resultReplies = replyService.dataInsert(replies);
-
-            for (MultipartFile mf : files) {
-                String orgFileName = mf.getOriginalFilename();
-                File f = new File(FILE_PATH, orgFileName);
-                int point = orgFileName.lastIndexOf(".");
-                String fName = orgFileName.substring(0, point);
-                String eName = orgFileName.substring(point + 1);
-
-                if (f.exists()) {
-                    for (int i = 1; ; i++) {
-                        String newFileName = fName + "(" + i + ")." + eName;
-
-                        File newFile = new File(FILE_PATH, newFileName);
-                        if (!newFile.exists()) {
-                            fName = fName + "(" + i + ").";
-                            break;
-                        }
-                    }
-                }
-
-                //ReplyImages replyImages = new ReplyImages(0, 0, );
-            }
-        } catch (Exception e) {
-
-        }
-
-
-        return replyService.addReply(authService.getUser(userId).getNo());
+        return SuccessOfFailResponse.builder().result(replyService.addReply(request)).build();
     }
 
     @GetMapping("/getReplies")

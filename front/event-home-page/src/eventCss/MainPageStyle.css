@@ -19,7 +19,7 @@
     margin-left: 10px;
 }
 
-
+/* Header Menu 스타일 */
 .header-menu {
     position: absolute;
     top: 10px;
@@ -39,82 +39,164 @@
 }
 
 .top-banner {
-    height: 29vh;
-    position: relative;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    height: 60vh;
+    margin-bottom: 150px;
 }
 
 .banner-content {
     display: flex;
     align-items: center;
     height: 100%;
-    flex-direction: row-reverse;
 }
 
 .banner-background {
     width: 100%;
-    height: 80%;
+    height: 100%;
 }
 
-.banner-text {
+/* start : 배너 이미지 디자인 ------------------------------------ */
+.banner-img {
+    position: absolute;
+    top: 20%;
+    right: 0;
     width: 50%;
-    padding: 20px;
-    box-sizing: border-box;
-    text-align: center; 
+    opacity: 0; /* 처음엔 보이지 않도록 */
+    animation: slideInImage 1s ease-out forwards; /* 애니메이션 적용 */
 }
+/* 이미지가 왼쪽 밖에서 부드럽게 나타나는 애니메이션 */
+@keyframes slideInImage {
+    0% {
+        opacity: 0;
+        transform: translateX(-10%); /* 왼쪽 밖에서 시작 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0); /* 원래 위치로 */
+    }
+}
+.banner-content img{
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+}
+/* end : 배너 이미지 디자인 ---------------------------------------- */
 
+
+/* start : 자세히보기 버튼 디자인 ------------------------------------ */
+.button-readmore {
+    color: #333; /* 텍스트 색상 */
+    padding: 0 7px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    background: transparent; /* 배경 없음 */
+    cursor: pointer;
+    transition: color 0.3s ease-in-out;
+    position: relative;
+}
+.button-readmore::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 1.5px;
+    background-color: #333;; /* 밑줄 색상 */
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    transition: width 0.3s ease-in-out;
+}
+.button-readmore:hover::after {
+    width: 100%; /* 텍스트 길이에 맞게 밑줄 표시 */
+}
+/* end : 자세히보기 버튼 디자인 --------------------------------------- */
+
+
+/* start : 배너 위 텍스트 디자인 -------------------------------------- */
+.banner-text {
+    position: absolute;
+    left: 10%; /* 화면 왼쪽 끝 */
+    transform: translateY(-50%); /* 수직 중앙 정렬 */
+    color: rgb(0, 0, 0);
+    padding: 20px;
+    z-index: 1;
+    text-align: left;
+    opacity: 0; /* 처음엔 보이지 않도록 */
+    animation: slideIn 1s ease-out forwards;
+}
+/* 왼쪽 밖에서 부드럽게 나타나는 애니메이션 */
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-30%); /* 왼쪽 밖에서 시작 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0); /* 원래 위치로 */
+    }
+}
 .banner-text h2 {
-    font-size: 2em;
+    font-size: 2.5em;
     margin-bottom: 10px;
 }
 
 .banner-text p {
     font-size: 1.2em;
-    margin-bottom: 20px;
-}
+    line-height: 1.5;
 
-.banner-text a {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
 }
+/* end : 배너 위 텍스트 디자인 ---------------------------------------- */
 
-.banner-content img {
-    width: 50%;
-    height: 95%;
-    object-fit: cover;
-}
 
-.top-banner .pagination {
+/* start : 페이지네이션 ----------------------------------------------- */
+.pagination {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    left: 5%;
     display: flex;
     align-items: center;
 }
 
-.pagination-container {
-    width: 100%;
-    display: flex;
-    justify-content: center;
+.pagination-text {
     margin-top: 20px;
-    margin-bottom: 20px;
+    margin-right: 10px;
+    font-size: 1.2em;
+    padding: 5px 10px;
 }
 
-.pagination {
-    display: flex;
-    justify-content: center;
-    position: relative;
-    bottom: auto;
-    right: auto;
+.pagination button {
+    padding: 10px 10px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.5em;
+    background-color: transparent;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-left: 10px;
+}
+/* end : 페이지네이션 ------------------------------------------------ */
+
+
+.slider-toggle-image {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    margin-top: 5px;
 }
 
-.pagination-container .pagination {
-    position: static;
+/* 진행 표시 바 스타일 */
+.progress-bar {
+    width: 250px;
+    height: 8px;
+    border-radius: 5px;
+    margin: 20px 5px 0 0;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #92AEDB;
+    border-radius: 5px;
+    transition: width 0.3s ease; /* 부드러운 애니메이션 효과 */
 }
 
 .search-bar {
@@ -141,13 +223,11 @@
     width: 22%;
     padding: 10px;
     height: 42vh;
-    
 }
 
 .date-picker {
     border: 1px solid #ccc;
     padding: 10px;
-    
 }
 .title-name{
     font-size: 1.2em;
@@ -169,7 +249,7 @@
 
 .image-item img {
     width: 100%;
-    height: 200px; 
+    height: 200px;
     object-fit: fill;
 }
 .date-addr{
@@ -211,24 +291,24 @@
 }
 .react-calendar {
     background-color: #E8F0FE;
-    border: none; 
+    border: none;
 }
 
 @media (max-width: 768px) {
   .date-picker-container {
-    width: 100%; 
-    height: auto; 
-    max-width: none; 
+    width: 100%;
+    height: auto;
+    max-width: none;
     padding: 10px;
   }
 
   .date-picker {
-    max-width: 100%; 
-    box-sizing: border-box; 
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
   .content-area {
-    flex-direction: column; 
+    flex-direction: column;
     display: flex;
   }
 
@@ -236,27 +316,7 @@
     width: 100%;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
-  
-}
 
-.pagination button {
-    padding: 8px 12px;
-    margin: 0 5px;
-    border: 1px solid #ddd;
-    background-color: white;
-    cursor: pointer;
-}
-.pagination button.active {
-    background-color: #4CAF50; 
-    color: white;
-    border: 1px solid #4CAF50;
-  }
-  
-.pagination button:hover:not(.active) {
-    background-color: #ddd;
-}
-.pagination {
-    order: 2; 
 }
 
 @media (max-width: 768px) {

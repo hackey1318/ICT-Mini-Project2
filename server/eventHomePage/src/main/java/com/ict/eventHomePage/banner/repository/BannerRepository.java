@@ -14,6 +14,7 @@ import java.util.List;
 
 @Repository
 public interface BannerRepository extends JpaRepository<Banners, Integer> {
+
     @Query("SELECT e FROM Events e WHERE " +
             "(:title IS NULL OR e.title LIKE :title) AND " +
             "(:startDate IS NULL OR e.startDate >= :startDate) AND " +
@@ -25,4 +26,7 @@ public interface BannerRepository extends JpaRepository<Banners, Integer> {
 
     @Query("SELECT new com.ict.eventHomePage.banner.service.dto.HomeBannerDto(b.no, b.eventNo, e.title, e.startDate, e.endDate, b.color, b.fileId) FROM Banners AS b LEFT JOIN Events as e ON e.no = b.eventNo WHERE b.status = :status")
     List<HomeBannerDto> findByStatus(@Param("status")StatusInfo status);
+
+    @Query("SELECT b, e.title FROM Banners b LEFT JOIN Events e ON b.eventNo = e.no")
+    List<Object[]> findAllBannersWithEventTitle();
 }

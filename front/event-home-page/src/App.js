@@ -13,6 +13,10 @@ import Login from './pages/Login';
 import Join from './pages/Join';
 import IdFind from './pages/IdFind';
 import PwFind from './pages/PwFind';
+import MypageLayout from './pages/mypage/MypageLayout';
+import Mypage from './pages/mypage/Mypage';
+import UpdateMyInfo from './pages/mypage/UpdateMyInfo';
+import ReplyList from './pages/mypage/ReplyList';
 
 import MyPage from './pages/my/MyPage';
 import ProfilePage from './pages/my/ProfilePage';
@@ -24,9 +28,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
-        <Route path="/eventView/:no" element={<EventView/>}></Route>
-        <Route path='/login' element={<Login/>}></Route>
-        <Route path='/join' element={<Join/>}></Route>
+        <Route path="/eventView/:no" element={<EventView />}></Route>
+        <Route path='/login' element={<Login />}></Route>
+        <Route path='/join' element={<Join />}></Route>
 
         <Route path="/admin" element={<Layout />}>
           <Route index element={<Admin />}></Route>
@@ -36,9 +40,16 @@ function App() {
           <Route path="createBanner" element={<CreateBanner />}></Route>
         </Route>
 
-        <Route path="/joinEdit" element={<JoinEdit/>}></Route>
-        <Route path="/idFind" element={<IdFind/>}></Route>
-        <Route path="/pwFind" element={<PwFind/>}></Route>
+        <Route path="/mypage" element={<MypageLayout />}>
+          <Route index element={<Mypage />}></Route>
+          <Route path="updateMyInfo" element={<UpdateMyInfo />}></Route>
+          <Route path="zzimList" element={<zzimList />}></Route>
+          <Route path="replyList" element={<ReplyList />}></Route>
+        </Route>
+
+        <Route path="/joinEdit" element={<JoinEdit />}></Route>
+        <Route path="/idFind" element={<IdFind />}></Route>
+        <Route path="/pwFind" element={<PwFind />}></Route>
 
         <Route path="/my" element={<MyPage />}>
           <Route index element={<ProfilePage />} />

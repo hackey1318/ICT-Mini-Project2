@@ -1,22 +1,18 @@
 package com.ict.eventHomePage.banner.controller;
 
+import com.ict.eventHomePage.banner.controller.request.BannerRequest;
 import com.ict.eventHomePage.banner.controller.response.BannerResponse;
 import com.ict.eventHomePage.banner.service.BannerService;
+import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Events;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
@@ -49,33 +45,42 @@ public class BannerManagerController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<String> createBanner(
-            @RequestParam("eventNo") Integer eventNo,
-            @RequestParam("startDate") String startDate,
-            @RequestParam("endDate") String endDate,
-            @RequestParam("color") String color,
-            @RequestParam("file") MultipartFile file) {
+    public SuccessOfFailResponse createBanner(@RequestBody BannerRequest request) {
+
+        return SuccessOfFailResponse.builder().result(bannerService.createBanner(request)).build();
+    }
+
+    @GetMapping("/bannerList")
+    public ResponseEntity<Map<String, List<Map<String, Object>>>> getBannerList() {
+        List<Map<String, Object>> banners = bannerService.getAllBanners();
+        Map<String, List<Map<String, Object>>> response = new HashMap<>();
+        response.put("list", banners);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/update/{no}")
+    public ResponseEntity<String> updateBanner(@PathVariable("no") Integer no, @RequestBody Map<String, Object> bannerData) {
         try {
-            String fileId = file.getOriginalFilename();
-            String uploadDir = "C:/uploads/";
-            File uploadDirFile = new File(uploadDir);
-            if (!uploadDirFile.exists()) {
-                uploadDirFile.mkdirs();
-            }
-            File dest = new File(uploadDir + fileId);
-            file.transferTo(dest);
+            Integer eventNo = Integer.parseInt(bannerData.get("eventNo").toString());
+            String fileId = bannerData.get("fileId").toString();
+            String color = bannerData.get("color").toString();
+            LocalDateTime startDate = LocalDateTime.parse(bannerData.get("startDate").toString() + "T00:00:00");
+            LocalDateTime endDate = LocalDateTime.parse(bannerData.get("endDate").toString() + "T00:00:00");
 
-            DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-            LocalDateTime start = LocalDateTime.parse(startDate, formatter);
-            LocalDateTime end = LocalDateTime.parse(endDate, formatter);
-
-            bannerService.createBanner(eventNo, fileId, color, start, end);
-
-            return ResponseEntity.ok("Banner created successfully");
-        } catch (IOException e) {
-            return ResponseEntity.status(500).body("File upload failed: " + e.getMessage());
+            bannerService.updateBanner(no, eventNo, fileId, color, startDate, endDate);
+            return ResponseEntity.ok("Banner updated successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error creating banner: " + e.getMessage());
+            return ResponseEntity.status(500).body("Error updating banner: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete/{no}")
+    public ResponseEntity<String> deleteBanner(@PathVariable("no") Integer no) {
+        try {
+            bannerService.deleteBanner(no);
+            return ResponseEntity.ok("Banner deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error deleting banner: " + e.getMessage());
         }
     }
 

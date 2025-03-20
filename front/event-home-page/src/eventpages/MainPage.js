@@ -152,7 +152,7 @@ function MainPage() {
             <header className="main-header">
                 <div className="top-banner">
                     <div className="banner-content">
-                        {imageData.length > 0 ? (
+                        {imageData.length > 0 && (
                             <>
                                 <img
                                     // src={`http://localhost:9988/images/${imageData[currentSlide % imageData.length].originImgurl}`} // originImgurl을 사용하여 이미지 경로 설정

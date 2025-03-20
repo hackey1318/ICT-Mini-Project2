@@ -7,7 +7,6 @@ import '../eventCss/EventView.css';
 import '../css/replyList.css';
 import ReviewEdit from '../js/event/ReviewEdit'
 import ReviewDelete from '../js/event/ReviewDelete';
-import axios from 'axios';
 import addFile from '../img/plus.jpg';
 import '../css/replyModal.css';
 

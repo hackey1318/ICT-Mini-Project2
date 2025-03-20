@@ -1,0 +1,17 @@
+.sidebar-menu {
+    border-radius: 0.5rem;
+}
+
+.sidebar-menu .list-group-item {
+    font-size: 1.125rem;
+    font-weight: 500;
+    padding: 0.75rem 0;
+}
+
+.sidebar-menu .list-group-item:last-child {
+    padding-bottom: 0;
+}
+
+.sidebar-menu .active {
+    font-weight: 600;
+}

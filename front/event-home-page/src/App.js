@@ -18,6 +18,10 @@ import Mypage from './pages/mypage/Mypage';
 import UpdateMyInfo from './pages/mypage/UpdateMyInfo';
 import ReplyList from './pages/mypage/ReplyList';
 
+import MyPage from './pages/my/MyPage';
+import ProfilePage from './pages/my/ProfilePage';
+import LikePage from './pages/my/likePage';
+import CommentsPage from './pages/my/CommentPage';
 
 function App() {
   return (
@@ -46,6 +50,12 @@ function App() {
         <Route path="/joinEdit" element={<JoinEdit />}></Route>
         <Route path="/idFind" element={<IdFind />}></Route>
         <Route path="/pwFind" element={<PwFind />}></Route>
+
+        <Route path="/my" element={<MyPage />}>
+          <Route index element={<ProfilePage />} />
+          <Route path="likes" element={<LikePage />} />
+          <Route path="comments" element={<CommentsPage />} />
+        </Route>
 
       </Routes>
     </BrowserRouter>

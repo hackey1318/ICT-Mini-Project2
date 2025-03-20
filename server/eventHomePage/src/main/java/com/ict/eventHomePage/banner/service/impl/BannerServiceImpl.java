@@ -4,6 +4,7 @@ import com.ict.eventHomePage.banner.controller.request.BannerRequest;
 import com.ict.eventHomePage.banner.controller.response.BannerResponse;
 import com.ict.eventHomePage.banner.repository.BannerRepository;
 import com.ict.eventHomePage.banner.service.BannerService;
+import com.ict.eventHomePage.banner.service.dto.HomeBannerDto;
 import com.ict.eventHomePage.domain.Banners;
 import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
@@ -92,6 +93,7 @@ public class BannerServiceImpl implements BannerService {
         banner.setEventNo(eventNo);
         banner.setFileId(fileId);
         banner.setColor(color);
+        banner.setStatus(StatusInfo.ACTIVE); // enum 값 사용 (StatusInfo.ACTIVE)
         banner.setStartDate(startDate);
         banner.setEndDate(endDate);
         bannerRepository.save(banner);
@@ -100,8 +102,9 @@ public class BannerServiceImpl implements BannerService {
     @Override
     public List<BannerResponse> getHomeBannerList() {
 
-        return modelMapper.map(bannerRepository.findByStatus(StatusInfo.ACTIVE), new TypeToken<List<BannerResponse>>() {
-        }.getType());
+        List<HomeBannerDto> banners = bannerRepository.findByStatus(StatusInfo.ACTIVE);
+
+        return modelMapper.map(banners, new TypeToken<List<BannerResponse>>(){}.getType());
     }
 
     @Override

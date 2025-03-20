@@ -28,7 +28,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
-        <Route path="/eventView" element={<EventView />}></Route>
+        <Route path="/eventView/:no" element={<EventView />}></Route>
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<Join />}></Route>
 

@@ -1,5 +1,6 @@
 package com.ict.eventHomePage.banner.repository;
 
+import com.ict.eventHomePage.banner.service.dto.HomeBannerDto;
 import com.ict.eventHomePage.domain.Banners;
 import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
@@ -23,7 +24,8 @@ public interface BannerRepository extends JpaRepository<Banners, Integer> {
             @Param("startDate") LocalDateTime startDate,
             @Param("addr") String addr);
 
-    List<Banners> findByStatus(@Param("status") StatusInfo status);
+    @Query("SELECT new com.ict.eventHomePage.banner.service.dto.HomeBannerDto(b.no, b.eventNo, e.title, e.startDate, e.endDate, b.color, b.fileId) FROM Banners AS b LEFT JOIN Events as e ON e.no = b.eventNo WHERE b.status = :status")
+    List<HomeBannerDto> findByStatus(@Param("status")StatusInfo status);
 
     @Query("SELECT b, e.title FROM Banners b LEFT JOIN Events e ON b.eventNo = e.no")
     List<Object[]> findAllBannersWithEventTitle();

@@ -13,5 +13,4 @@ public interface LoginService {
     Users pwFind(Users usersVO);
 
     Users usersUpdate(Users usersVO);
-
 }

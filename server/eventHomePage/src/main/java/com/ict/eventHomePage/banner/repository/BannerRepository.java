@@ -2,6 +2,7 @@ package com.ict.eventHomePage.banner.repository;
 
 import com.ict.eventHomePage.domain.Banners;
 import com.ict.eventHomePage.domain.Events;
+import com.ict.eventHomePage.domain.constant.StatusInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -20,4 +21,6 @@ public interface BannerRepository extends JpaRepository<Banners, Integer> {
             @Param("title") String title,
             @Param("startDate") LocalDateTime startDate,
             @Param("addr") String addr);
+
+    List<Banners> findByStatus(@Param("status")StatusInfo status);
 }

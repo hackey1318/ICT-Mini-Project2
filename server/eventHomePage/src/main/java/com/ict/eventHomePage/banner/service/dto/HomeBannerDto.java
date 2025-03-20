@@ -1,4 +1,4 @@
-package com.ict.eventHomePage.banner.controller.response;
+package com.ict.eventHomePage.banner.service.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BannerResponse {
+public class HomeBannerDto {
 
     private int no;
 

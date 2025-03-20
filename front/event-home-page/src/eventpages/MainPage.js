@@ -14,19 +14,17 @@ import BannerInfo from "../pages/banner/bannerInfo";
 
 function MainPage() {
     const StyledLink = styled(Link)`
-        text-decoration:none;
-
-        &:link, &:visited, &:active{
-            color:black;
+        text-decoration: none;
+        &:link, &:visited, &:active {
+            color: black;
         }
-
-        &:hover{
-            color:cyan;        
+        &:hover {
+            color: cyan;
         }
     `;
 
     const [searchTerm, setSearchTerm] = useState('');
-    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // 디바운싱된 검색어
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [imageData, setImageData] = useState([]);
@@ -47,7 +45,7 @@ function MainPage() {
         };
     };
 
-    const debouncedSetSearchTerm = useCallback(debounce(setDebouncedSearchTerm, 500), []); // 500ms 딜레이
+    const debouncedSetSearchTerm = useCallback(debounce(setDebouncedSearchTerm, 500), []);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -114,28 +112,26 @@ function MainPage() {
         debouncedSetSearchTerm(e.target.value);
     };
 
-    const DatePicker = ({ currentDate, setCurrentDate }) => {
+    const setCurrenDate2 = (date) => {
+        setCurrentDate(date);
+    };
+
+    const DatePicker = ({ currentDate, setCurrenDate2 }) => { 
         const [date, setDate] = useState(currentDate);
 
         useEffect(() => {
             setDate(currentDate);
         }, [currentDate]);
 
-        const handleDateChange = (date) => {
+        const onDateChange = (date) => {
             setDate(date);
-            setCurrentDate(date);
-        };
-
-        const formatDate = (date) => {
-            return moment(date).format('YYYY년 MM월 DD일');
+            setCurrenDate2(date); 
         };
 
         return (
-            <div className="date-picker">
-                <p>{formatDate(date)}</p>
                 <Calendar
                     key={calendarKey}
-                    onChange={handleDateChange}
+                    onChange={onDateChange}
                     value={date}
                     locale="ko-KR"
                     calendarType="hebrew"
@@ -153,7 +149,6 @@ function MainPage() {
                         return "";
                     }}
                 />
-            </div>
         );
     };
 
@@ -171,7 +166,6 @@ function MainPage() {
         <div className="main-page">
             <header className="main-header">
                 <BannerInfo/>
-                {/* 로그인 상태에 따라 메뉴 변경 */}
                 <div className="header-menu">
                     <ul>
                         <Link to={isLoggedIn ? `/my` : `/login`}>
@@ -202,7 +196,7 @@ function MainPage() {
                 <div className="date-picker-container">
                     <DatePicker
                         currentDate={currentDate}
-                        setCurrentDate={currentDate}
+                        setCurrenDate2={setCurrenDate2}
                     />
                 </div>
 

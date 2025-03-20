@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './../eventCss/MainPageStyle.css';
 import moment from 'moment';
 import axios from 'axios';
-import EventModal from './EventModal'; // 모달 컴포넌트 import
+import EventModal from './EventModal';
 import styled from 'styled-components';
 import { Link } from "react-router-dom";
 import myIcon from '../img/user.png';
@@ -13,18 +13,17 @@ import likeIcon from '../img/heart.png';
 
 function MainPage() {
     const StyledLink = styled(Link)`
-        text-decoration:none;
-
-        &:link, &:visited, &:active{
-            color:black;
+        text-decoration: none;
+        &:link, &:visited, &:active {
+            color: black;
         }
-
-        &:hover{
-            color:cyan;
+        &:hover {
+            color: cyan;
         }
     `;
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // 디바운싱된 검색어
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [imageData, setImageData] = useState([]);
@@ -32,27 +31,37 @@ function MainPage() {
     const [currentDate, setCurrentDate] = useState(new Date());
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [calendarKey, setCalendarKey] = useState(Date.now());
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(9);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const debounce = (func, delay) => {
+        let timeout;
+        return function(...args) {
+            const context = this;
+            clearTimeout(timeout);
+            timeout = setTimeout(() => func.apply(context, args), delay);
+        };
+    };
+
+    const debouncedSetSearchTerm = useCallback(debounce(setDebouncedSearchTerm, 500), []); // 500ms 딜레이
 
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('http://localhost:9988/api/events/ongoing'); // 진행 중인 이벤트만 가져오기
+                const response = await axios.get('http://localhost:9988/api/events/ongoing');
                 setImageData(response.data);
-                setFilteredImageData(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
             }
         };
-
         fetchEvents();
     }, []);
 
     useEffect(() => {
         const intervalId = setInterval(() => {
             setCurrentSlide((prevSlide) => (prevSlide + 1) % imageData.length);
-        }, 5000); //5초마다 배너전환
-
-        // 배너가 변경될 때 달력 초기화 방지
+        }, 5000);
         return () => clearInterval(intervalId);
     }, [imageData.length]);
 
@@ -64,8 +73,10 @@ function MainPage() {
         const fetchFilteredEvents = async () => {
             try {
                 let apiUrl = `/api/events/search?`;
-                if (searchTerm) {
-                    apiUrl += `searchTerm=${searchTerm}&`;
+                apiUrl += `nowPage=${currentPage}&onePageRecord=${itemsPerPage}&`;
+
+                if (debouncedSearchTerm) { 
+                    apiUrl += `searchTerm=${debouncedSearchTerm}&`;
                 }
                 if (currentDate) {
                     apiUrl += `selectedDate=${moment(currentDate).format('YYYY-MM-DDTHH:mm:ss')}&`;
@@ -74,7 +85,10 @@ function MainPage() {
                 apiUrl = apiUrl.replace(/&$/, '');
 
                 const response = await axios.get('http://localhost:9988' + apiUrl);
-                setFilteredImageData(response.data);
+
+                setFilteredImageData(response.data.content);
+                setTotalPages(response.data.paging.totalPage);
+
             } catch (error) {
                 console.error('Error fetching filtered events:', error);
                 setFilteredImageData([]);
@@ -82,7 +96,7 @@ function MainPage() {
         };
 
         fetchFilteredEvents();
-    }, [searchTerm, currentDate]);
+    }, [debouncedSearchTerm, currentDate, currentPage, itemsPerPage]); 
 
     const goToPrevSlide = () => {
         setCurrentSlide((prevSlide) => (prevSlide - 1 + imageData.length) % imageData.length);
@@ -94,6 +108,7 @@ function MainPage() {
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
+        debouncedSetSearchTerm(e.target.value); 
     };
 
     const DatePicker = ({ currentDate, setCurrentDate }) => {
@@ -147,6 +162,8 @@ function MainPage() {
         setSelectedEvent(null);
     };
 
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="main-page">
             <header className="main-header">
@@ -165,33 +182,28 @@ function MainPage() {
                                     {/* <h2>{imageData[currentSlide % imageData.length].title}</h2> */}
                                     <h2>{"test"}</h2>
                                 </div>
-
                             </>
                         )}
                     </div>
-
-                    {/* 페이지네이션 */}
                     <div className="pagination">
                         <span>{currentSlide + 1} / {imageData.length}</span>
                         <button onClick={goToPrevSlide}>←</button>
                         <button onClick={goToNextSlide}>→</button>
                     </div>
                 </div>
-                {/* 로그인 상태에 따라 메뉴 변경 */}
                 <div className="header-menu">
                     <ul>
                         <Link to={isLoggedIn ? `/mypage` : `/login`}>
                             <img src={myIcon} alt="My Page" style={{margin: '5px', width:'40px', height:'40px'}}/>
                         </Link>
-                        {isLoggedIn? (
+                        {isLoggedIn ? (
                             <>
-                            <NotificationSystem />
-                            <Link to={`/like`}>
-                                <img src={likeIcon} alt="Like" style={{margin: '5px', width:'40px', height:'40px'}}/>
-                            </Link>
+                                <NotificationSystem/>
+                                <Link to={`/like`}>
+                                    <img src={likeIcon} alt="Like" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                                </Link>
                             </>
-                        ): null
-                        }
+                        ) : null}
                     </ul>
                 </div>
             </header>
@@ -209,7 +221,7 @@ function MainPage() {
                 <div className="date-picker-container">
                     <DatePicker
                         currentDate={currentDate}
-                        setCurrentDate={setCurrentDate}
+                        setCurrentDate={currentDate}
                     />
                 </div>
 
@@ -217,14 +229,14 @@ function MainPage() {
                     {filteredImageData.length > 0 ? (
                         filteredImageData.map((image) => (
                             <div key={image.no} className="image-item">
+                                <h5 className="title-name">{image.title}</h5>
                                 <img
-                                    src={image.img_list && image.img_list[0].originImgurl}
+                                    src={image.img_list && image.img_list[0] ? image.img_list[0].originImgurl : null}
                                     alt={image.title}
                                     className="grid-image"
                                 />
-                                <h3>{image.title}</h3>
-                                <p>{moment(image.startDate).format('YYYY-MM-DD')} ~ {moment(image.endDate).format('YYYY-MM-DD')}</p>
-                                <p>행사장소: {image.addr}</p>
+                                <p className="date-addr">{moment(image.startDate).format('YYYY-MM-DD')} ~ {moment(image.endDate).format('YYYY-MM-DD')}</p>
+                                <p className="date-addr">행사장소: {image.addr}</p>
                                 <button className="viewButton" onClick={() => openModal(image)}>자세히 보기</button>
                             </div>
                         ))
@@ -233,7 +245,15 @@ function MainPage() {
                     )}
                 </div>
             </div>
-
+            {totalPages > 1 && (
+                <div className="pagination">
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
+                        <button key={number} onClick={() => paginate(number)} className={currentPage === number ? 'active' : ''}>
+                            {number}
+                        </button>
+                    ))}
+                </div>
+            )}
             {selectedEvent && (
                 <EventModal event={selectedEvent} onClose={closeModal} />
             )}

@@ -19,7 +19,7 @@
     margin-left: 10px;
 }
 
-/* Header Menu 스타일 */
+
 .header-menu {
     position: absolute;
     top: 10px;
@@ -49,6 +49,7 @@
     display: flex;
     align-items: center;
     height: 100%;
+    flex-direction: row-reverse;
 }
 
 .banner-background {
@@ -60,6 +61,7 @@
     width: 50%;
     padding: 20px;
     box-sizing: border-box;
+    text-align: center;
 }
 
 .banner-text h2 {
@@ -87,7 +89,7 @@
     object-fit: cover;
 }
 
-.pagination {
+.top-banner .pagination {
     position: absolute;
     bottom: 10px;
     right: 10px;
@@ -95,17 +97,24 @@
     align-items: center;
 }
 
-.pagination span {
-    margin-right: 10px;
+.pagination-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
-.pagination button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.pagination {
+    display: flex;
+    justify-content: center;
+    position: relative;
+    bottom: auto;
+    right: auto;
+}
+
+.pagination-container .pagination {
+    position: static;
 }
 
 .search-bar {
@@ -115,7 +124,6 @@
     padding: 20px;
     display: flex;
     align-items: center;
-
 }
 
 .search-bar input[type="text"] {
@@ -139,6 +147,11 @@
     padding: 10px;
 }
 
+.title-name{
+    font-size: 1.2em;
+    float: left
+}
+
 .image-grid {
     width: 74%;
     padding: 10px;
@@ -155,9 +168,17 @@
 
 .image-item img {
     width: 100%;
-    height: auto;
+    height: 200px;
+    object-fit: fill;
 }
-
+.date-addr{
+    text-align: left;
+}
+@media (max-width: 768px) {
+    .image-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    }
+  }
 .viewButton {
     background-color: #92AEDB;
     border: none;
@@ -168,15 +189,6 @@
     text-decoration: none;
     font-size: 16px;
     border-radius: 5px;
-}
-
-.date-picker {
-    padding: 10px;
-    background: #fff;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    max-width: 300px;
-    text-align: center;
 }
 
 .date-picker-container {
@@ -196,33 +208,59 @@
 .custom-calendar .friday {
     color: black !important;
 }
+.react-calendar {
+    background-color: #E8F0FE;
+    border: none;
+}
 
-/* 반응형 디자인 */
 @media (max-width: 768px) {
-    .date-picker-container {
+  .date-picker-container {
+    width: 100%;
+    height: auto;
+    max-width: none;
+    padding: 10px;
+  }
+
+  .date-picker {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .content-area {
+    flex-direction: column;
+    display: flex;
+  }
+
+  .image-grid {
+    width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+
+}
+
+.pagination button {
+    padding: 8px 12px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+}
+.pagination button.active {
+    background-color: #4CAF50;
+    color: white;
+    border: 1px solid #4CAF50;
+  }
+
+.pagination button:hover:not(.active) {
+    background-color: #ddd;
+}
+.pagination {
+    order: 2;
+}
+
+@media (max-width: 768px) {
+    .pagination-container {
         width: 100%;
-        /* 화면 전체 너비 사용 */
-        height: auto;
-        /* 높이를 자동으로 설정 */
-        max-width: none;
-        /* 최대 너비 제한 제거 */
-        padding: 10px;
-    }
-
-    .date-picker {
-        max-width: 100%;
-        /* 달력이 컨테이너에 맞게 확장되도록 설정 */
-        box-sizing: border-box;
-        /* padding이 너비에 포함되도록 설정 */
-    }
-
-    .content-area {
-        flex-direction: column;
-        /* 세로로 정렬 */
-    }
-
-    .image-grid {
-        width: 100%;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
 }
+

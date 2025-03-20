@@ -1,6 +1,7 @@
 package com.ict.eventHomePage.users.controller;
 
 import com.ict.eventHomePage.common.config.AuthCheck;
+import com.ict.eventHomePage.common.config.AuthRequired;
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.domain.WithdrawReasons;
 import com.ict.eventHomePage.users.service.AuthService;
@@ -22,28 +23,18 @@ public class UserDelController {
     private final UserDelService service;
     private final AuthService authService;
 
-    //회원탈퇴 페이지 접속
-    /*
-    @PostMapping("/userDel")
-    public Optional<Users> joinEdit(@RequestBody Users users){
-        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-
-        System.out.println("!!!"+users.toString());
-
-        return service.joinSelect(users);
-    }
-    */
-
-
-    //회원탈퇴(DB)
+    //회원탈퇴
     @PostMapping("/userDelOk")
-    public String userDel(@RequestBody WithdrawReasons reasons){
-        System.out.println(reasons.toString());
-
+    @AuthRequired({USER, ADMIN})
+    public int userDel(@RequestBody WithdrawReasons reasons){
         String userId = AuthCheck.getUserId(USER, ADMIN);
+        int userNo = authService.getUser(userId).getNo();
+        reasons.setUserNo(userNo);
 
+        //탈퇴사유 저장
+        service.delReason(reasons);
 
-
-        return service.userDel();
+        //users테이블에 상태를 DELETE로 변경
+        return service.userDel(userNo);
     }
 }

@@ -52,6 +52,8 @@ public class SecurityConfig {
                 mvc.pattern("/api/events/**"),
                 mvc.pattern("/member/**"),
                 mvc.pattern("/banner/**"),
+                mvc.pattern("/banner"),
+                mvc.pattern("/file-system/download/**"),
                 mvc.pattern("/auth/sign-up"),
                 mvc.pattern("/auth/token-refresh"),
                 mvc.pattern("/swagger-ui/index.html")
@@ -62,7 +64,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(request -> {
                     CorsConfiguration config = new CorsConfiguration();
                     config.setAllowedOrigins(List.of("http://localhost:3000"));
-                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+                    config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
                     config.setAllowedHeaders(List.of("*"));
                     config.setExposedHeaders(List.of("accessToken")); // accessToken 노출
                     config.setAllowCredentials(true);

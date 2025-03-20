@@ -44,7 +44,6 @@ public class FileSystemController {
         return fileSystemService.uploadFile(files, userId);
     }
 
-    @AuthRequired({USER, ADMIN})
     @GetMapping("/download/{imageId}")
     public void download(@PathVariable("imageId") String imageId, HttpServletResponse response) {
 
@@ -73,8 +72,6 @@ public class FileSystemController {
         }
     }
 
-
-    @AuthRequired({USER, ADMIN})
     @GetMapping("/download")
     public void download(@RequestBody ImageRequest request, HttpServletResponse response) {
 

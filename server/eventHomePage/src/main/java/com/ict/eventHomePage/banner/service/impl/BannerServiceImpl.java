@@ -1,11 +1,14 @@
 package com.ict.eventHomePage.banner.service.impl;
 
+import com.ict.eventHomePage.banner.controller.response.BannerResponse;
 import com.ict.eventHomePage.banner.repository.BannerRepository;
 import com.ict.eventHomePage.banner.service.BannerService;
 import com.ict.eventHomePage.domain.Banners;
 import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,6 +17,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class BannerServiceImpl implements BannerService {
+
+    private final ModelMapper modelMapper;
 
     private final BannerRepository bannerRepository;
 
@@ -37,5 +42,11 @@ public class BannerServiceImpl implements BannerService {
         banner.setUpdatedAt(LocalDateTime.now());
 
         bannerRepository.save(banner);
+    }
+
+    @Override
+    public List<BannerResponse> getHomeBannerList() {
+
+        return modelMapper.map(bannerRepository.findByStatus(StatusInfo.ACTIVE), new TypeToken<List<BannerResponse>>(){}.getType());
     }
 }

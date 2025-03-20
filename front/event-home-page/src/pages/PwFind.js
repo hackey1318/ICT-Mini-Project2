@@ -156,7 +156,7 @@ function PwFind(){
 
             // 응답의 result가 "pwResetFail"인지 "pwResetSuccess"인지 확인
             if (response.data.result === "pwResetFail") {
-                alert("비밀번호 재설정에에 실패하였습니다. 다시 설정해주세요.");
+                alert("비밀번호 재설정에 실패하였습니다. 다시 설정해주세요.");
             } else if (response.data.result === "pwResetSuccess") {
                 alert("비밀번호 재설정에 성공하였습니다. 로그인페이지로 넘어갑니다.");
                 window.location.href="/login"; // 홈으로 이동 

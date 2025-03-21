@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react"
 import "../../css/my/likesGrid.css"
 import axios from "axios"
+import ErrorModal from "../common/ErrorModal"
 
 function LikePage() {
+    const [showError, setShowError] = useState(false);
     const [wishlistItems, setWishlistItems] = useState([])
     const [favorites, setFavorites] = useState([])
     const [loading, setLoading] = useState(true)
@@ -15,10 +17,10 @@ function LikePage() {
                 setLoading(true)
                 const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
                 const response = await axios.get("http://localhost:9988/like", {
-                        headers: {
-                            Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-                        }
+                    headers: {
+                        Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
                     }
+                }
                 )
 
                 if (!response.data) {
@@ -31,8 +33,12 @@ function LikePage() {
                 // 초기 찜 상태 설정 (모든 항목이 이미 찜 목록에 있으므로 모든 no를 favorites에 추가)
                 setFavorites(data.filter((item) => item.status === "ACTIVE").map((item) => item.no));
             } catch (err) {
-                setError(err.message)
-                console.error("Error fetching wishlist:", err)
+                if (err.response.status === 403) {
+                    sessionStorage.removeItem("accessToken");
+                    setShowError(true);
+                }
+
+                setError(err.message);
             } finally {
                 setLoading(false)
             }
@@ -49,7 +55,7 @@ function LikePage() {
                     Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
                 }
             })
-            
+
             if (!response.data) {
                 throw new Error("찜 업데이트에 실패했습니다.")
             }
@@ -60,23 +66,24 @@ function LikePage() {
                 setFavorites([...favorites, itemNo])
             }
         } catch (err) {
-            console.error("wishList Update Error : ", err)
+            if (err.response.status === 403) {
+                sessionStorage.removeItem("accessToken");
+                setShowError(true);
+            }
+
+            setError(err.message);
         }
 
-        
     }
 
     if (loading) {
         return <div className="text-center py-5">로딩 중...</div>
     }
 
-    if (error) {
-        return <div className="alert alert-danger">{error}</div>
-    }
-
     return (
         <div>
             <h2 className="h4 mb-4 d-none d-md-block">찜 목록</h2>
+            <ErrorModal show={showError} onClose={() => setShowError(false)} />
 
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
                 {wishlistItems.map((item) => (

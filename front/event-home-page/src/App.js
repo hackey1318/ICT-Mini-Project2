@@ -56,8 +56,8 @@ function App() {
         <Route path="/userDel" element={<UserDel />}></Route>
 
         <Route path="/my" element={<MyPage />}>
-          <Route index element={<ProfilePage />} />
-          <Route path="likes" element={<LikePage />} />
+          <Route index element={<LikePage />} />
+          <Route path="joinEdit" element={<JoinEdit />} />
           <Route path="comments" element={<CommentsPage />} />
         </Route>
 

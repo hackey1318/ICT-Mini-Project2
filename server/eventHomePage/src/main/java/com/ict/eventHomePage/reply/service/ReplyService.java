@@ -9,8 +9,8 @@ public interface ReplyService {
 
     boolean addReply(ReplyRequest request);
 
-    List<Replies> getReplies(String userId, String content);
-
     Replies dataInsert(Replies replies);
+
+    List<Replies> getReplies(int eventNo);
 }
 

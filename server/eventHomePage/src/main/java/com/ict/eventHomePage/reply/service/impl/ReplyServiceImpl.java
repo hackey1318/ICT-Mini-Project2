@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -53,8 +54,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<Replies> getReplies(String userId, String content) {
-        return List.of();
+    public List<Replies> getReplies(int eventNo) {
+
+        /*ReplyRequest request = new ReplyRequest();
+        if(request.getEventNo() == eventNo) {
+
+        } else {
+            return Collections.emptyList();
+        }*/
+        return replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
     }
 
     @Override
@@ -62,3 +70,5 @@ public class ReplyServiceImpl implements ReplyService {
         return null;
     }
 }
+
+

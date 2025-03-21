@@ -63,6 +63,9 @@ function PwFind(){
                 userIdRef.current.focus();
             } else if (response.data.result === "pwFindSuccess") {
                 setPwFound(true);  // 비밀번호 찾기 성공 상태로 변경
+            } else if (response.data.result === "pwFindDelete") {
+                // 탈퇴한 사용자 처리
+                alert(response.data.message || "이미 탈퇴한 사용자입니다.");
             }
         })
         .catch(function(error){
@@ -162,7 +165,6 @@ function PwFind(){
                 window.location.href="/login"; // 홈으로 이동 
             }
 
-
         })
         .catch(function(error){
             console.log(error);
@@ -170,8 +172,8 @@ function PwFind(){
     }
 
     return(
-        <div className="id-find-container">
-            <div className="id-find-form">
+        <div className="find-container">
+            <div className="find-form">
                 {!pwFound ? (
                     <>
                     <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
@@ -196,7 +198,7 @@ function PwFind(){
                             <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                         </button>
                         <form onSubmit={pwFormCheck}>
-                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'blue'}}>재설정</span></h2>
+                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>재설정</span></h2>
                             <div className="id-find-input">
                                 <label htmlFor="pw">비밀번호</label>
                                 <input type="password" id="pw" name="pw" className="pw-style" onChange={setPwResetFormCheck} ref={pwRef} />

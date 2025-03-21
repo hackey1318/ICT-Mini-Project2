@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class SuccessOfFailResponse {
 
     private boolean result;
+    private String message; //오류메세지를 front단에 넘기기위해
 }

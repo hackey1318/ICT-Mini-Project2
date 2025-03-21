@@ -15,7 +15,11 @@ import java.util.Map;
 @Repository
 public interface ReplyRepository extends JpaRepository<Replies, Integer> {
 
-    List<Replies> findRepliesByUserNo(int userNo);
+    @Query("SELECT r FROM Replies r WHERE r.eventNo = :eventNo ORDER BY r.createdAt DESC")
+    List<Replies> findByEventNoOrderByEventNoDesc(@Param("eventNo") int eventNo);
+
+
+    //List<Replies> findRepliesByUserNo(int userNo);
 
     @Query(value = "SELECT r.no, r.user_no AS userNo, e.title AS joinedTitle, r.content, r.created_at, r.event_no AS eventNo " +
             "FROM replies r JOIN events e ON r.event_no = e.no " +

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -55,17 +56,22 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public List<Replies> getReplies(int eventNo) {
 
-        /*ReplyRequest request = new ReplyRequest();
-        if(request.getEventNo() == eventNo) {
-
-        } else {
-            return Collections.emptyList();
-        }*/
         return replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
     }
 
     @Override
     public Replies dataInsert(Replies replies) {
         return null;
+    }
+
+    @Override
+    public void replyDel(int no) {
+
+        Replies replies = replyRepository.findById(no)
+                .orElseThrow(() -> new RuntimeException("Reply not found"));
+
+        replies.setStatus(StatusInfo.DELETE);
+
+        replyRepository.save(replies);
     }
 }

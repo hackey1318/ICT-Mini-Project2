@@ -6,11 +6,19 @@ import axios from 'axios';
 import '../eventCss/EventView.css';
 import '../css/replyList.css';
 import ReviewEdit from '../js/event/ReviewEdit'
-import ReviewDelete from '../js/event/ReviewDelete';
 import addFile from '../img/plus.jpg';
 import '../css/replyModal.css';
 import edit from "../img/edit.jpg";
 import del from "../img/del.jpg";
+import icon1 from "../img/usericons/1.jpg";
+import icon2 from "../img/usericons/2.jpg";
+import icon3 from "../img/usericons/3.jpg";
+import icon4 from "../img/usericons/4.jpg";
+import icon5 from "../img/usericons/5.jpg";
+import icon6 from "../img/usericons/6.jpg";
+import icon7 from "../img/usericons/7.jpg";
+import { Users } from 'lucide-react';
+import {jwtDecode} from 'jwt-decode';
 
 function EventView() {
     const [event, setEvent] = useState({});
@@ -19,13 +27,17 @@ function EventView() {
     let [title, setTitle] = useState('');
     let [content, setContent] = useState('');
     let [isModalOpen, setIsModalOpen] = useState(false);
-    const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
+    let [comment, setComment] = useState([]);
+    let [userIcon, setUserIcon] = useState();
     let [replies, setReplies] = useState([]);
+    const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
     const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
     const [uniqueImages, setUniqueImages] = useState([]);
+    const [userNoFromToken, setUserNoFromToken] = useState(null);
     const accessToken = sessionStorage.getItem("accessToken");
     const userNo = sessionStorage.getItem("userNo");
+    const icons = [icon1, icon2, icon3, icon4, icon5, icon6, icon7];
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -189,7 +201,6 @@ function EventView() {
     async function addReply(event) {
         event.preventDefault();
 
-        // let formData = new FormData();
         let replyData = {
             eventNo: no,
             title: title,
@@ -198,30 +209,39 @@ function EventView() {
         }
 
         let formData = new FormData();
-        for (let i = 0; i < runfile.current.files.length; i++) {
-            formData.append("files", runfile.current.files[i]);
-        }
+        let isFile = runfile.current.files.length > 0;
 
-        const fileUpload = await axios.post("http://localhost:9988/file-system/upload", formData, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "multipart/form-data",
+        if(isFile) {
+            for (let i = 0; i < runfile.current.files.length; i++) {
+                formData.append("files", runfile.current.files[i]);
             }
-        })
-
+            const fileUpload = await axios.post("http://localhost:9988/file-system/upload", formData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "multipart/form-data",
+                }
+            })
+            replyData.imageIdList = fileUpload.data.imageIds || [];
+        }
         axios.post("http://localhost:9988/reply/addReply", replyData, {
             headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${accessToken}`,
             }
         })
             .then(function (response) {
                 console.log(response.data);
                 console.log(replyData)
-                if (response.data.content == "") {
+                if(response.data.title == "") {
+                    alert("제목을 입력해주세요.")
+                    return false;
+                } else if(response.data.content == "") {
                     alert("내용을 입력해주세요.")
                     return false;
                 }
+
                 setIsModalOpen(false);
+                iconMixer();
+                setComment(prev => [...prev, response.data.list]);
             })
             .catch(function (error) { console.log(error) })
     }
@@ -244,7 +264,6 @@ function EventView() {
                         event.target.value = "";
                         break;
                     }
-
                     const reader = new FileReader();
                     reader.onload = function (e) {   //div에 이미지 추가
                         const div = document.createElement('div');
@@ -279,6 +298,36 @@ function EventView() {
 
         if (imgList.contains(imgDiv)) {
             imgList.removeChild(imgDiv);
+        }
+    }
+
+    const iconMixer = () => {
+        const randomIndex = Math.floor(Math.random() * icons.length) + 1;
+        setUserIcon(icons[randomIndex]);
+        console.log(userIcon)
+    }
+
+    function ReviewDelete(no) {
+       
+        if (window.confirm("글을 삭제하시겠습니까?")) {
+            axios.get(`http://localhost:9988/reply/replyDel/${no}`)
+            .then(function (response) {
+                console.log(response.data);
+                
+                if (response.data == "deleted") {
+                    const updatedReplies = replies.map(reply =>
+                        replies.no === no ? {...reply, status: "DELETE"} : reply
+                    );
+                    setReplies(updatedReplies);
+
+                    alert("삭제가 완료되었습니다.");
+                } else {
+                    alert("삭제를 실패했습니다.");
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
         }
     }
 
@@ -361,16 +410,19 @@ function EventView() {
                 <p style={{ fontSize: '1.8em' }}>Review</p>
                 <div>
                     {
-                        replies.map(replies => (
+                        replies.filter(replies => replies.status !== "DELETE").map(replies => (
                             <div className='replyList'>
                                 <ul>
-                                    <li id='username'>{replies.name}</li>
+                                    <li id='usericon'><img src={userIcon}/></li>
                                     <li id='title'>{replies.title}</li>
-                                    {(replies.name == sessionStorage.getItem(replies.name)) &&
-                                        <div>
-                                            <img src={edit} className='editor' onClick={ReviewEdit} style={{ marginRight: '20px' }}/>
-                                            <img src={del} className='editor' onClick={() => ReviewDelete}/>
-                                        </div>
+                                    <li id='username'>{replies.userNo.name}</li>
+                                    {(replies.no.userNo == sessionStorage.getItem(userNo)) &&
+                                        <li>
+                                            <div id="edit-container">
+                                                <img src={edit} className='editor' onClick={ReviewEdit}/>
+                                                <img src={del} className='editor' onClick={()=>ReviewDelete(no)}/>
+                                            </div>
+                                        </li>
                                     }
                                 </ul>
                             </div>

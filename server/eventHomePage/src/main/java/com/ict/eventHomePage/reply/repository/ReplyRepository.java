@@ -15,7 +15,9 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
 
     @Query("SELECT r FROM Replies r WHERE r.eventNo = :eventNo ORDER BY r.createdAt DESC")
     List<Replies> findByEventNoOrderByEventNoDesc(@Param("eventNo") int eventNo);
-    List<Replies> findRepliesByUserNo(int userNo);
+
+
+    //List<Replies> findRepliesByUserNo(int userNo);
 
     //@Query("SELECT COUNT(n.id) FROM Replies AS n WHERE n.userNo = :userNo AND n.status = READABLE")
     //Optional<Replies> findByUserId(int userNo);

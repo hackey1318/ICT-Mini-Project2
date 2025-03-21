@@ -4,6 +4,7 @@ import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.config.AuthRequired;
 import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Replies;
+import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 import com.ict.eventHomePage.reply.service.impl.ReplyServiceImpl;
 import com.ict.eventHomePage.users.service.AuthService;
@@ -43,13 +44,15 @@ public class ReplyController {
     public List<Replies> getReplies(@RequestParam int eventNo) {
 
         List<Replies> replies = replyService.getReplies(eventNo);
+
         return replies;
     }
 
-    @GetMapping("/replyDel")
-    public String replyDel() {
+    @GetMapping("/replyDel/{no}")
+    public String replyDel(@PathVariable("no") int no) {
 
-        return null;
+        replyService.replyDel(no);
+        return "deleted";
     }
 }
 

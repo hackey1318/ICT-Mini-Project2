@@ -12,5 +12,7 @@ public interface ReplyService {
     Replies dataInsert(Replies replies);
 
     List<Replies> getReplies(int eventNo);
+
+    public void replyDel(int no);
 }
 

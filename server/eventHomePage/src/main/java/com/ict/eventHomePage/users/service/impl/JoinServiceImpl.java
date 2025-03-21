@@ -16,7 +16,7 @@ public class JoinServiceImpl implements JoinService {
     private final UsersRepository usersRepository;
 
     //아이디 중복확인
-    @Override
+
     public boolean checkId(Users users) {
         Optional<Users> userInfo = usersRepository.findByUserId(users.getUserId());
 
@@ -47,7 +47,7 @@ public class JoinServiceImpl implements JoinService {
     }
 
     //회원정보 수정
-    @Override
+
     public int joinUpdate(Users users) {
         return usersRepository.joinUpdate(users.getNo(), users.getEmail(), users.getTel(), users.getPostalCode(), users.getAddr());
     }

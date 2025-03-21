@@ -60,13 +60,6 @@ function MainPage() {
     }, []);
 
     useEffect(() => {
-        const intervalId = setInterval(() => {
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % imageData.length);
-        }, 5000);
-        return () => clearInterval(intervalId);
-    }, [imageData.length]);
-
-    useEffect(() => {
         setIsLoggedIn(!!sessionStorage.getItem('accessToken'));
     }, []);
 
@@ -98,14 +91,6 @@ function MainPage() {
 
         fetchFilteredEvents();
     }, [debouncedSearchTerm, currentDate, currentPage, itemsPerPage]);
-
-    const goToPrevSlide = () => {
-        setCurrentSlide((prevSlide) => (prevSlide - 1 + imageData.length) % imageData.length);
-    };
-
-    const goToNextSlide = () => {
-        setCurrentSlide((prevSlide) => (prevSlide + 1) % imageData.length);
-    };
 
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);

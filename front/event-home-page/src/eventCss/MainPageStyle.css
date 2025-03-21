@@ -51,7 +51,7 @@
     width: 50%;
     padding: 20px;
     box-sizing: border-box;
-    text-align: center; 
+    text-align: center;
 }
 .banner-text h2 {
     font-size: 2em;
@@ -125,7 +125,7 @@
 }
 .react-calendar {
     background-color: #E8F0FE;
-    border: none; 
+    border: none;
     border-radius: 15px;
     margin: 0 auto;
 }
@@ -160,7 +160,7 @@
 }
 .image-item img {
     width: 100%;
-    height: 200px; 
+    height: 200px;
     object-fit: fill;
 }
 .date-addr{
@@ -211,7 +211,7 @@
     cursor: pointer;
 }
 .pagination button.active {
-    background-color: #4CAF50; 
+    background-color: #4CAF50;
     color: white;
     border: 1px solid #4CAF50;
   }
@@ -219,10 +219,15 @@
     background-color: #ddd;
 }
 .pagination {
-    order: 2; 
+    order: 2;
 }
 @media (max-width: 768px) {
     .pagination-container {
         width: 100%;
     }
+}
+
+.react-calendar__navigation__arrow {
+    font-family: 'Gowun Batang', sans-serif;
+    font-size: 2em;
 }

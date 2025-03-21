@@ -5,8 +5,7 @@ import '../../eventCss/MainPageStyle.css';
 
 import StopImage from '../../img/btn_slidem_stop.png'; // 멈춤 이미지 경로
 import StartImage from '../../img/btn_slide_play.png'; // 재시작 이미지 경로
-import LeftArrowImage from '../../img/btn_left.png'; // 왼쪽 화살표 이미지
-import RightArrowImage from '../../img/btn_right.png'; // 오른쪽 화살표 이미지
+import ArrowImage from '../../img/btn_left.png'; // 왼쪽 화살표 이미지 (오른쪽 화살표는 회전시켜서 사용)
 import moment from "moment";
 import { useNavigate } from 'react-router-dom';
 
@@ -118,9 +117,9 @@ function BannerInfo() {
                 </div>
                 
                 <span className="pagination-text">{currentSlide + 1} / {bannerList.length}</span>
-                <button onClick={goToPrevSlide}><img src={LeftArrowImage} alt="Previous Slide" className="arrow-button"/></button>
-                <button onClick={toggleAutoSlide}> <img src={isRunning ? StopImage : StartImage} alt={isRunning ? "멈춤" : "재시작"} className="slider-toggle-image"/></button>
-                <button onClick={goToNextSlide}><img src={RightArrowImage} alt="Next Slide" className="arrow-button"/></button>
+                <button onClick={goToPrevSlide}><img src={ArrowImage} alt="Previous Slide"/></button>
+                <button onClick={toggleAutoSlide}> <img src={isRunning ? StopImage : StartImage} alt={isRunning ? "멈춤" : "재시작"}/></button>
+                <button onClick={goToNextSlide}><img src={ArrowImage} alt="Next Slide" style={{transform: 'rotate(180deg)'}}/></button>
             </div>
         </div>
     );

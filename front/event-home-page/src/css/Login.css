@@ -17,14 +17,15 @@
 }
 
 .login-style {
-    background: white;
-    padding: 50px 100px;
-    border-radius: 15px;
-    box-shadow: 1px 1px 1px 1px #ddd;
-    text-align: center;
-    max-width: 480px; /* 폼 최대 너비 설정 */
+    background-color: #ffffff;
+    padding: 80px 90px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 450px; /* 폼 최대 너비 설정 */
+    max-height: 380px;
+    position: relative;  /* 화살표 버튼을 절대 위치로 놓을 수 있게 함 */
     width: 100%;
-    position: relative;  /* 내부 요소들에 대해 상대적인 위치 지정 */
+    text-align: center;
 }
 
 .login-style a {

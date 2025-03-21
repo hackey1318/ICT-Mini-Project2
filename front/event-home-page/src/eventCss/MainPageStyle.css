@@ -39,17 +39,14 @@
 }
 
 .top-banner {
-    height: 29vh;
-    position: relative;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    height: 60vh;
+    margin-bottom: 150px;
 }
 
 .banner-content {
     display: flex;
     align-items: center;
     height: 100%;
-    flex-direction: row-reverse;
 }
 
 .banner-background {
@@ -125,8 +122,6 @@
     text-align: left;
     opacity: 0; /* 처음엔 보이지 않도록 */
     animation: slideIn 1s ease-out forwards;
-    box-sizing: border-box;
-    text-align: center;
 }
 /* 왼쪽 밖에서 부드럽게 나타나는 애니메이션 */
 @keyframes slideIn {
@@ -168,7 +163,6 @@
 }
 
 .pagination button {
-    padding: 10px 10px;
     border: none;
     border-radius: 25px;
     cursor: pointer;
@@ -178,47 +172,54 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-left: 10px;
+    margin-top: 13px;
+}
+
+.progress-bar { /*진행 표시 바*/
+    width: 250px;
+    height: 4px;
+    border-radius: 3px;
+    margin: 20px 5px 0 0;
+}
+.progress-bar-fill {
+    height: 100%;
+    background-color: #E8F0FE;
+    border-radius: 3px;
+    transition: width 0.3s ease; /* 부드러운 애니메이션 효과 */
 }
 /* end : 페이지네이션 ------------------------------------------------ */
 
-
-.slider-toggle-image {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    margin-top: 5px;
-}
-
-/* 진행 표시 바 스타일 */
-.progress-bar {
-    width: 250px;
-    height: 8px;
-    border-radius: 5px;
-    margin: 20px 5px 0 0;
-}
-
-.progress-bar-fill {
-    height: 100%;
-    background-color: #92AEDB;
-    border-radius: 5px;
-    transition: width 0.3s ease; /* 부드러운 애니메이션 효과 */
-}
-
+/* start : 검색어창 디자인 -------------------------------------------- */
+/* 검색창 전체 스타일 */
 .search-bar {
-    margin-left: 10%;
-    align-items: center;
-    width: 80%;
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    
+    width: 100%;
+    max-width: 80%; /* 검색창 너비를 조금 더 넓힘 */
+    margin: 10px auto; /* 가운데 정렬 */
+    position: relative;
 }
 
-.search-bar input[type="text"] {
-    flex-grow: 1;
-    margin: 0 10px;
-    padding: 5px;
+/* 검색 입력창 스타일 */
+.search-bar input {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 16px;
+    border: 1px solid #ddd; /* 연한 회색 테두리 */
+    border-radius: 25px; /* 둥근 모서리 */
+    outline: none;
 }
+
+/* 입력창 포커스 시 스타일 */
+.search-bar input:focus {
+    border-color: #E8F0FE; /* 포커스 시 테두리 색 변경 */
+}
+
+/* 검색창 placeholder 스타일 */
+.search-bar input::placeholder {
+    color: #aaa;
+    font-size: 14px;
+}
+
+/* end : 검색어창 디자인 -------------------------------------------- */
 
 .content-area {
     display: flex;
@@ -262,6 +263,7 @@
 .date-addr{
     text-align: left;
 }
+
 @media (max-width: 768px) {
     .image-grid {
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -285,20 +287,103 @@
     margin-bottom: 20px;
 }
 
+/* start : 달력 전체 스타일========================================================= */
 .custom-calendar .sunday {
     color: red !important;
 }
 
 .custom-calendar .saturday {
-    color: red !important;
+    color: blue !important;
 }
 
 .custom-calendar .friday {
     color: black !important;
 }
+
+.custom-calendar {
+    font-size: 16px;
+    border-radius: 5px; /* 둥근 모서리 */
+    padding: 20px;
+    width: 300px; /* 고정된 크기 유지 */
+    height: 380px; /* 고정된 높이 유지 */
+    background-color: #f4f4f9; /* 전체 배경을 연한 회색으로 변경 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 부드러운 그림자 */
+    overflow: hidden;
+}
+
+/* 요일 이름 스타일 */
+.custom-calendar .react-calendar__month-view__weekdays__weekday {
+    font-weight: 500;
+    color: #666; /* 중간 톤의 회색 */
+    text-align: center;
+    padding: 8px 0;
+    text-transform: uppercase; /* 요일을 대문자로 */
+}
+
+.custom-calendar .sunday {
+    color: red !important;
+}
+
+.custom-calendar .saturday {
+    color: blue !important;
+}
+
+.custom-calendar .friday {
+    color: black !important;
+}
+
+/* 날짜 스타일 */
+.custom-calendar .react-calendar__tile {
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent; /* 테두리 */
+}
+
+/* 선택된 날짜 스타일 */
+.custom-calendar .react-calendar__tile--active {
+    background-color: #4caf50; /* 선택된 날짜 배경 */
+    color: white;
+    border-color: #4caf50; /* 선택된 날짜 테두리 색상 */
+}
+
+/* 호버 시 날짜 배경색 변경 */
+.custom-calendar .react-calendar__tile:hover {
+    background-color: #656b68; /* 호버 효과 */
+    transform: scale(1.05); /* 클릭 시 살짝 커지는 효과 */
+    border: 0;
+}
+
+/* 비활성 날짜 스타일 (이전/다음 달의 날짜) */
+.custom-calendar .react-calendar__tile:disabled {
+    background-color: transparent; /* 비활성 날짜 배경을 투명하게 */
+    color: #bbb; /* 연한 회색 */
+}
+
+/* 달력 월, 연도 표시 스타일 */
+.custom-calendar .react-calendar__month-view__month {
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* 현재 날짜 스타일 */
+.custom-calendar .react-calendar__tile--now {
+    background-color: #ff8a80; /* 오늘 날짜 강조 */
+    color: white;
+    border-color: #ff8a80;
+}
+
+/* end : 달력 전체 스타일========================================================= */
+
 .react-calendar {
     background-color: #E8F0FE;
     border: none;
+    width:100%;
 }
 
 @media (max-width: 768px) {
@@ -324,26 +409,6 @@
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
-}
-
-.pagination button {
-    padding: 8px 12px;
-    margin: 0 5px;
-    border: 1px solid #ddd;
-    background-color: white;
-    cursor: pointer;
-}
-.pagination button.active {
-    background-color: #4CAF50;
-    color: white;
-    border: 1px solid #4CAF50;
-  }
-
-.pagination button:hover:not(.active) {
-    background-color: #ddd;
-}
-.pagination {
-    order: 2;
 }
 
 @media (max-width: 768px) {

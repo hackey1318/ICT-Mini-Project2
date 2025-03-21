@@ -1,32 +1,38 @@
-import { Link, Outlet } from "react-router-dom";
-import './../../css/adminStyle.css';
-import styled from 'styled-components';
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import Sidebar from "../../js/sidebar/sidebar"
+import arrow from '../../img/arrow.png';
 
-const StyledLink = styled(Link)`
-        text-decoration:none;
-        &:link, &:visited, &:active{
-        color:black;
-        }
-        &:hover{
-            color:blue;
-        }
-    `;
 
 function Admin() {
 
+    const location = useLocation()
+    const navigate = useNavigate()
+
+    // 현재 활성화된 메뉴 항목 확인
+    const getActiveMenu = () => {
+        const path = location.pathname
+        if (path.includes("/my/likes")) return "likes"
+        if (path.includes("/my/comments")) return "comments"
+        return "profile"
+    }
+
     return (
-        <div className="container">
-            <h1>관리자 페이지</h1>
-            <div style={{ display: "flex" }}>
-                <div className="left" style={{ backgroundColor: "#E7F0FF", width: "250px", height: "200px" }}>
-                    <ul>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/memberList">회원 정보 조회</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/withdrawalList">회원 탈퇴 명단</StyledLink></li>
-                        <li style={{ margin: "20px", fontSize: "20px" }}><StyledLink to="/admin/bannerList">배너관리</StyledLink></li>
-                    </ul>
+        <div className="container main-content" style={{marginTop: "4vh"}}>
+            <div className="page-header d-flex align-items-center">
+                <button className="btn btn-link p-0 me-3" onClick={() => navigate(-1)} style={{fontSize:'20px', position:'absolute', top:'30px', left:'30px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
+            </div>
+
+            <div className="row">
+                {/* 사이드바 */}
+                <div className="col-md-3 mb-4 mb-md-0">
+                    <Sidebar activeMenu={getActiveMenu()} />
                 </div>
-                <div className="right" style={{ flex: 1, padding: "30px" }}>
-                    <Outlet></Outlet>
+
+                {/* 메인 콘텐츠 */}
+                <div className="col-md-9">
+                    <Outlet />
                 </div>
             </div>
         </div>

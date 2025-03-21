@@ -7,16 +7,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotificationResponse {
+public class AnnounceResponse {
 
     private int id;
     private String title;
     private String content;
+    private List<String> userEmailList;
     private NotificationStatus status;
     private LocalDateTime createdAt;
 }

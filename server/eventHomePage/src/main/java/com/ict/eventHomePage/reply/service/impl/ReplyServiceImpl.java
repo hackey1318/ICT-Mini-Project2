@@ -4,6 +4,7 @@ import com.ict.eventHomePage.domain.Replies;
 import com.ict.eventHomePage.domain.ReplyImages;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
+import com.ict.eventHomePage.reply.controller.response.ReplyResponse;
 import com.ict.eventHomePage.reply.repository.ReplyImagesRepository;
 import com.ict.eventHomePage.reply.repository.ReplyRepository;
 import com.ict.eventHomePage.reply.service.ReplyService;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -28,7 +28,7 @@ public class ReplyServiceImpl implements ReplyService {
     @Transactional
     public boolean addReply(ReplyRequest request) {
 
-        try{
+        try {
 
             Replies saveEntity = replyRepository.save(Replies.builder()
                     .userNo(request.getUserNo())
@@ -54,14 +54,9 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<Replies> getReplies(int eventNo) {
+    public List<ReplyResponse> getReplies(int eventNo) {
 
         return replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
-    }
-
-    @Override
-    public Replies dataInsert(Replies replies) {
-        return null;
     }
 
     @Override

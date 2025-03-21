@@ -426,7 +426,7 @@ function EventView() {
                                 <ul>
                                     <li id='usericon'><img src={userIcon}/></li>
                                     <li id='title'>{replies.title}</li>
-                                    <li id='username'>{userInfo.name}</li>
+                                    <li id='username'>{replies.name}</li>
                                     {(replies.userNo === userInfo.no) &&
                                         <li>
                                             <div id="edit-container">

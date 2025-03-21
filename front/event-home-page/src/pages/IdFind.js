@@ -52,21 +52,25 @@ function IdFind(){
         })
         .then(function(response) {
             console.log("Response:", response.data.result);  // 응답 데이터 확인
-
-            // 응답의 result가 "idFindFail"인지 "idFindSuccess"인지 확인
+        
+            // 응답의 result가 "idFindFail", "idFindSuccess", "idFindDelete"인지 확인
             if (response.data.result === "idFindFail") {
-                alert("아이디 찾기 실패하였습니다. 다시 입력해주세요.");
+                // 실패 시 메시지 처리
+                alert(response.data.message || "아이디 찾기 실패하였습니다. 다시 입력해주세요.");
             } else if (response.data.result === "idFindSuccess") {
-                // alert("찾은 아이디 : " + response.data.userId);
+                // 아이디 찾기 성공
                 setUserId(response.data.userId);  // 찾은 아이디 저장
                 setIdFound(true);  // 아이디 찾기 성공 상태로 변경
+            } else if (response.data.result === "idFindDelete") {
+                // 탈퇴한 사용자 처리
+                alert(response.data.message || "이미 탈퇴한 사용자입니다.");
             }
-
         })
         .catch(function(error) {
-            console.log(error);
+            // 네트워크 오류나 서버 오류 처리
+            console.error("Error:", error);
+            alert("서버와의 통신에 실패했습니다. 잠시 후 다시 시도해 주세요.");
         });
-
     }
 
     // 뒤로가기 버튼 눌렀을 때
@@ -85,8 +89,8 @@ function IdFind(){
 
     return(
 
-        <div className="id-find-container">
-            <div className="id-find-form">
+        <div className="find-container">
+            <div className="find-form">
                 {!idFound ? (
                     <>
                     <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
@@ -108,10 +112,10 @@ function IdFind(){
                 ) : (
                     <div>
                         <div>
-                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}} >아이디찾기 <span style={{color:'#3e9ca7'}}>성공</span></h2>
+                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)', marginBottom:'40px'}} >아이디찾기 <span style={{color:'#3e9ca7'}}>성공</span></h2>
                             <div className="findIdSuccess">ID찾기에 성공하였습니다.<br />
                             찾은 아이디 : <span className="userId-style">{userId}</span>
-                            <button onClick={copyToClipboard} className="namecopy-style">복사하기</button>
+                            <button onClick={copyToClipboard} className="namecopy-style" style={{marginBottom:'30px'}}>복사하기</button>
                             </div>
                             
                             <div className="button-container">

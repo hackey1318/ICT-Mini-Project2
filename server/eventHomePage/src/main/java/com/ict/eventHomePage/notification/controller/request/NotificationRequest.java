@@ -16,6 +16,8 @@ public class NotificationRequest {
 
     private List<Integer> userIdList;
 
+    private String titie;
+
     private String message;
 
     private NotificationType type;

@@ -67,12 +67,6 @@ public class ReplyController {
         return replyService.addReply(authService.getUser(userId).getNo());
     }
 
-//    @GetMapping("/getReplies")
-//    public List<Replies> getReplies(String userId, String content) {
-//        List<Replies> replies = replyService.getReplies(userId, content);
-//        return replies;
-//    }
-
     @AuthRequired({USER, ADMIN})
     @GetMapping("/replyList")
     public ResponseEntity<Map<String, Object>> getReplyList() {
@@ -84,7 +78,7 @@ public class ReplyController {
     }
 
     @AuthRequired({USER, ADMIN})
-    @PutMapping("/{replyNo}")
+    @PatchMapping("/{replyNo}")
     public ResponseEntity<Void> updateReply(@PathVariable int replyNo) {
         replyService.updateReply(replyNo);
         return ResponseEntity.ok().build();

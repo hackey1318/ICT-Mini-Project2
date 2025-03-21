@@ -38,20 +38,11 @@ public class NotificationController {
         }.getType());
     }
 
-
     @PatchMapping
     @AuthRequired({USER, ADMIN})
     public int readNotification(@RequestBody List<Integer> notificationList) {
         String userId = AuthCheck.getUserId(USER, ADMIN);
         return notificationService.readNotification(userId, notificationList);
-    }
-
-    @PostMapping
-    @AuthRequired(ADMIN)
-    public List<NotificationResponse> postNotification(@RequestBody NotificationRequest request) {
-
-        return modelMapper.map(notificationService.generateNotification(request), new TypeToken<List<NotificationResponse>>() {
-        }.getType());
     }
 }
 

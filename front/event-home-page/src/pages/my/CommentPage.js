@@ -75,7 +75,7 @@ function CommentsPage() {
 
     return (
         <div className="container">
-            <h1>작성한 댓글</h1>
+            <h3 className="mb-4 d-none d-md-block">작성한 댓글</h3>
             <div style={{ display: "flex" }}>
 
                 <div className="right" style={{ flex: 1, padding: "30px" }}>

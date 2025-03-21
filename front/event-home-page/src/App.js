@@ -17,6 +17,7 @@ import MypageLayout from './pages/mypage/MypageLayout';
 import Mypage from './pages/mypage/Mypage';
 import UpdateMyInfo from './pages/mypage/UpdateMyInfo';
 import ReplyList from './pages/mypage/ReplyList';
+import Announce from './pages/admin/Announce';
 
 import MyPage from './pages/my/MyPage';
 import ProfilePage from './pages/my/ProfilePage';
@@ -33,12 +34,13 @@ function App() {
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<Join />}></Route>
 
-        <Route path="/admin" element={<Layout />}>
-          <Route index element={<Admin />}></Route>
+        <Route path="/admin" element={<MyPage />}>
+          <Route index element={<MemberList />}></Route>
           <Route path="memberList" element={<MemberList />}></Route>
           <Route path="withdrawalList" element={<WithdrawalList />}></Route>
           <Route path="bannerList" element={<BannerList />}></Route>
           <Route path="createBanner" element={<CreateBanner />}></Route>
+          <Route path='announce' element={<Announce />}></Route>
         </Route>
 
         <Route path="/mypage" element={<MypageLayout />}>

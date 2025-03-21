@@ -305,7 +305,7 @@ function Join(){
                         </div>
                         <input type="button" value="중복확인" className='id-check' onClick={handleIdCheck}/>
                         <div className='join-form-line'>
-                            <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box' onChange={setFormData} ref={userPwRef} /></div>
+                            <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData} ref={userPwRef} /></div>
                             {pwValid === false && (
                                 <div className='alert-text' style={{ color: 'red' }}>7~10자의 영문 대소문자, 숫자, !@#$% 가능</div>
                             )}
@@ -314,7 +314,7 @@ function Join(){
                             )}
                         </div>
                         <div className='join-form-line'>
-                            <div className='join-title'>비밀번호 확인</div><div className='join-input-box'><input type="password" name="pw_check" className='text-box' onChange={setFormData}/></div>
+                            <div className='join-title'>비밀번호 확인</div><div className='join-input-box'><input type="password" name="pw_check" className='text-box' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData}/></div>
                             {pwCheckValid === false && (
                                 <div className='alert-text' style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
                             )}

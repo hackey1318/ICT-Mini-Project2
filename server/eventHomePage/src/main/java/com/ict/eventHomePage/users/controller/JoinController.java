@@ -66,4 +66,22 @@ public class JoinController {
 
         return "ok";
     }
+
+    @PostMapping("/pwdCheck")
+    @AuthRequired({USER, ADMIN})
+    public String pwdCheck(@RequestBody Users users){
+        System.out.println("받은 사용자 비밀번호 (body): " + users.getPw());
+
+        // 입력받은 비밀번호를 암호화한 값
+        String pwdChk = users.getPw();  // 암호화된 값으로 비교할 필요 없음
+
+        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
+
+        // 암호화된 비밀번호와 비교
+        if (bCryptPasswordEncoder.matches(pwdChk, user.getPw())) {
+            return "pwdOk";
+        } else {
+            return "pwdFail";
+        }
+    }
 }

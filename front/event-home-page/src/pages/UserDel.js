@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
 import '../css/userDel.css';
+import arrow from '../img/arrow.png';
 
 function UserDel() {
     const [selectReason, setSelectReason] = useState('');
@@ -20,19 +21,23 @@ function UserDel() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const finalReason = selectReason === "기타(직접 입력)" ? writeReason : selectReason;
         
-        if (!finalReason) {
-            alert("탈퇴 사유를 선택해주세요.");
+        if (!selectReason) {
+            alert("탈퇴 이유를 선택해주세요.");
             return;
         }
+        if (selectReason==="기타(직접 입력)" && (writeReason==null || writeReason.trim() === "")) {
+            alert("탈퇴 이유를 작성해주세요.");
+            return;
+        }
+
+        const finalReason = selectReason === "기타(직접 입력)" ? writeReason : selectReason;
 
         const confirmDelete = window.confirm("정말로 회원탈퇴를 하시겠습니까?");
         if (!confirmDelete) return;
 
         try {
             setIsSubmitting(true);
-            alert("finalReason="+finalReason);
             const accessToken = sessionStorage.getItem("accessToken");
             const response = await axios.post(
                 "http://127.0.0.1:9988/member/userDelOk",
@@ -60,11 +65,19 @@ function UserDel() {
     return (
         <div className="wrap">
             <div className="user-del-form">
+                <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
                 <form onSubmit={handleSubmit}>
                     <h2 className='del-form-title'>회원탈퇴</h2>
-                    <div>
-                        탈퇴 이유<br />
-                        <select value={selectReason} onChange={handleReasonChange}>
+                    <div className='del-select-content'>
+                        <p>
+                            회원 탈퇴시 계정은 즉시 삭제되며 복구되지 않습니다.<br/>
+                            탈퇴 이유를 알려주시면 향후 서비스 개선에 도움이 됩니다.<br/>
+                            소중한 의견 부탁드립니다.
+                        </p>
+                        탈퇴 이유 :<br/>
+                        <select value={selectReason} className='select-reason' onChange={handleReasonChange}>
                             <option value="" disabled>탈퇴 이유를 선택해주세요.</option>
                             <option value="사이트를 이용하지 않아서">사이트를 이용하지 않아서</option>
                             <option value="서비스에 만족하지 않아서">서비스에 만족하지 않아서</option>
@@ -73,14 +86,13 @@ function UserDel() {
                             <option value="개인정보 보호 우려">개인정보 보호 우려</option>
                             <option value="기타(직접 입력)">기타(직접 입력)</option>
                         </select><br/>
-                        
-                        {/* 기타(직접 입력) 선택시 입력 가능 */}
-                        <input type="text" className="del-reason" onChange={handleWriteReasonChange} placeholder="탈퇴사유를 작성해주세요"
+                        <textarea type="text" className="textarea-reason" onChange={handleWriteReasonChange} placeholder="탈퇴 이유를 200자 이내로 작성해주세요."
                             readOnly={selectReason !== "기타(직접 입력)"}
-                            value={writeReason}
-                            style={{backgroundColor: selectReason !== "기타(직접 입력)" ? '#ddd' : 'white'}}/>
+                            value={writeReason} maxLength={200}
+                            style={{backgroundColor: selectReason !== "기타(직접 입력)" ? '#ddd' : 'white'}}>
+                        </textarea>
+                        <input type="submit" value="회원탈퇴" className='del-btn'/>
                     </div>
-                    <input type="submit" value="회원탈퇴"/>
                 </form>
             </div>
         </div>

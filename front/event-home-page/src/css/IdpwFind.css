@@ -1,5 +1,5 @@
 /* 전체 배경 스타일 */
-.id-find-container {
+.find-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,12 +8,13 @@
 }
 
 /* 아이디 찾기 폼을 위한 스타일 */
-.id-find-form {
+.find-form {
     background-color: #ffffff;
     padding: 80px 90px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     max-width: 450px; /* 폼 최대 너비 설정 */
+    max-height: 380px;
     position: relative;  /* 화살표 버튼을 절대 위치로 놓을 수 있게 함 */
     width: 100%;
 }
@@ -31,7 +32,7 @@
     color: #333;
 }
 
-.id-find-form input {
+.find-form input {
     margin-bottom: 5px;
     padding: 5px;
     border: 1px solid #ccc;

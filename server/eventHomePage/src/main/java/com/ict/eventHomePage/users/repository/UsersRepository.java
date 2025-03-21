@@ -23,4 +23,10 @@ public interface UsersRepository extends JpaRepository<Users, Integer> {
     @Modifying
     @Query(value="UPDATE Users u SET u.email = :email, u.tel = :tel, u.postal_code = :postal_code, u.addr = :addr WHERE u.no = :no", nativeQuery = true)
     int joinUpdate(@Param("no") int no, @Param("email") String email, @Param("tel") String tel, @Param("postal_code") String postal_code, @Param("addr") String addr);
+
+    //상태를 DELETE로 변경
+    @Transactional
+    @Modifying
+    @Query("UPDATE Users u SET u.status = 'DELETE' WHERE u.no = :no")
+    int updateStatusToDelete(@Param("no") int no);
 }

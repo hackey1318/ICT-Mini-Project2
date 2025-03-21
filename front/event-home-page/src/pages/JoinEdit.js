@@ -44,7 +44,7 @@ function JoinEdit(){
                 updatedData.tel = `${updatedData.tel1}-${updatedData.tel2}-${updatedData.tel3}`;
                 return updatedData;
             });
-        } 
+        }
 
         setJoinData(prevState => ({
             ...prevState,
@@ -140,7 +140,7 @@ function JoinEdit(){
             return false;
         }
 
-        // 주소 존재유무 확인 
+        // 주소 존재유무 확인
         if(joinData.zipcode==null || joinData.zipcode=="" || joinData.addr==null || joinData.addr==""){
             alert('주소를 입력하세요');
             document.querySelector('input[name="zipcode"]').focus();
@@ -202,12 +202,12 @@ function JoinEdit(){
                 addr: response.data.addr,
                 birth: response.data.birth
             });
-            
+
             //생년월일 나눠서 셋팅
             const birthParts = response.data.birth.split('.');
             setYear(birthParts[0]);
             setMonth(birthParts[1]);
-            setDay(birthParts[2]);  
+            setDay(birthParts[2]);
 
             //전화번호 tel1, tel2, tel3로 나눠서 셋팅
             const telParts = response.data.tel.split('-');

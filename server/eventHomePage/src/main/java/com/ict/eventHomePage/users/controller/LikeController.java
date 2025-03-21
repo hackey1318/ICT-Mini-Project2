@@ -25,6 +25,16 @@ public class LikeController {
     private final LikesService likesService;
 
     @AuthRequired({USER, ADMIN})
+    @GetMapping("/{eventId}")
+    public SuccessOfFailResponse getlikeEvent(@PathVariable("eventId") int eventId) {
+
+        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
+
+        return SuccessOfFailResponse.builder()
+                .result(likesService.getLikeEvent(user, eventId)).build();
+    }
+
+    @AuthRequired({USER, ADMIN})
     @PostMapping("/{eventId}")
     public SuccessOfFailResponse likeEvent(@PathVariable("eventId") int eventId) {
 
@@ -45,7 +55,7 @@ public class LikeController {
 
     @PatchMapping("/{eventId}")
     @AuthRequired({USER, ADMIN})
-    public SuccessOfFailResponse disLikeEvent(@PathVariable("eventId") int eventId) {
+    public SuccessOfFailResponse updateLikeEvent(@PathVariable("eventId") int eventId) {
 
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
 

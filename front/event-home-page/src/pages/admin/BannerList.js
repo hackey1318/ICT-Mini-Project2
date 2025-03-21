@@ -4,23 +4,6 @@ import axios from "axios";
 import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
 
-const Container = styled.div`
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  max-width: 1200px;
-  margin: 0 auto;
-  @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 10px;
-  }
-`;
-
-const Title = styled.h1`
-  font-size: 24px;
-  color: #333;
-  margin-bottom: 20px;
-`;
-
 const Sidebar = styled.div`
   background-color: #e7f0ff;
   width: 250px;
@@ -398,22 +381,9 @@ function BannerList() {
   };
 
   return (
-    <Container>
-      <Title>배너 목록</Title>
+    <div>
+      <h3 className="mb-4 d-none d-md-block">배너 목록</h3>
       <div style={{ display: "flex" }}>
-        <Sidebar>
-          <ul>
-            <NavItem>
-              <StyledLink to="/admin/memberList">회원 정보 조회</StyledLink>
-            </NavItem>
-            <NavItem>
-              <StyledLink to="/admin/withdrawalList">회원 탈퇴 명단</StyledLink>
-            </NavItem>
-            <NavItem>
-              <StyledLink to="/admin/bannerList">배너관리</StyledLink>
-            </NavItem>
-          </ul>
-        </Sidebar>
 
         <Content>
           <TableHeader>
@@ -590,7 +560,7 @@ function BannerList() {
           </ModalContent>
         </ModalOverlay>
       )}
-    </Container>
+    </div>
   );
 }
 

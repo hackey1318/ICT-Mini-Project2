@@ -50,8 +50,9 @@ function ReplyList() {
         }
     }
 
-    const handleEdit = (replyNo) => {
-        console.log(`댓글 ${replyNo} 수정`);
+    const handleEdit = (eventNo) => {
+        //console.log(`댓글 ${eventNo} 수정`);\
+        navigate(`/eventview/${eventNo}`);
     };
 
     const handleDelete = async (replyNo) => {
@@ -75,7 +76,7 @@ function ReplyList() {
 
     return (
         <div className="container">
-            <h1>작성한 댓글</h1>
+            <h2 className="h4 mb-4 d-none d-md-block">찜 목록</h2>
             <div style={{ display: "flex" }}>
                 <div className="left" style={{ backgroundColor: "#E7F0FF", width: "250px", height: "200px", borderRadius: "12px" }}>
                     <ul>
@@ -99,8 +100,8 @@ function ReplyList() {
                                 <div className="col-sm-4 p-2">{record.content}</div>
                                 <div className="col-sm-2 p-2">{formatDate(record.createdAt)}</div>
                                 <div className="col-sm-2 p-2">
-                                    <button className="btn btn-warning" style={{ margin: "1px" }} onClick={() => handleEdit(record.no)}>수정</button>
-                                    <button className="btn btn-danger" style={{ margin: "1px" }} onClick={() => handleDelete(record.no)}>삭제</button>
+                                <button className="btn btn-warning" style={{ margin: "1px" }} onClick={() => handleEdit(record.eventNo)}>수정</button>
+                                <button className="btn btn-danger" style={{ margin: "1px" }} onClick={() => handleDelete(record.no)}>삭제</button>
                                 </div>
                             </div>
                         );

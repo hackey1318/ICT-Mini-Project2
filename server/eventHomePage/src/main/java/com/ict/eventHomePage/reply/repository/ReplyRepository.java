@@ -17,9 +17,6 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
 
     List<Replies> findRepliesByUserNo(int userNo);
 
-    //@Query("SELECT COUNT(n.id) FROM Replies AS n WHERE n.userNo = :userNo AND n.status = READABLE")
-    //Optional<Replies> findByUserId(int userNo);
-
     @Query(value = "SELECT r.no, r.user_no AS userNo, e.title AS joinedTitle, r.content, r.created_at, r.event_no AS eventNo " +
             "FROM replies r JOIN events e ON r.event_no = e.no " +
             "WHERE r.user_no = :currentUserNo AND r.status = 'active'", nativeQuery = true)
@@ -29,8 +26,4 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
     @Transactional
     @Query("UPDATE Replies r SET r.status = :status WHERE r.no = :replyNo")
     void updateStatusByReplyNo(@Param("replyNo") int replyNo, @Param("status") StatusInfo status);
-
-
 }
-
-

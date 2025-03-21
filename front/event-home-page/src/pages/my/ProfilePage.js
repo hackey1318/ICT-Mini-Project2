@@ -1,7 +1,7 @@
 function ProfilePage() {
     return (
         <div>
-            <h2 className="h4 mb-4 d-none d-md-block">내 정보 수정</h2>
+            <h3 className="mb-4 d-none d-md-block">내 정보 수정</h3>
 
             <div className="card">
                 <div className="card-body">

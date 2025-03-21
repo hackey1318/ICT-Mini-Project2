@@ -50,8 +50,8 @@ function EventModal({ event, onClose }) {
   const overviewText = removeBrTags(event.overView);
 
   return (
-    <div className="modal-overlay">
-      <div className="modal-contents">
+    <div className="modal-overlay2">
+      <div className="modal-contents2">
         <div className="modal-header">
           <h2>{event.title}</h2>
           <button className="close-button" onClick={onClose}>
@@ -62,7 +62,7 @@ function EventModal({ event, onClose }) {
           <img
             src={event.img_list[0].originImgurl}
             alt={event.title}
-            className="modal-image"
+            className="modal-image2"
           />
           <p>
             <strong>{moment(event.startDate).format('YYYY-MM-DD')} ~ {moment(event.endDate).format('YYYY-MM-DD')}</strong>

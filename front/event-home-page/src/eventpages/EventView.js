@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import '../eventCss/EventView.css';
 import axios from 'axios';
-import '../eventCss/EventView.css';
 import '../css/replyList.css';
 import ReviewEdit from '../js/event/ReviewEdit'
 import addFile from '../img/plus.jpg';
@@ -18,11 +17,15 @@ import icon5 from "../img/usericons/5.jpg";
 import icon6 from "../img/usericons/6.jpg";
 import icon7 from "../img/usericons/7.jpg";
 import { Users } from 'lucide-react';
+import backbutton from '../img/backbutton.png';
+import nextbutton from '../img/nextbutton.png';
+
 
 function EventView() {
     const [event, setEvent] = useState({});
     const { no } = useParams();
     const mapRef = useRef(null);
+    const navigate = useNavigate();
     let [title, setTitle] = useState('');
     let [content, setContent] = useState('');
     let [isModalOpen, setIsModalOpen] = useState(false);
@@ -146,12 +149,9 @@ function EventView() {
         }
     }, [event, isOverviewExpanded]);
 
-    if (!event) {
-        return <div>이벤트 정보를 불러오는 중...</div>;
-    }
-    const toggleOverview = () => {
-        setIsOverviewExpanded(!isOverviewExpanded);
-    };
+  const toggleOverview = () => {
+    setIsOverviewExpanded(!isOverviewExpanded);
+  };
 
     //홈페이지 태그제거
     const removeTags = (str) => {
@@ -188,15 +188,29 @@ function EventView() {
         setSelectedImageIndex(null);
     };
 
-    const Previous = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex > 1 ? prevIndex - 1 : uniqueImages.length - 1));
-    };
+  const Previous = () => {
+    setSelectedImageIndex((prevIndex) => {
+      if (prevIndex > 0) {
+        return prevIndex - 1;
+      } else {
+        return uniqueImages.length - 1;
+      }
+    });
+  };
 
-    const Next = () => {
-        setSelectedImageIndex((prevIndex) => (prevIndex < uniqueImages.length - 1 ? prevIndex + 1 : 1));
+  const Next = () => {
+      setSelectedImageIndex((prevIndex) => {
+        if (prevIndex < uniqueImages.length - 1) {
+          return prevIndex + 1;
+        } else {
+          return 0;
+        }
+      });
     };
-
-    //모달창 함수
+    const BackButton = () => {
+      navigate('/');
+    };
+//모달창 함수
     //후기 제목 함수
     function setTitleValue(event) {
         setTitle(event.target.value);
@@ -319,12 +333,12 @@ function EventView() {
     }
 
     function ReviewDelete(no) {
-       
+
         if (window.confirm("글을 삭제하시겠습니까?")) {
             axios.get(`http://localhost:9988/reply/replyDel/${no}`)
             .then(function (response) {
                 console.log(response.data);
-                
+
                 if (response.data == "deleted") {
                     const updatedReplies = replies.map(reply =>
                         replies.no === no ? {...reply, status: "DELETE"} : reply
@@ -342,140 +356,159 @@ function EventView() {
         }
     }
 
-    return (
-        <div className="event-view-container">
-            <div className="content-wrapper">
-                <div className="event-title">
-                    {event.title}
-                </div>
-                <div className="event-image">
-                    {event.img_list && event.img_list[0] && event.img_list[0].originImgurl ? (
-                        <img src={event.img_list[0].originImgurl} alt={event.title} />
-                    ) : (
-                        <div>No Image</div>
-                    )}
-                </div>
-                <div className="small-images">
-                    {event.img_list &&
-                        uniqueImages.map((item, idx) => {
-                            return (
-                                idx !== 0 && <img key={item.no} src={item.originImgurl} alt={`small_${idx}`} onClick={() => openModal(idx)} />
-                            )
-                        })}
-                </div>
 
-                <div className="event-info">
-                    <p><strong>{moment(event.startDate).format('YYYY.MM.DD')} ~ {moment(event.endDate).format('YYYY.MM.DD')}</strong></p>
-                    <p><strong>{event.addr}</strong></p>
-                    <div className={`overview-container ${isOverviewExpanded ? 'expanded' : ''}`}>
-                        <p className="overview-text">
-                            {removeBrTags(event?.overView || '')}
-                        </p>
-                        <button className="overview-toggle-button" onClick={toggleOverview}>
-                            {isOverviewExpanded ? '▲' : '▼'}
-                        </button>
-                    </div>
-                    {isOverviewExpanded && (
-                        <>
-                            <p>주최 : {event.telName}</p>
-                            <p>전화번호 : {event.tel}</p>
-                            {event.homePage && (
-                                <p>
-                                    홈페이지 : {
-                                        (() => {
-                                            const url = extractUrl(event.homePage);
-                                            return url ? <a href={url} target="_blank" rel="noopener noreferrer">{url}</a> : '홈페이지가 없습니다.';
-                                        })()
-                                    }
-                                </p>
-                            )}
-                        </>
-                    )}
-                </div>
-
-                {isOverviewExpanded && <div id="kakao-map" ref={mapRef}></div>}
-            </div>
-            {selectedImageIndex !== null && (
-                <div className="modal-overlay" onClick={closeModal}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-                        <img
-                            src={uniqueImages[selectedImageIndex]?.originImgurl}
-                            alt={event.title}
-                            className="modal-image"
-                        />
-                        <div className='modal-button'>
-                            <button className="modal-nav-button prev" onClick={Previous}>
-                                🠔
-                            </button>
-                            <button className="modal-nav-button next" onClick={Next}>
-                                🠖
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-            )}
-            <hr style={{maxWidth: '850px', margin: '20px auto'}}/>
-
-            <div className="replies">
-                <p style={{ fontSize: '1.8em' }}>Review</p>
-                <div>
-                    {
-                        replies.filter(replies => replies.status !== "DELETE").map(replies => (
-                            <div className='replyList'>
-                                <ul>
-                                    <li id='usericon'><img src={userIcon}/></li>
-                                    <li id='title'>{replies.title}</li>
-                                    <li id='username'>{userInfo.name}</li>
-                                    {(replies.userNo === userInfo.no) &&
-                                        <li>
-                                            <div id="edit-container">
-                                                <img src={edit} className='editor' onClick={ReviewEdit}/>
-                                                <img src={del} className='editor' onClick={()=>ReviewDelete(replies.no)}/>
-                                            </div>
-                                        </li>
-                                    }
-                                </ul>
-                            </div>
-                        ))
-                    }
-                </div>
-
-                <div>
-                    <input type='button' id='openWriteForm' value='후기쓰기' onClick={() => setIsModalOpen(true)} />
-                </div>
-
-                {isModalOpen && (
-                    <div className='modalContainer' style={{ width: '100%', height: '100%', margin: "10% 10% 0", backgroundColor: '#gray', opacity: '1' }}>
-                        <div className='writeForm' >
-                            <form onSubmit={addReply}>
-                                <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue} /><br />
-                                <textarea type='text' className='festival-modal-textarea' placeholder="후기내용을 입력하세요" value={content} onChange={setContentValue} />
-
-                                <label style={{ fontSize: '0.7em', position: 'relative', left: '20px', top: '15px' }}>사진첨부(최대 3장)</label><br/>
-                                <input type='file' multiple ref={runfile}
-                                    style={{ position: 'relative', left: '10px', top: '-5px', opacity: '0', width: '65%' }} />
-
-                                <div id="plus-container" onMouseOver={opacityController}
-                                    onMouseOut={opacityController2} onClick={runInputFile}></div>
-                                <img src={addFile} id='addFile' style={{ cursor: 'pointer' }}
-                                    onMouseOver={opacityController}
-                                    onMouseOut={opacityController2}
-                                    onClick={runInputFile} />
-
-                                <div className='imgList'></div>
-
-                                <input type='submit' value='등 록' />
-                                <input type='button' value='취 소' onClick={() => setIsModalOpen(false)} />
-                            </form>
-                        </div>
-                    </div>
-                )}
-            </div>
+   return (
+    <div className="event-view-container">
+      <div className="content-wrapper">
+      <button className="back-button" onClick={BackButton}>
+        <span>🠔</span>
+      </button>
+        <div className="event-title">
+          {event.title}
         </div>
-    );
+        <div className="event-image" onClick={()=>openModal(0)}>
+          {event.img_list && event.img_list[0] && event.img_list[0].originImgurl ? (
+          <img src={event.img_list[0].originImgurl} alt={event.title} />
+          ) : (
+            <div>No Image</div>
+          )}
+        </div>
+        <div className="small-images">
+          {event.img_list &&
+             uniqueImages.map((item, idx) => {
+              return (
+                idx !== 0 && <img key={item.no} src={item.originImgurl} alt={`small_${idx}`}  onClick={() => openModal(idx)} />
+              )
+            })}
+        </div>
+        <div>찜버튼넣는곳</div>
+        <hr/>
+        <div className="event-info">
+          <p><strong>{moment(event.startDate).format('YYYY.MM.DD')} ~ {moment(event.endDate).format('YYYY.MM.DD')}</strong></p>
+          <p><strong>{event.addr}</strong></p>
+          <div className={`overview-container ${isOverviewExpanded ? 'expanded' : ''}`}>
+            <p className="overview-text">
+              {removeBrTags(event?.overView || '')}
+            </p>
+            {!isOverviewExpanded ? (
+              <button className="overview-toggle-button" onClick={toggleOverview}>
+                ▼
+              </button>
+            ) : (
+              <div className='event-info2'>
+              <>
+                <p>주최 : {event.telName}</p>
+                <p>전화번호 : {event.tel}</p>
+                {event.homePage && (
+                  <p>
+                    홈페이지 :{' '}
+                    {(() => {
+                      const url = extractUrl(event.homePage);
+                      return url ? (
+                        <a href={url} target="_blank" rel="noopener noreferrer">
+                          {url}
+                        </a>
+                      ) : (
+                        '홈페이지가 없습니다.'
+                      );
+                    })()}
+                  </p>
+                )}
+                {isOverviewExpanded && <div id="kakao-map" ref={mapRef}></div>}
+                <div className="centered-button">
+                  <button className="overview-toggle-button" onClick={toggleOverview}>
+                    ▲
+                  </button>
+                </div>
+              </>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+        {selectedImageIndex !== null && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-button" onClick={closeModal}>
+              ✕
+            </button>
+              <img
+                src={uniqueImages[selectedImageIndex]?.originImgurl}
+                alt={event.title}
+                className="modal-image"
+              />
+              <div className='modal-button'>
+              <button className="modal-nav-button prev" onClick={Previous}>
+              <img src={require('../img/backbutton.png')} alt="Previous"/>
+            </button>
+            <button className="modal-nav-button next" onClick={Next}>
+            <img src={require('../img/nextbutton.png')} alt="Next"/>
+            </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+      <hr style={{maxWidth: '850px', margin: '20px auto'}}/>
+
+                  <div className="replies">
+                      <p style={{ fontSize: '1.8em' }}>Review</p>
+                      <div>
+                          {
+                              replies.filter(replies => replies.status !== "DELETE").map(replies => (
+                                  <div className='replyList'>
+                                      <ul>
+                                          <li id='usericon'><img src={userIcon}/></li>
+                                          <li id='title'>{replies.title}</li>
+                                          <li id='username'>{userInfo.name}</li>
+                                          {(replies.userNo === userInfo.no) &&
+                                              <li>
+                                                  <div id="edit-container">
+                                                      <img src={edit} className='editor' onClick={ReviewEdit}/>
+                                                      <img src={del} className='editor' onClick={()=>ReviewDelete(replies.no)}/>
+                                                  </div>
+                                              </li>
+                                          }
+                                      </ul>
+                                  </div>
+                              ))
+                          }
+                      </div>
+
+                      <div>
+                          <input type='button' id='openWriteForm' value='후기쓰기' onClick={() => setIsModalOpen(true)} />
+                      </div>
+
+                      {isModalOpen && (
+                          <div className='modalContainer' style={{ width: '100%', height: '100%', margin: "10% 10% 0", backgroundColor: '#gray', opacity: '1' }}>
+                              <div className='writeForm' >
+                                  <form onSubmit={addReply}>
+                                      <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue} /><br />
+                                      <textarea type='text' className='festival-modal-textarea' placeholder="후기내용을 입력하세요" value={content} onChange={setContentValue} />
+
+                                      <label style={{ fontSize: '0.7em', position: 'relative', left: '20px', top: '15px' }}>사진첨부(최대 3장)</label><br/>
+                                      <input type='file' multiple ref={runfile}
+                                          style={{ position: 'relative', left: '10px', top: '-5px', opacity: '0', width: '65%' }} />
+
+                                      <div id="plus-container" onMouseOver={opacityController}
+                                          onMouseOut={opacityController2} onClick={runInputFile}></div>
+                                      <img src={addFile} id='addFile' style={{ cursor: 'pointer' }}
+                                          onMouseOver={opacityController}
+                                          onMouseOut={opacityController2}
+                                          onClick={runInputFile} />
+
+                                      <div className='imgList'></div>
+
+                                      <input type='submit' value='등 록' />
+                                      <input type='button' value='취 소' onClick={() => setIsModalOpen(false)} />
+                                  </form>
+                              </div>
+                          </div>
+                      )}
+                  </div>
+    </div>
+  );
 }
 
 export default EventView;
-
-

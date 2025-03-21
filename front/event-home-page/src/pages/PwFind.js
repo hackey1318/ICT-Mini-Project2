@@ -63,6 +63,9 @@ function PwFind(){
                 userIdRef.current.focus();
             } else if (response.data.result === "pwFindSuccess") {
                 setPwFound(true);  // 비밀번호 찾기 성공 상태로 변경
+            } else if (response.data.result === "pwFindDelete") {
+                // 탈퇴한 사용자 처리
+                alert(response.data.message || "이미 탈퇴한 사용자입니다.");
             }
         })
         .catch(function(error){
@@ -162,7 +165,6 @@ function PwFind(){
                 window.location.href="/login"; // 홈으로 이동 
             }
 
-
         })
         .catch(function(error){
             console.log(error);
@@ -170,8 +172,8 @@ function PwFind(){
     }
 
     return(
-        <div className="id-find-container">
-            <div className="id-find-form">
+        <div className="find-container">
+            <div className="find-form">
                 {!pwFound ? (
                     <>
                     <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>

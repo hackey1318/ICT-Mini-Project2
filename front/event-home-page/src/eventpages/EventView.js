@@ -18,7 +18,6 @@ import icon5 from "../img/usericons/5.jpg";
 import icon6 from "../img/usericons/6.jpg";
 import icon7 from "../img/usericons/7.jpg";
 import { Users } from 'lucide-react';
-import {jwtDecode} from 'jwt-decode';
 
 function EventView() {
     const [event, setEvent] = useState({});
@@ -30,6 +29,7 @@ function EventView() {
     let [comment, setComment] = useState([]);
     let [userIcon, setUserIcon] = useState();
     let [replies, setReplies] = useState([]);
+    let [userInfo, setUserInfo] = useState({});
     const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
     const [isOverviewExpanded, setIsOverviewExpanded] = useState(false);
     const [selectedImageIndex, setSelectedImageIndex] = useState(null);
@@ -81,11 +81,22 @@ function EventView() {
               const listData = await axios.get('http://localhost:9988/reply/getReplies', {
                 params: {eventNo: no}
               });
+
+              const userData = await axios.get("http://localhost:9988/auth/user", {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+              });
+
+              setUserInfo(userData.data)
+
               console.log(listData.data);
               setReplies(listData.data);
           } catch(error) {
               console.error("Error fetching replies : ", error);
           }
+
+
         };
         callList();
     }, []);
@@ -415,12 +426,12 @@ function EventView() {
                                 <ul>
                                     <li id='usericon'><img src={userIcon}/></li>
                                     <li id='title'>{replies.title}</li>
-                                    <li id='username'>{replies.userNo.name}</li>
-                                    {(replies.no.userNo == sessionStorage.getItem(userNo)) &&
+                                    <li id='username'>{userInfo.name}</li>
+                                    {(replies.userNo === userInfo.no) &&
                                         <li>
                                             <div id="edit-container">
                                                 <img src={edit} className='editor' onClick={ReviewEdit}/>
-                                                <img src={del} className='editor' onClick={()=>ReviewDelete(no)}/>
+                                                <img src={del} className='editor' onClick={()=>ReviewDelete(replies.no)}/>
                                             </div>
                                         </li>
                                     }

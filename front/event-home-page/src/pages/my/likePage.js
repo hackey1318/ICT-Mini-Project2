@@ -2,8 +2,11 @@ import { useState, useEffect } from "react"
 import "../../css/my/likesGrid.css"
 import axios from "axios"
 import ErrorModal from "../common/ErrorModal"
+import { useNavigate } from "react-router-dom";
 
 function LikePage() {
+    const navigate = useNavigate();
+
     const [showError, setShowError] = useState(false);
     const [wishlistItems, setWishlistItems] = useState([])
     const [favorites, setFavorites] = useState([])
@@ -76,6 +79,10 @@ function LikePage() {
 
     }
 
+    const handleEdit = (eventNo) => {
+        navigate(`/eventview/${eventNo}`);
+    };
+
     if (loading) {
         return <div className="text-center py-5">로딩 중...</div>
     }
@@ -116,7 +123,7 @@ function LikePage() {
                                 </button>
                             </div>
                             <div className="text-center mt-2">
-                                <button className="btn btn-outline-primary btn-sm rounded-pill px-3">자세히 보기</button>
+                                <button onClick={() => handleEdit(item.eventNo)} className="btn btn-outline-primary btn-sm rounded-pill px-3">자세히 보기</button>
                             </div>
                         </div>
                     </div>

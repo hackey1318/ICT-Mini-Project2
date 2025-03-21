@@ -206,7 +206,7 @@ function MainPage() {
                 </div>
             </div>
             {totalPages > 1 && (
-                <div className="pagination">
+                <div className="pagination-event">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                         <button key={number} onClick={() => paginate(number)} className={currentPage === number ? 'active' : ''}>
                             {number}

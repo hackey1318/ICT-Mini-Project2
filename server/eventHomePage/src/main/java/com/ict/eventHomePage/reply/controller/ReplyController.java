@@ -2,8 +2,10 @@ package com.ict.eventHomePage.reply.controller;
 
 import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.config.AuthRequired;
+import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Replies;
 import com.ict.eventHomePage.domain.Users;
+import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 import com.ict.eventHomePage.reply.service.impl.ReplyServiceImpl;
 import com.ict.eventHomePage.users.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,56 +34,27 @@ public class ReplyController {
 
     @AuthRequired({USER, ADMIN})
     @PostMapping("/addReply")
-    public List<Replies> addReply(@RequestBody Replies replies, MultipartFile[] files, HttpServletRequest request) {
+    public SuccessOfFailResponse addReply(@RequestBody ReplyRequest request) {
 
-        String userId = AuthCheck.getUserId(USER, ADMIN);
-        FILE_PATH = request.getServletContext().getRealPath("/uploads");
-        List<File> fileList = new ArrayList<File>();
+        int userNo = authService.getUser(AuthCheck.getUserId(USER, ADMIN)).getNo();
+        request.setUserNo(userNo);
 
-        try {
-            Replies resultReplies = replyService.dataInsert(replies);
-
-            for (MultipartFile mf : files) {
-                String orgFileName = mf.getOriginalFilename();
-                File f = new File(FILE_PATH, orgFileName);
-                int point = orgFileName.lastIndexOf(".");
-                String fName = orgFileName.substring(0, point);
-                String eName = orgFileName.substring(point + 1);
-
-                if (f.exists()) {
-                    for (int i = 1; ; i++) {
-                        String newFileName = fName + "(" + i + ")." + eName;
-
-                        File newFile = new File(FILE_PATH, newFileName);
-                        if (!newFile.exists()) {
-                            fName = fName + "(" + i + ").";
-                            break;
-                        }
-                    }
-                }
-                //ReplyImages replyImages = new ReplyImages(0, 0, );
-            }
-        } catch (Exception e) {
-
-        }
-        return replyService.addReply(authService.getUser(userId).getNo());
+        return SuccessOfFailResponse.builder().result(replyService.addReply(request)).build();
     }
 
-    @AuthRequired({USER, ADMIN})
-    @GetMapping("/replyList")
-    public ResponseEntity<Map<String, Object>> getReplyList() {
-        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-        List<Replies> replyList = replyService.getReplyList();
-        Map<String, Object> response = new HashMap<>();
-        response.put("list", replyList);
-        return ResponseEntity.ok(response);
+    @GetMapping("/getReplies")
+    public List<Replies> getReplies(@RequestParam int eventNo) {
+
+        List<Replies> replies = replyService.getReplies(eventNo);
+
+        return replies;
     }
 
-    @AuthRequired({USER, ADMIN})
-    @PatchMapping("/{replyNo}")
-    public ResponseEntity<Void> updateReply(@PathVariable int replyNo) {
-        replyService.updateReply(replyNo);
-        return ResponseEntity.ok().build();
+    @GetMapping("/replyDel/{no}")
+    public String replyDel(@PathVariable("no") int no) {
+
+        replyService.replyDel(no);
+        return "deleted";
     }
 }
 

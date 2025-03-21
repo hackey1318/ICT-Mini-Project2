@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -15,7 +16,13 @@ public class ReplyRequest {
 
     private int userNo;
 
-    private List<Integer> replyList;
+    private int eventNo;
 
+    private String title;
 
+    private String content;
+
+    private List<String> imageIdList;
 }
+
+

@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,7 +29,6 @@ import java.util.Map;
 public class BannerServiceImpl implements BannerService {
 
     private final ModelMapper modelMapper;
-
     private final BannerRepository bannerRepository;
 
     @Override
@@ -54,11 +56,12 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public List<Map<String, Object>> getAllBanners() {
-        List<Object[]> results = bannerRepository.findAllBannersWithEventTitle();
+    public Map<String, Object> getAllBanners(int page, int size) {
+        Pageable pageable = PageRequest.of(page - 1, size); // 0-based index
+        Page<Object[]> results = bannerRepository.findAllBannersWithEventTitle(pageable);
         List<Map<String, Object>> banners = new ArrayList<>();
 
-        for (Object[] result : results) {
+        for (Object[] result : results.getContent()) {
             Banners banner = (Banners) result[0];
             String title = (String) result[1];
 
@@ -77,7 +80,17 @@ public class BannerServiceImpl implements BannerService {
             banners.add(bannerMap);
         }
 
-        return banners;
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", banners);
+
+        Map<String, Object> pageInfo = new HashMap<>();
+        pageInfo.put("nowPage", results.getNumber() + 1); // 1-based index로 변환
+        pageInfo.put("totalPage", results.getTotalPages());
+        pageInfo.put("totalCount", results.getTotalElements());
+        pageInfo.put("size", size);
+        response.put("pageInfo", pageInfo);
+
+        return response;
     }
 
     @Override
@@ -85,7 +98,7 @@ public class BannerServiceImpl implements BannerService {
         Banners banner = bannerRepository.findById(no)
                 .orElseThrow(() -> new IllegalArgumentException("배너를 찾을 수 없습니다: " + no));
 
-        if (fileId != null && fileId.length() > 16) { // 최대 16자 제한
+        if (fileId != null && fileId.length() > 16) {
             log.warn("fileId is too long: {} characters! Trimming...", fileId.length());
             fileId = fileId.substring(0, 16);
         }
@@ -93,7 +106,7 @@ public class BannerServiceImpl implements BannerService {
         banner.setEventNo(eventNo);
         banner.setFileId(fileId);
         banner.setColor(color);
-        banner.setStatus(StatusInfo.ACTIVE); // enum 값 사용 (StatusInfo.ACTIVE)
+        banner.setStatus(StatusInfo.ACTIVE);
         banner.setStartDate(startDate);
         banner.setEndDate(endDate);
         bannerRepository.save(banner);
@@ -101,9 +114,7 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public List<BannerResponse> getHomeBannerList() {
-
         List<HomeBannerDto> banners = bannerRepository.findByStatus(StatusInfo.ACTIVE);
-
         return modelMapper.map(banners, new TypeToken<List<BannerResponse>>(){}.getType());
     }
 

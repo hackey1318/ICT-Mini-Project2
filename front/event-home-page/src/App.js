@@ -3,7 +3,7 @@ import './App.css';
 import Admin from './pages/admin/Admin';
 import Layout from './pages/admin/Layout';
 import MemberList from './pages/admin/MemberList';
-import WithdrawalList from './pages/admin/WithdrawalList';
+import MemberDelList from './pages/admin/MemberDelList';
 import BannerList from './pages/admin/BannerList';
 import CreateBanner from './pages/admin/CreateBanner';
 import MainPage from './eventpages/MainPage';
@@ -37,7 +37,7 @@ function App() {
         <Route path="/admin" element={<MyPage />}>
           <Route index element={<MemberList />}></Route>
           <Route path="memberList" element={<MemberList />}></Route>
-          <Route path="withdrawalList" element={<WithdrawalList />}></Route>
+          <Route path="memberDelList" element={<MemberDelList />}></Route>
           <Route path="bannerList" element={<BannerList />}></Route>
           <Route path="createBanner" element={<CreateBanner />}></Route>
           <Route path='announce' element={<Announce />}></Route>

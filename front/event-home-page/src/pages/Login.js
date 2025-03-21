@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom';
 import "./../css/Login.css";
 import { useRef, useState } from 'react';
 import axios from 'axios';
+import arrow from '../img/arrow.png';
 
 function Login(){
     // 폼의 아이디와 비밀번호를 보관할 변수
@@ -96,30 +97,34 @@ function Login(){
     }
 
     return(
+        <>
         <div className="login-container">
             <div className="login-style">
+                <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                </button>
                 <form onSubmit={formCheck}>
-                    <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
-                    <h1>LOGIN</h1>
+                    <h1 style={{textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>LOGIN</h1>
                     <div className="input-container">
                         <label htmlFor="userId">아이디</label>
                         <input type="text" id="userId" name="userId" className="input-style" placeholder="아이디를 입력하세요." onChange={setFormData} ref={userIdRef}/>
                     </div>
                     <div className="input-container">
                         <label htmlFor="pw">비밀번호</label>
-                        <input type="password" id="pw" name="pw" className="input-style" placeholder="비밀번호를 입력하세요." onChange={setFormData} ref={pwRef}/>
+                        <input type="password" id="pw" name="pw" className="input-style pw-style" placeholder="비밀번호를 입력하세요." onChange={setFormData} ref={pwRef}/>
                     </div>
                     <div>
                         <input type="submit" className="login-btn" value="로그인"/>
                     </div>
                     <div className="link-style">
-                        <Link to="/join" className="login-link">회원가입</Link><span style={{margin:'0px 3px'}}>|</span>
-                        <Link to="/idFind" className="login-link">아이디 찾기</Link><span style={{margin:'0px 3px'}}>|</span> 
+                        <Link to="/join" className="login-link">회원가입</Link><span style={{margin:'0px 5px'}}>|</span>
+                        <Link to="/idFind" className="login-link">아이디 찾기</Link><span style={{margin:'0px 5px'}}>|</span> 
                         <Link to="/pwFind" className="login-link">비밀번호 찾기</Link>
                     </div>
                 </form>
             </div>
         </div>
+        </>
     );
 }
 

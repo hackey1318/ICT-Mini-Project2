@@ -8,8 +8,11 @@ public interface ReplyService {
 
     List<Replies> addReply(int userNo);
 
-    List<Replies> getReplies(String userId, String content);
+    //List<Replies> getReplies(String userId, String content);
+    List<Replies> getReplyList();
 
     Replies dataInsert(Replies replies);
+
+    void updateReply(int replyNo);
 }
 

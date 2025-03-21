@@ -48,9 +48,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public Users usersUpdate(Users usersVO) {
         usersVO.setPw(bCryptPasswordEncoder.encode(usersVO.getPw()));
-        System.out.println("데이터넣기전 최종 데이터 확인 ====> "+usersVO);
 
         return usersRepository.save(usersVO);
     }
-
 }

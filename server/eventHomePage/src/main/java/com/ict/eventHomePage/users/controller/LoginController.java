@@ -1,8 +1,10 @@
 package com.ict.eventHomePage.users.controller;
 
 import com.ict.eventHomePage.common.exception.custom.UserAuthenticationException;
+import com.ict.eventHomePage.common.exception.custom.UserStatusException;
 import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Users;
+import com.ict.eventHomePage.domain.constant.StatusInfo;
 import com.ict.eventHomePage.users.controller.request.LoginRequest;
 import com.ict.eventHomePage.users.service.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,28 +45,32 @@ public class LoginController {
         } catch (UserAuthenticationException e) {
             // 로그인 실패 시 적절한 응답을 반환
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
-            response.setHeader("Error-Message", e.getMessage());  // 오류 메시지를 헤더로 전달
-            return SuccessOfFailResponse.builder().result(false).build();
+            // response.setHeader("Error-Message", e.getMessage());  // 오류 메시지를 헤더로 전달
+            return SuccessOfFailResponse.builder().result(false).message(e.getMessage()).build(); //오류메세지를 front단에 넘기기위해 .message(e.getMessage()) 써줌
         } catch (Exception e) {
             // 다른 예기치 않은 오류에 대한 처리
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR); // 500 Internal Server Error
-            return SuccessOfFailResponse.builder().result(false).build();
+            return SuccessOfFailResponse.builder().result(false).message(e.getMessage()).build(); //오류메세지를 front단에 넘기기위해 .message(e.getMessage()) 써줌
         }
     }
 
     @PostMapping("/idFindOk")
     public ResponseEntity<Map<String, Object>> idFindOk(@RequestBody Users usersVO) {
 
-        Users result = loginService.idFind(usersVO);
         Map<String, Object> response = new HashMap<>();
 
-        if (result == null) {
-            response.put("result", "idFindFail");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else {
+        try {
+            Users result = loginService.idFind(usersVO);
+            if (StatusInfo.DELETE == result.getStatus()) {
+                response.put("result", "idFindDelete");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
             response.put("result", "idFindSuccess");
             response.put("userId", result.getUserId());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }catch(Exception e){
+            response.put("result", "idFindFail");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
 
@@ -73,15 +79,21 @@ public class LoginController {
     @PostMapping("/pwFindOk")
     public ResponseEntity<Map<String, Object>> pwFindOk(@RequestBody Users usersVO) {
 
-        Users result = loginService.pwFind(usersVO);
-
         Map<String, Object> response = new HashMap<>();
 
-        if (result == null) {
-            response.put("result", "pwFindFail");
-            return ResponseEntity.status(HttpStatus.OK).body(response);
-        } else {
+        try {
+            Users result = loginService.pwFind(usersVO);
+
+            if (StatusInfo.DELETE == result.getStatus()) {
+                response.put("result", "pwFindDelete");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+
             response.put("result", "pwFindSuccess");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        } catch (Exception e) {
+            response.put("result", "pwFindFail");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }

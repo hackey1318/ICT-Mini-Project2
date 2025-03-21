@@ -3,7 +3,7 @@
     font-family: Arial, sans-serif;
     color: #333;
     padding: 20px;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -13,6 +13,7 @@
     max-width: 800px;
     width: 100%;
     text-align: center;
+    margin: 0 auto;
 }
 
 .event-title {

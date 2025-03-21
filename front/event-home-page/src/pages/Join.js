@@ -283,11 +283,10 @@ function Join(){
                     <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                 </button>
                 <form onSubmit={formCheck}>
-                    
-                    <h2 id="join-form-title">회원가입</h2>
+                    <h2 id="join-form-title" style={{textShadow: "rgba(0, 0, 0, 0.2) 2px 2px 4px"}}>회원가입</h2>
                     <div className='join-form-inner'>
                         <div className='join-form-line'>
-                            <div className='join-title'>아이디</div><div className='join-input-box'><input type="text" name="user_id" className='text-box' onChange={setFormData} ref={userIdRef}/></div>
+                            <div className='join-title'>아이디</div><div className='join-input-box'><input type="text" name="user_id" className='text-box' onChange={setFormData} ref={userIdRef} placeholder='5~10자의 영어소문자, 숫자 가능'/></div>
                             {idValid === false && !idChecked && (
                                 <div id='alert-id' className='alert-text'>5~10자의 영어소문자, 숫자만 가능</div>
                             )}
@@ -305,7 +304,7 @@ function Join(){
                         </div>
                         <input type="button" value="중복확인" className='id-check' onClick={handleIdCheck}/>
                         <div className='join-form-line'>
-                            <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData} ref={userPwRef} /></div>
+                            <div className='join-title'>비밀번호</div><div className='join-input-box'><input type="password" name="user_pw" className='text-box pw-style' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData} ref={userPwRef} placeholder='7~10자의 영문 대소문자, 숫자, !@#$% 가능'/></div>
                             {pwValid === false && (
                                 <div className='alert-text' style={{ color: 'red' }}>7~10자의 영문 대소문자, 숫자, !@#$% 가능</div>
                             )}
@@ -314,7 +313,7 @@ function Join(){
                             )}
                         </div>
                         <div className='join-form-line'>
-                            <div className='join-title'>비밀번호 확인</div><div className='join-input-box'><input type="password" name="pw_check" className='text-box' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData}/></div>
+                            <div className='join-title'>비밀번호 확인</div><div className='join-input-box'><input type="password" name="pw_check" className='text-box pw-style' style={{fontFamily: "'Gowun Batang', sans-serif"}} onChange={setFormData} placeholder='비밀번호를 한 번 더 입력해주세요.'/></div>
                             {pwCheckValid === false && (
                                 <div className='alert-text' style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</div>
                             )}
@@ -323,7 +322,7 @@ function Join(){
                             )}
                         </div>
                         <div className='join-form-line'>
-                            <div className='join-title'>이름</div><div className='join-input-box'><input type="text" name="user_name" className='text-box'  minLength={2} onChange={setFormData}/></div>
+                            <div className='join-title'>이름</div><div className='join-input-box'><input type="text" name="user_name" className='text-box'  minLength={2} onChange={setFormData} placeholder='이름을 입력하세요.'/></div>
                         </div>
                         <div className='join-form-line'>
                             <div className='join-title'>생년월일</div>
@@ -343,23 +342,23 @@ function Join(){
                             </div>
                         </div>
                         <div className='join-form-line'>
-                            <div className='join-title'>이메일</div><div className='join-input-box'><input type="email" name="email" className='text-box' onChange={setFormData}/></div>
+                            <div className='join-title'>이메일</div><div className='join-input-box'><input type="email" name="email" className='text-box' onChange={setFormData} placeholder='example@naver.com'/></div>
                         </div>
                         <div className='join-form-line'>
                             <div className='join-title'>연락처</div>
                             <div className='join-input-box'>
-                                <input type="text" name="tel1" className='text-box tel'  minLength={2} maxLength={3} onChange={setFormData} />
-                                -<input type="text" name="tel2" className='text-box tel' minLength={3} maxLength={4} onChange={setFormData} />
-                                -<input type="text" name="tel3" className='text-box tel' maxLength={4} minLength={4} onChange={setFormData} />
+                                <input type="text" name="tel1" className='text-box tel'  minLength={2} maxLength={3} onChange={setFormData} placeholder='010'/>
+                                -<input type="text" name="tel2" className='text-box tel' minLength={3} maxLength={4} onChange={setFormData} placeholder='0000'/>
+                                -<input type="text" name="tel3" className='text-box tel' maxLength={4} minLength={4} onChange={setFormData} placeholder='0000'/>
                             </div>
                         </div>
                         <div className='join-form-line addr-zipcode'>
                             <div className='join-title'>주소</div><div className='join-input-box'><input type="text" name="zipcode" value={zipcode} className='text-box zipcode' onChange={setFormData} readOnly/></div>
                         </div>
-                        <input type="button" value="우편번호" className='text-box zipcode-btn' onClick={daumPostCodeSearch}/>
+                        <input type="button" value="우편번호" className='zipcode-btn' onClick={daumPostCodeSearch}/>
                         <div className='join-form-line'>
                             <div className='join-title'></div>
-                            <div className='join-input-box'><input type="text" name="addr" value={addr} className='addr-input' onChange={setFormData} readOnly/></div>
+                            <div className='join-input-box'><input type="text" name="addr" value={addr} className='addr-input' onChange={setFormData} placeholder='우편번호 버튼을 눌러 검색하세요.' readOnly/></div>
                         </div>
                         <div>
                             <input type="submit" value="회원가입" className='join-btn'/>

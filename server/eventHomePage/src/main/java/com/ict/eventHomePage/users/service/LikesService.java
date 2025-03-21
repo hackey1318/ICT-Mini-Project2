@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface LikesService {
 
+    boolean getLikeEvent(Users users, int eventId);
+
     boolean likeEvent(Users users, int eventId);
 
     List<LikesResponse> getLikeEvent(Users users);

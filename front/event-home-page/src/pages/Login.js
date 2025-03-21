@@ -74,25 +74,21 @@ function Login(){
                 window.location.href="/"; // 홈으로 이동 
             }
         })
-        .catch(function(error){
+        .catch(function (error) {
             if (error.response) {
-                // 서버에서 응답한 에러 메시지
-                //console.error("Error:", error.response.data);
-                // 실제 에러 메시지를 추출하여 표시
-                // alert("로그인 실패: " + (error.response.data.message || error.response.data));
-                if(error.response.data.result==false){
-                    alert("로그인에 실패하였습니다. 다시 입력해주세요.");
-                }
+                // 서버에서 응답한 에러 메시지를 가져옴
+                const errorMessage = error.response.data.message || "로그인에 실패하였습니다. 다시 입력해주세요.";
+        
+                // 에러 메시지를 alert로 표시
+                alert(errorMessage);
             } else if (error.request) {
-                // 요청이 이루어졌지만 응답을 받지 못한 경우
                 console.error("Request Error:", error.request);
                 alert("서버와의 연결이 실패했습니다.");
             } else {
-                // 기타 오류 처리
                 console.error("Unknown Error:", error.message);
                 alert("알 수 없는 오류가 발생했습니다.");
             }
-        })
+        });
 
     }
 

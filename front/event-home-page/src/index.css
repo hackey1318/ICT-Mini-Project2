@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@font-face {
+  font-family: 'Cafe24Dangdanghae';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.2/Cafe24Dangdanghae.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+ font-family: 'Cafe24Dangdanghae', sans-serif;
+}
+
+

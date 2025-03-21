@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import axios from "axios";
+import arrow from '../img/arrow.png';
 
 function IdFind(){
 
@@ -68,14 +69,31 @@ function IdFind(){
 
     }
 
+    // 뒤로가기 버튼 눌렀을 때
+    function goBack() {
+        window.history.back(); // 뒤로가기 기능 추가
+    }
+
+    function copyToClipboard() {
+        // 아이디 텍스트를 복사
+        navigator.clipboard.writeText(userId).then(() => {
+            alert("아이디가 복사되었습니다!");
+        }).catch(err => {
+            alert("복사에 실패했습니다. 다시 시도해주세요.");
+        });
+    }
+
     return(
 
         <div className="id-find-container">
             <div className="id-find-form">
                 {!idFound ? (
+                    <>
+                    <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                        <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
+                    </button>
                     <form onSubmit={formCheck}>
-                        <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
-                        <h2>아이디 찾기</h2>
+                        <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}} >아이디 찾기</h2>
                         <div className="id-find-input">
                             <label htmlFor="name">이름</label>
                             <input type="text" id="name" name="name" style={{ width: '50%' }} placeholder="이름을 입력하세요." onChange={setFormData} ref={nameRef}/>
@@ -86,12 +104,20 @@ function IdFind(){
                         </div>
                         <button type="submit" className="idfind-btn">아이디 찾기</button>
                     </form>
+                    </>
                 ) : (
                     <div>
-                        <div style={{textAlign:'left', fontSize:'20px', cursor:'pointer'}} onClick={() => window.history.back()}>←</div>
-                        <h2>아이디 찾기 <span style={{color:'blue'}}>성공</span></h2>
-                        <div style={{marginTop:'30px'}}>찾은 아이디: <b>{userId}</b></div>
-                        <div style={{textAlign:'right'}}><a href="/login">→로그인하러가기</a></div>
+                        <div>
+                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}} >아이디찾기 <span style={{color:'#3e9ca7'}}>성공</span></h2>
+                            <div className="findIdSuccess">ID찾기에 성공하였습니다.<br />
+                            찾은 아이디 : <span className="userId-style">{userId}</span>
+                            <button onClick={copyToClipboard} className="namecopy-style">복사하기</button>
+                            </div>
+                            
+                            <div className="button-container">
+                                <a href="/login" className="login-button">로그인 페이지로 이동</a>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>

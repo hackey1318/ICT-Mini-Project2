@@ -233,7 +233,7 @@ function JoinEdit(){
                     <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
                         <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                     </button>
-                    <h2 id="join-form-title">회원정보수정</h2>
+                    <h2 className="edit-form-title" style={{textShadow: "rgba(0, 0, 0, 0.2) 2px 2px 4px"}}>회원정보수정</h2>
                     <div className='join-form-inner'>
                         <div className='join-form-line'>
                             <div className='join-title'>아이디</div><div className='join-input-box'><input type="text" name="user_id" value={joinData.user_id} className='text-box' readOnly/></div>
@@ -246,9 +246,9 @@ function JoinEdit(){
                         <div className='join-form-line'>
                             <div className='join-title'>생년월일</div>
                             <div className='join-input-box'>
-                                <input type="text" value={`${year}년`} className='text-box tel' readOnly/>
-                                <input type="text" value={`${month}월`} className='text-box tel' readOnly/>
-                                <input type="text" value={`${day}일`} className='text-box tel' readOnly/>
+                                <input type="text" value={`${year}년`} className='text-box birth' readOnly/>
+                                <input type="text" value={`${month}월`} className='text-box birth' readOnly/>
+                                <input type="text" value={`${day}일`} className='text-box birth' readOnly/>
                             </div>
                         </div>
                         <div className='join-form-line'>

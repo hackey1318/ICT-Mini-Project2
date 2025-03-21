@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +30,7 @@ public class ReplyController {
 
     private final ReplyServiceImpl replyService;
     private final AuthService authService;
+    private static String FILE_PATH = null;
 
     @AuthRequired({USER, ADMIN})
     @PostMapping("/addReply")
@@ -55,5 +57,6 @@ public class ReplyController {
         return "deleted";
     }
 }
+
 
 

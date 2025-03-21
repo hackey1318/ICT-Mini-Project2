@@ -82,7 +82,7 @@ function LikePage() {
 
     return (
         <div>
-            <h2 className="h4 mb-4 d-none d-md-block">찜 목록</h2>
+            <h3 className="mb-4 d-none d-md-block">찜 목록</h3>
             <ErrorModal show={showError} onClose={() => setShowError(false)} />
 
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">

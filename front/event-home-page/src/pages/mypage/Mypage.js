@@ -29,6 +29,7 @@ function Mypage() {
                     <Outlet></Outlet>
                 </div>
             </div>
+            <a href="/userDel" style={{textDecoration:'none', textAlign:'right', color:'inherit', display:'block', marginTop:'50px'}}>회원탈퇴</a>
         </div>
     );
 }

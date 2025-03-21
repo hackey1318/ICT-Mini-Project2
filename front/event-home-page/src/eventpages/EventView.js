@@ -3,7 +3,6 @@ import {  useParams, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import '../eventCss/EventView.css';
 import axios from 'axios';
-import '../eventCss/EventView.css';
 import '../css/replyList.css';
 import ReviewEdit from '../js/event/ReviewEdit'
 import ReviewDelete from '../js/event/ReviewDelete';
@@ -15,6 +14,8 @@ function EventView() {
   const [event, setEvent] = useState({});
   const { no } = useParams();
   const mapRef = useRef(null);
+
+
   let [title, setTitle] = useState('');
   let [content, setContent] = useState('');
   let [isModalOpen, setIsModalOpen] = useState(false);
@@ -154,6 +155,7 @@ function EventView() {
   const Next = () => {
     setSelectedImageIndex((prevIndex) => (prevIndex < uniqueImages.length-1 ? prevIndex + 1 : 1));
   };
+
 
 
 

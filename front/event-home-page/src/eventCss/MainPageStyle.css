@@ -153,7 +153,10 @@
 .image-item {
     border: 1px solid #ddd;
     padding: 10px;
-    text-align: center;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 .image-item img {
     width: 100%;
@@ -162,6 +165,7 @@
 }
 .date-addr{
     text-align: left;
+    margin-bottom: 10px;
 }
 .viewButton {
     background-color: #92AEDB;
@@ -173,6 +177,7 @@
     text-decoration: none;
     font-size: 16px;
     border-radius: 5px;
+    margin: 0 auto;
 }
 .custom-calendar .sunday {
     color: red !important;
@@ -189,8 +194,7 @@
   }
   .image-grid {
     width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* 변경 */
-    /* grid-template-columns: repeat(1, 1fr);  기존 코드 삭제 */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 
   .date-picker-container {

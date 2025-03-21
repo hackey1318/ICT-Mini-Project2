@@ -1,5 +1,6 @@
 import { Outlet, useLocation, useNavigate } from "react-router-dom"
 import Sidebar from "../../js/sidebar/sidebar"
+import arrow from '../../img/arrow.png';
 
 function MyPage() {
     const location = useLocation()
@@ -14,36 +15,23 @@ function MyPage() {
     }
 
     // 페이지 제목 가져오기
-    const getPageTitle = () => {
-        switch (getActiveMenu()) {
-            case "likes":
-                return "찜 목록"
-            case "comments":
-                return "작성한 댓글"
-            default:
-                return "내 정보 수정"
-        }
-    }
+    // const getPageTitle = () => {
+    //     switch (getActiveMenu()) {
+    //         case "likes":
+    //             return "찜 목록"
+    //         case "comments":
+    //             return "작성한 댓글"
+    //         default:
+    //             return "내 정보 수정"
+    //     }
+    // }
 
     return (
-        <div className="container main-content">
-            <div className="page-header d-flex align-items-center d-md-none">
-                <button className="btn btn-link p-0 me-3" onClick={() => navigate(-1)}>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                    >
-                        <path d="M19 12H5M12 19l-7-7 7-7" />
-                    </svg>
+        <div className="container main-content" style={{marginTop: "4vh"}}>
+            <div className="page-header d-flex align-items-center">
+                <button className="btn btn-link p-0 me-3" onClick={() => navigate(-1)} style={{fontSize:'20px', position:'absolute', top:'30px', left:'30px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
+                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                 </button>
-                <h1 className="h4 mb-0">{getPageTitle()}</h1>
             </div>
 
             <div className="row">

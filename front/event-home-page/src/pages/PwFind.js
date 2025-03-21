@@ -198,7 +198,7 @@ function PwFind(){
                             <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
                         </button>
                         <form onSubmit={pwFormCheck}>
-                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'blue'}}>재설정</span></h2>
+                            <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>재설정</span></h2>
                             <div className="id-find-input">
                                 <label htmlFor="pw">비밀번호</label>
                                 <input type="password" id="pw" name="pw" className="pw-style" onChange={setPwResetFormCheck} ref={pwRef} />

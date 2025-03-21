@@ -12,10 +12,11 @@ function MyPage() {
         if (path.includes("/likes")) return "likes"
         if (path.includes("/comments")) return "comments"
         if (path.includes("/memberList")) return "memberList"
+        if (path.includes("/joinEdit")) return "joinEdit"
         if (path.includes("/withdrawalList")) return "withdrawalList"
         if (path.includes("/bannerList")) return "bannerList"
         if (path.includes("/announce")) return "announce"
-        return "profile"
+        return "likes"
     }
 
     // 페이지 제목 가져오기

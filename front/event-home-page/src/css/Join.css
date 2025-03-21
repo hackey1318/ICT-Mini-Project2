@@ -15,22 +15,33 @@
 }
 .join-form{
     width: 650px;
+    height: 665px;
     background: #fff;
     border-radius: 20px;
     box-shadow: 1px 1px 1px 1px #ddd;
     margin: 0 auto;
     margin-top: 50px;
     padding: 50px 10px;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
 }
 #join-form-title{
     text-align: center;
     margin-bottom: 30px;
 }
+.edit-form-title{
+    text-align: center;
+    margin: 40px 0;
+}
 .join-form-inner{
-    width: 90%;
+    width: 560px;
+    height: 100%;
     margin: 0 auto;
+}
+.edit-form-inner{
+    width: 560px;
+    height: 100%;
+    margin-top: 60px;
 }
 .join-form-line{
     width: 420px;
@@ -43,13 +54,18 @@
 .join-input-box{
     width: 400px;
 }
-.text-box, .id-check, .addr-input, .join-btn{
+.text-box, .id-check, .zipcode-btn, .addr-input, .join-btn{
     width: 250px;
     height: 25px;
-    border: none;
+    /*border: none;*/
+    border: 1px solid #ccc;
     box-shadow: 1px 1px 1px 1px #ddd;
     border-radius: 5px;
     margin-right: 10px;
+}
+.text-box{
+    padding-left: 5px;
+    font-size: 12px;
 }
 .id-check{
     float: left;
@@ -60,15 +76,13 @@
     text-align: left;
     float: left;
 }
-.tel{
-    width: 70px;
-}
 .zipcode{
     width: 80px;
     float: left;
 }
 .join-form .id-check, .zipcode-btn, .join-btn{
-    width: 77px;
+    width: 80px;
+    height: 28px;
     color: #fff;
     background: #6ECEDA;
 }
@@ -84,14 +98,24 @@
     box-shadow: 1px 1px 1px 1px #ddd;
     margin-right: 7px;
 }
+.birth{
+    width: 76px;
+    margin: 0 5px;
+}
+.birth:nth-child(1){
+    margin-left: 0;
+}
 .tel{
+    width: 71px;
     margin: 0 5px;
 }
 .tel:nth-child(1){
     margin-left: 0;
 }
 .addr-input{
-    margin-left: 128px;
+    font-size: 12px;
+    padding-left: 5px;
+    margin-left: 132px;
 }
 .zipcode-btn{
     display: block;
@@ -100,7 +124,8 @@
     left: -184px;
 } 
 .join-btn{
-    width: 150px;
+    width: 210px;
+    height: 44px;
     clear: both;
     display: block;
     margin:0 auto;
@@ -118,4 +143,7 @@
     position: relative;
     top: 5px;
     left: -95px;
+}
+.pw-style::placeholder {
+    font-family: 'Cafe24Dangdanghae';
 }

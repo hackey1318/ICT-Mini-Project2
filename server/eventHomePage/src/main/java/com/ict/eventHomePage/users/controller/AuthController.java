@@ -1,16 +1,15 @@
 package com.ict.eventHomePage.users.controller;
 
+import com.ict.eventHomePage.common.config.AuthCheck;
 import com.ict.eventHomePage.common.exception.custom.UserAuthenticationException;
 import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
+import com.ict.eventHomePage.domain.constant.UserRole;
 import com.ict.eventHomePage.users.controller.request.AuthRequest;
 import com.ict.eventHomePage.users.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -30,5 +29,16 @@ public class AuthController {
         response.setHeader("accessToken", accessToken);
         return SuccessOfFailResponse.builder()
                 .result(true).build();
+    }
+
+    @GetMapping
+    public SuccessOfFailResponse getRole() {
+        boolean res = true;
+        try {
+            String userId = AuthCheck.getUserId(UserRole.ADMIN);
+        } catch (Exception e) {
+            res = false;
+        }
+        return SuccessOfFailResponse.builder().result(res).build();
     }
 }

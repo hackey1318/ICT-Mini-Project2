@@ -325,3 +325,7 @@
     }
 }
 
+.react-calendar__navigation__arrow {
+    font-family: 'Gowun Batang', sans-serif;
+    font-size: 2em;
+}

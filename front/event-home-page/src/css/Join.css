@@ -22,7 +22,7 @@
     margin: 0 auto;
     margin-top: 50px;
     padding: 50px 10px;
-    overflow: auto;
+    overflow: hidden;
     position: relative;
 }
 #join-form-title{
@@ -37,6 +37,11 @@
     width: 560px;
     height: 100%;
     margin: 0 auto;
+}
+.edit-form-inner{
+    width: 560px;
+    height: 100%;
+    margin-top: 60px;
 }
 .join-form-line{
     width: 420px;

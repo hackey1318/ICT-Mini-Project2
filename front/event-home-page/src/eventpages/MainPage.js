@@ -11,7 +11,6 @@ import myIcon from '../img/user.png';
 import NotificationSystem from "../js/notification/notificationInfo";
 import likeIcon from '../img/heart.png';
 import BannerInfo from "../pages/banner/bannerInfo";
-import Menubar from "../pages/MenuBar";
 
 function MainPage() {
     const StyledLink = styled(Link)`
@@ -152,7 +151,6 @@ function MainPage() {
         <div className="main-page">
 
             <header className="main-header">
-                <Menubar />
                 <BannerInfo />
                 <div className="header-menu">
                     <ul>

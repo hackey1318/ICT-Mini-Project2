@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { Link, useNavigate } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../img/logo.png';
 import axios from 'axios';
 
@@ -16,11 +16,15 @@ const StyledLink = styled(Link)`
 `;
 
 const HeaderContainer = styled.header`
-    position:absolute;
     display: flex;
     align-items: center;
     padding: 10px 20px;
     width:100%;
+    ${props => ((props.isHomePage) || (props.isLoginPage) || (props.isJoinPage)
+        || (props.isIdFindPage) || (props.isPwFindPage)) && css` // isHomePage 또는 isLoginPage가 true일 때 적용
+        position: absolute;
+        z-index:5;
+    `}
 `;
 
 const HeaderLeft = styled.div`
@@ -47,8 +51,10 @@ const HeaderMenu = styled.div`
     }
     li {
         margin-left: 10px;
+        width : 130px;
+        text-align : center;
     }   
-    margin-left:30%;
+    margin-left:23%;
 `;
 
 const Nav = styled.nav`
@@ -72,6 +78,7 @@ const Nav = styled.nav`
 
 function Menubar() {
     const navigate = useNavigate();
+    const location = useLocation();
     const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [userRole, setUserRole] = useState();
 
@@ -117,8 +124,15 @@ function Menubar() {
         }
     };
 
+    const isHomePage = location.pathname === '/';
+    const isLoginPage = location.pathname === '/login';
+    const isJoinPage = location.pathname === '/join';
+    const isIdFindPage = location.pathname === '/idFind';
+    const isPwFindPage = location.pathname === '/pwFind';
+
     return (
-        <HeaderContainer>
+        <HeaderContainer isHomePage={isHomePage} isLoginPage={isLoginPage}
+            isJoinPage={isJoinPage} isIdFindPage={isIdFindPage} isPwFindPage={isPwFindPage}>
             <HeaderLeft>
                 <LogoContainer>
                     <Logo src={logo} alt="Logo" onClick={handleLogoClick} />

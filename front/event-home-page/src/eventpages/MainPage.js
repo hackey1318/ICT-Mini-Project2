@@ -38,7 +38,7 @@ function MainPage() {
 
     const debounce = (func, delay) => {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             const context = this;
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(context, args), delay);
@@ -101,7 +101,7 @@ function MainPage() {
         setCurrentDate(date);
     };
 
-    const DatePicker = ({ currentDate, setCurrenDate2 }) => { 
+    const DatePicker = ({ currentDate, setCurrenDate2 }) => {
         const [date, setDate] = useState(currentDate);
 
         useEffect(() => {
@@ -110,30 +110,30 @@ function MainPage() {
 
         const onDateChange = (date) => {
             setDate(date);
-            setCurrenDate2(date); 
+            setCurrenDate2(date);
         };
 
         return (
-                <Calendar
-                    key={calendarKey}
-                    onChange={onDateChange}
-                    value={date}
-                    locale="ko-KR"
-                    calendarType="hebrew"
-                    formatShortWeekday={(locale, date) =>
-                        ["일", "월", "화", "수", "목", "금", "토"][date.getDay()]
-                    }
-                    formatDay={(locale, date) => `${date.getDate()}`}
-                    showNeighboringMonth={false}
-                    className="custom-calendar"
-                    tileClassName={({ date }) => {
-                        const day = date.getDay();
-                        if (day === 0) return "sunday";
-                        if (day === 6) return "saturday";
-                        if (day === 5) return "friday";
-                        return "";
-                    }}
-                />
+            <Calendar
+                key={calendarKey}
+                onChange={onDateChange}
+                value={date}
+                locale="ko-KR"
+                calendarType="hebrew"
+                formatShortWeekday={(locale, date) =>
+                    ["일", "월", "화", "수", "목", "금", "토"][date.getDay()]
+                }
+                formatDay={(locale, date) => `${date.getDate()}`}
+                showNeighboringMonth={false}
+                className="custom-calendar"
+                tileClassName={({ date }) => {
+                    const day = date.getDay();
+                    if (day === 0) return "sunday";
+                    if (day === 6) return "saturday";
+                    if (day === 5) return "friday";
+                    return "";
+                }}
+            />
         );
     };
 
@@ -149,18 +149,19 @@ function MainPage() {
 
     return (
         <div className="main-page">
+
             <header className="main-header">
-                <BannerInfo/>
+                <BannerInfo />
                 <div className="header-menu">
                     <ul>
                         <Link to={isLoggedIn ? `/my` : `/login`}>
-                            <img src={myIcon} alt="My Page" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                            <img src={myIcon} alt="My Page" style={{ margin: '5px', width: '40px', height: '40px' }} />
                         </Link>
                         {isLoggedIn ? (
                             <>
-                                <NotificationSystem/>
+                                <NotificationSystem />
                                 <Link to={`/like`}>
-                                    <img src={likeIcon} alt="Like" style={{margin: '5px', width:'40px', height:'40px'}}/>
+                                    <img src={likeIcon} alt="Like" style={{ margin: '5px', width: '40px', height: '40px' }} />
                                 </Link>
                             </>
                         ) : null}

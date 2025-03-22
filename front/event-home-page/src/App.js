@@ -24,10 +24,12 @@ import ProfilePage from './pages/my/ProfilePage';
 import LikePage from './pages/my/likePage';
 import CommentsPage from './pages/my/CommentPage';
 import UserDel from './pages/UserDel';
+import Menubar from './pages/MenuBar';
 
 function App() {
   return (
     <BrowserRouter>
+      <Menubar />
       <Routes>
         <Route path="/" element={<MainPage />}></Route>
         <Route path="/eventView/:no" element={<EventView />}></Route>

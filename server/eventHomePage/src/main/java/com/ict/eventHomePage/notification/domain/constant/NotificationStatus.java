@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NotificationStatus {
 
+    ALL("전체"),
     READABLE("읽지 않음"),
     READ("읽음");
 

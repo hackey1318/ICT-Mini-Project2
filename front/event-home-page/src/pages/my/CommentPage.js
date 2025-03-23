@@ -21,7 +21,7 @@ function CommentsPage() {
 
     const mounted = useRef(false);
     useEffect(() => {
-        if (!mounted.current) {
+        if (mounted.current) {
             mounted.current = true;
         } else {
             getReplyList();

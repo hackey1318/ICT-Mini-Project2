@@ -10,8 +10,12 @@ public interface ReplyService {
 
     boolean addReply(ReplyRequest request);
 
+    Replies dataInsert(Replies replies);
+
+    List<Replies> getReplyList();
+
     List<ReplyResponse> getReplies(int eventNo);
 
-    void replyDel(int no);
+    public void replyDel(int no);
 }
 

@@ -34,6 +34,13 @@ public class LikesServiceImpl implements LikesService {
     private final EventImagesRepository eventImagesRepository;
 
     @Override
+    public boolean getLikeEvent(Users users, int eventId) {
+
+        Likes likes = likesRepository.findByUserNoAndEventNo(users.getNo(), eventId).orElse(null);
+        return likes != null;
+    }
+
+    @Override
     public boolean likeEvent(Users users, int eventId) {
 
         if (!eventsRepository.existsById(eventId)) {
@@ -62,7 +69,7 @@ public class LikesServiceImpl implements LikesService {
                     return response;
                 }));
 
-        List<Integer> eventNoList = likeList.stream().map(Likes::getNo).toList();
+        List<Integer> eventNoList = likeList.stream().map(Likes::getEventNo).toList();
         // 행사 및 이미지 정보 조회
         Map<Integer, String> eventTitleMap = eventsRepository.findAllById(eventNoList)
                 .stream().collect(Collectors.toMap(Events::getNo, Events::getTitle));
@@ -91,7 +98,7 @@ public class LikesServiceImpl implements LikesService {
             Likes likes = likesRepository.findByUserNoAndEventNo(users.getNo(), eventId).orElseThrow(() -> new NotFoundException("찜 정보가 없습니다."));
             likesRepository.updateLike(likes.getNo(), (StatusInfo.ACTIVE.equals(likes.getStatus()) ? StatusInfo.DELETE : StatusInfo.ACTIVE));
         } catch (Exception e) {
-            return false;
+            return this.likeEvent(users, eventId);
         }
         return true;
     }

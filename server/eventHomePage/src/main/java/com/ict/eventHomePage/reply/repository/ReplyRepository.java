@@ -19,10 +19,17 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
     @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no, r.userNo, u.name, r.title, r.content, r.status, r.createdAt, r.updatedAt) FROM Replies AS r LEFT JOIN Users AS u ON r.userNo = u.no WHERE r.eventNo = :eventNo ORDER BY r.createdAt DESC")
     List<ReplyResponse> findByEventNoOrderByEventNoDesc(@Param("eventNo") int eventNo);
 
+    @Query(value = "SELECT r.no, r.user_no AS userNo, e.title AS joinedTitle, r.content, r.created_at AS createdAt, " +
+            "r.event_no AS eventNo, r.status " +
+            "FROM replies r JOIN events e ON r.event_no = e.no " +
+            "WHERE r.user_no = :currentUserNo AND r.status = :status", nativeQuery = true)
+    List<Map<String, Object>> getReplyListByUserNo(@Param("currentUserNo") int currentUserNo, @Param("status") String status);
+
     @Query(value = "SELECT r.no, r.user_no AS userNo, e.title AS joinedTitle, r.content, r.created_at, r.event_no AS eventNo " +
             "FROM replies r JOIN events e ON r.event_no = e.no " +
             "WHERE r.user_no = :currentUserNo AND r.status = 'active'", nativeQuery = true)
     List<Map<String, Object>> getReplyListByUserNo(int currentUserNo);
+
 
     @Modifying
     @Transactional

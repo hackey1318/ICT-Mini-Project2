@@ -97,7 +97,7 @@ function BannerInfo() {
                     <div className="banner-text">
                         <h2>{bannerList[currentSlide].title}</h2>
                         <p>{moment(bannerList[currentSlide].startDate).format('YYYY-MM-DD')}~{moment(bannerList[currentSlide].endDate).format('YYYY-MM-DD')}</p>
-                        <p><button onClick={(event) => handleViewDetailsClick(event, bannerList[currentSlide].no)}  className="button-readmore" style={{color: getTextColorBasedOnBackground(bannerList[currentSlide].color)}}>자세히 보기</button></p>
+                        <p><button onClick={(event) => handleViewDetailsClick(event, bannerList[currentSlide].eventNo)}  className="button-readmore" style={{color: getTextColorBasedOnBackground(bannerList[currentSlide].color)}}>자세히 보기</button></p>
                     </div>
                     <div className="banner-img">
                         <img 

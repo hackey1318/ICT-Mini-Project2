@@ -42,6 +42,16 @@ public class ReplyController {
         return replies;
     }
 
+    @AuthRequired({USER, ADMIN})
+    @GetMapping("/replyList")
+    public ResponseEntity<Map<String, Object>> getReplyList() {
+        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
+        List<Replies> replyList = replyService.getReplyList();
+        Map<String, Object> response = new HashMap<>();
+        response.put("list", replyList);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/replyDel/{no}")
     public String replyDel(@PathVariable("no") int no) {
 

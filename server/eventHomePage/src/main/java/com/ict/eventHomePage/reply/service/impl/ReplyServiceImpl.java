@@ -35,19 +35,18 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public boolean addReply(ReplyRequest request) {
+    public boolean addReply(ReplyResponse response) {
 
-        try {
-
+        try{
             Replies saveEntity = replyRepository.save(Replies.builder()
-                    .userNo(request.getUserNo())
-                    .eventNo(request.getEventNo())
-                    .title(request.getTitle())
-                    .content(request.getContent())
+                    .userNo(response.getUserNo())
+                    .eventNo(response.getEventNo())
+                    .title(response.getTitle())
+                    .content(response.getContent())
                     .status(StatusInfo.ACTIVE).build());
 
             List<ReplyImages> replyImagesList = new ArrayList<>();
-            for (String imageId : request.getImageIdList()) {
+            for (String imageId : response.getImageIdList()) {
                 replyImagesList.add(ReplyImages.builder()
                         .replyNo(saveEntity.getNo())
                         .fileId(imageId)
@@ -55,10 +54,9 @@ public class ReplyServiceImpl implements ReplyService {
             }
             replyImagesRepository.saveAll(replyImagesList);
         } catch (Exception e) {
-            log.error("리뷰 작성 실패{} : {}", request.getTitle(), e.getMessage());
+            log.error("리뷰 작성 실패{} : {}", response.getTitle(), e.getMessage());
             return false;
         }
-
         return true;
     }
 
@@ -95,7 +93,12 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public List<ReplyResponse> getReplies(int eventNo) {
 
-        return replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
+        List<ReplyResponse> replyList = replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
+        for(ReplyResponse response : replyList) {
+            response.setImageIdList(replyImagesRepository.getImageIdList(response.getNo()));
+        }
+
+        return replyList;
     }
 
     @Override
@@ -112,5 +115,15 @@ public class ReplyServiceImpl implements ReplyService {
         replies.setStatus(StatusInfo.DELETE);
 
         replyRepository.save(replies);
+    }
+
+    @Override
+    public int editReply(int no) {
+
+        Replies replies = replyRepository.findById(no)
+                .orElseThrow(() -> new RuntimeException("Replies not found"));
+
+        //replies.setStatus();
+        return 0;
     }
 }

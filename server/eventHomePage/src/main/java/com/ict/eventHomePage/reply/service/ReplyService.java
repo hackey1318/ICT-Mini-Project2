@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReplyService {
 
-    boolean addReply(ReplyRequest request);
+    boolean addReply(ReplyResponse response);
 
     Replies dataInsert(Replies replies);
 
@@ -17,5 +17,7 @@ public interface ReplyService {
     List<ReplyResponse> getReplies(int eventNo);
 
     public void replyDel(int no);
+
+    int editReply(int no);
 }
 

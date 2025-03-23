@@ -7,22 +7,27 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ReplyResponse {
 
     private int no;
 
     private int userNo;
 
+    private  int eventNo;
+
     private String name;
 
     private String title;
 
     private String content;
+
+    private List<String> imageIdList;
 
     private StatusInfo status;
 

@@ -2,6 +2,8 @@ import axios from "axios";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import addFile from '../../img/plus.jpg';
+import apiFileClient from './../axiosFileConfig';
+import apiClient from './../axiosConfig';
 
 
 function ReviewEdit() {
@@ -42,19 +44,11 @@ function ReviewEdit() {
             formData.append("files", runfile.current.files[i]);
         }
 
-        const fileUpload = await axios.post("http://localhost:9988/file-system/upload", formData, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        const fileUpload = await apiFileClient.post("/file-system/upload", formData)
 
         replyData.imageIdList = fileUpload.data.map(item => item.imageId);
 
-        axios.post("http://localhost:9988/reply/addReply", replyData, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        })
+        apiClient.post("/reply/addReply", replyData)
             .then(function (response) {
                 console.log(response.data);
                 console.log(replyData)

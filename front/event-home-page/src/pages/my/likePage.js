@@ -34,7 +34,7 @@ function LikePage() {
                 setWishlistItems(data)
 
                 // 초기 찜 상태 설정 (모든 항목이 이미 찜 목록에 있으므로 모든 no를 favorites에 추가)
-                setFavorites(data.filter((item) => item.status === "ACTIVE").map((item) => item.no));
+                setFavorites(data.filter((item) => item.status === "ACTIVE").map((item) => item.eventNo));
             } catch (err) {
                 if (err.response.status === 403) {
                     sessionStorage.removeItem("accessToken");
@@ -93,26 +93,28 @@ function LikePage() {
             <ErrorModal show={showError} onClose={() => setShowError(false)} />
 
             <div className="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
-                {wishlistItems.map((item) => (
+                {wishlistItems.length > 0 ?
+                
+                (wishlistItems.map((item) => (
                     <div key={item.no} className="col">
                         <div className="wishlist-item">
                             <div className="fw-medium mb-2">{item.title}</div>
                             <div className="position-relative rounded overflow-hidden">
                                 <img
                                     src={item.imageInfo || "/placeholder.svg"}
-                                    alt={item.title}
+                                    alt={`${item.title}-${item.eventNo}`}
                                     className="w-100 item-image"
                                 />
                                 <button
                                     className="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle p-1"
-                                    onClick={() => toggleFavorite(item.no)}
+                                    onClick={() => toggleFavorite(item.eventNo)}
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="20"
                                         height="20"
                                         viewBox="0 0 24 24"
-                                        fill={favorites.includes(item.no) ? "red" : "none"}
+                                        fill={favorites.includes(item.eventNo) ? "red" : "none"}
                                         stroke="red"
                                         strokeWidth="2"
                                         strokeLinecap="round"
@@ -127,7 +129,10 @@ function LikePage() {
                             </div>
                         </div>
                     </div>
-                ))}
+                ))) : (
+                    <div>찜한 내역이 없습니다.</div>
+                )
+            }
             </div>
         </div>
     )

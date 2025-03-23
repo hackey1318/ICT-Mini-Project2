@@ -40,21 +40,19 @@ public class BannerManagerController {
         List<Events> events = bannerService.searchEvents(title, startDate, addr);
         Map<String, List<Events>> response = new HashMap<>();
         response.put("list", events);
-
         return ResponseEntity.ok(response);
     }
 
     @PostMapping("/create")
     public SuccessOfFailResponse createBanner(@RequestBody BannerRequest request) {
-
         return SuccessOfFailResponse.builder().result(bannerService.createBanner(request)).build();
     }
 
     @GetMapping("/bannerList")
-    public ResponseEntity<Map<String, List<Map<String, Object>>>> getBannerList() {
-        List<Map<String, Object>> banners = bannerService.getAllBanners();
-        Map<String, List<Map<String, Object>>> response = new HashMap<>();
-        response.put("list", banners);
+    public ResponseEntity<Map<String, Object>> getBannerList(
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "5") int size) {
+        Map<String, Object> response = bannerService.getAllBanners(page, size);
         return ResponseEntity.ok(response);
     }
 
@@ -86,7 +84,6 @@ public class BannerManagerController {
 
     @GetMapping
     public List<BannerResponse> homeBannerList() {
-
         return bannerService.getHomeBannerList();
     }
 }

@@ -1,257 +1,21 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import styled from "styled-components";
 import { HexColorPicker } from "react-colorful";
-
-const Sidebar = styled.div`
-  background-color: #e7f0ff;
-  width: 250px;
-  height: 200px;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const NavItem = styled.li`
-  margin: 15px 0;
-  font-size: 18px;
-`;
-
-const StyledLink = styled(Link)`
-  text-decoration: none;
-  color: #333;
-  &:hover {
-    color: #007bff;
-  }
-`;
-
-const Content = styled.div`
-  flex: 1;
-  padding: 20px;
-`;
-
-const TableHeader = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr;
-  background-color: #f5f5f5;
-  padding: 10px;
-  border-bottom: 2px solid #ddd;
-  font-weight: bold;
-  font-size: 16px;
-  text-align: center;
-  & > div {
-    border-right: 1px solid #ddd;
-    padding: 10px;
-  }
-  & > div:last-child {
-    border-right: none;
-  }
-`;
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr 2fr;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  align-items: center;
-  &:nth-child(odd) {
-    background-color: #ffffff;
-  }
-  &:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  &:hover {
-    background-color: #f0f0f0;
-  }
-  & > div {
-    border-right: 1px solid #ddd;
-    padding: 10px;
-    text-align: center;
-  }
-  & > div:last-child {
-    border-right: none;
-  }
-`;
-
-const Image = styled.img`
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
-  border-radius: 5px;
-`;
-
-const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 20px;
-`;
-
-const Button = styled.button`
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
-
-const ActionButton = styled.button`
-  padding: 5px 10px;
-  margin-right: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-`;
-
-const EditButton = styled(ActionButton)`
-  background-color: #28a745;
-  color: white;
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-const DeleteButton = styled(ActionButton)`
-  background-color: #dc3545;
-  color: white;
-  &:hover {
-    background-color: #c82333;
-  }
-`;
-
-const ModalOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-`;
-
-const ModalContent = styled.div`
-  background-color: white;
-  padding: 25px;
-  border-radius: 8px;
-  width: 500px;
-  max-width: 90%;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-`;
-
-const ModalHeader = styled.div`
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
-  grid-column: span 2;
-`;
-
-const ModalFormGroup = styled.div`
-  display: flex;
-  flex-direction: column; /* 수직 정렬 */
-  gap: 5px;
-  width: 100%;
-`;
-
-const ModalForm = styled.form`
-  display: flex;
-  flex-direction: column; /* 세로 정렬 */
-  gap: 15px;
-`;
-
-const FormLabel = styled.label`
-  font-size: 14px;
-  color: #333;
-  text-align: left; /* 왼쪽 정렬 */
-`;
-
-const FormInput = styled.input`
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 14px;
-  width: 100%;
-  height: 40px;
-  box-sizing: border-box;
-`;
-
-const ColorPickerContainer = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  position: relative; /* 위치 조정 */
-`;
-
-const ColorPickerPopup = styled.div`
-  position: absolute;
-  top: 45px;
-  left: 0;
-  z-index: 1000;
-  background: #fff;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-`;
-
-const ColorPreview = styled.button`
-  width: 35px;
-  height: 35px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  border-radius: 4px;
-  background-color: ${(props) => props.color || "#fff"};
-`;
-
-const ModalButtons = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-  grid-column: span 2;
-`;
-
-const SaveButton = styled.button`
-  padding: 10px 16px;
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background-color: #218838;
-  }
-`;
-
-const CancelButton = styled.button`
-  padding: 10px 16px;
-  background-color: #6c757d;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-
-  &:hover {
-    background-color: #5a6268;
-  }
-`;
+import "./../../css/admin.css";
 
 function BannerList() {
   const [bannerData, setBannerData] = useState([]);
+  const [searchWord, setSearchWord] = useState("");
+  const [nowPage, setNowPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const pageSize = 5;
+  const mounted = useRef(false);
+  const navigate = useNavigate();
+  const location = useLocation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBanner, setSelectedBanner] = useState(null);
-  const [originalData, setOriginalData] = useState(null);
   const [formData, setFormData] = useState({
     eventNo: "",
     fileId: "",
@@ -259,22 +23,22 @@ function BannerList() {
     startDate: "",
     endDate: "",
   });
-  const navigate = useNavigate();
-  const location = useLocation();
-
   const [showColorPicker, setShowColorPicker] = useState(false);
 
-  const handleColorChange = (color) => {
-    setFormData((prevFormData) => ({ ...prevFormData, color }));
-  };
-
   useEffect(() => {
-    getBannerList();
+    if (!mounted.current || location.state?.refresh) {
+      mounted.current = true;
+      getBannerList(1);
+    }
   }, [location.state?.refresh]);
 
-  function getBannerList() {
+  function getBannerList(page) {
+    let url = `http://localhost:9988/banner/bannerList?page=${page}&size=${pageSize}`;
+    if (searchWord) {
+      url += `&searchWord=${searchWord}`;
+    }
     axios
-      .get("http://localhost:9988/banner/bannerList")
+      .get(url)
       .then((response) => {
         const banners = response.data.list || [];
         setBannerData(
@@ -289,6 +53,10 @@ function BannerList() {
             fileId: record.fileId,
           }))
         );
+        const pageInfo = response.data.pageInfo;
+        setNowPage(pageInfo.nowPage);
+        setTotalPage(pageInfo.totalPage);
+        setTotalCount(pageInfo.totalCount);
       })
       .catch((error) => {
         console.error("배너 목록 조회 오류:", error);
@@ -312,19 +80,16 @@ function BannerList() {
     setIsModalOpen(true);
   };
 
-  const handleColorPickerToggle = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    setShowColorPicker((prev) => !prev);
-  };
-
   const handleDeleteBanner = (no) => {
     if (window.confirm("정말로 이 배너를 삭제하시겠습니까?")) {
       axios
         .delete(`http://localhost:9988/banner/delete/${no}`)
         .then(() => {
           alert("배너가 삭제되었습니다.");
-          getBannerList();
+          getBannerList(nowPage);
+          if (bannerData.length === 1 && nowPage > 1) {
+            getBannerList(nowPage - 1);
+          }
         })
         .catch((error) => {
           console.error("배너 삭제 오류:", error);
@@ -336,26 +101,16 @@ function BannerList() {
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedBanner(null);
-    setFormData({
-      eventNo: "",
-      fileId: "",
-      color: "",
-      startDate: "",
-      endDate: "",
-    });
+    setFormData({ eventNo: "", fileId: "", color: "", startDate: "", endDate: "" });
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = (e) => {
     e.preventDefault();
-
     const updatedBanner = {
       eventNo: formData.eventNo,
       fileId: formData.fileId,
@@ -363,16 +118,12 @@ function BannerList() {
       startDate: formData.startDate,
       endDate: formData.endDate,
     };
-
     axios
-      .put(
-        `http://localhost:9988/banner/update/${selectedBanner.no}`,
-        updatedBanner
-      )
+      .put(`http://localhost:9988/banner/update/${selectedBanner.no}`, updatedBanner)
       .then(() => {
         alert("배너가 수정되었습니다.");
         handleModalClose();
-        getBannerList();
+        getBannerList(nowPage);
       })
       .catch((error) => {
         console.error("배너 수정 오류:", error);
@@ -380,185 +131,151 @@ function BannerList() {
       });
   };
 
+  const getPageNumbers = () => {
+    const pageNumbers = [];
+    const maxButtons = 5;
+    let startPage = Math.max(1, nowPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPage, startPage + maxButtons - 1);
+
+    if (endPage - startPage + 1 < maxButtons) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+    return pageNumbers;
+  };
+
   return (
     <div>
       <h3 className="mb-4 d-none d-md-block">배너 목록</h3>
       <div style={{ display: "flex" }}>
 
-        <Content>
-          <TableHeader>
+        <div className="admin-content">
+          <div className="admin-search-container">
+            <label className="admin-form-label">제목:</label>
+            <input
+              className="admin-search-input"
+              type="text"
+              placeholder="배너 제목 입력"
+              value={searchWord}
+              onChange={(e) => setSearchWord(e.target.value)}
+            />
+            <button className="admin-button" onClick={() => getBannerList(1)}>
+              검색
+            </button>
+          </div>
+          <div
+            className="admin-table-header"
+            style={{ gridTemplateColumns: "repeat(7, 1fr)" }}
+          >
             <div>번호</div>
-            <div>이름</div>
+            <div>제목</div>
             <div>시작일</div>
             <div>종료일</div>
             <div>이미지</div>
-            <div>색상</div>
-            <div>작업</div>
-          </TableHeader>
+            <div>대표색</div>
+            <div>관리</div>
+          </div>
           {bannerData.map((record) => (
-            <TableRow key={record.no}>
+            <div
+              key={record.no}
+              className="admin-table-row"
+              style={{ gridTemplateColumns: "repeat(7, 1fr)", height: "80px" }}
+            >
               <div>{record.no}</div>
               <div>{record.title}</div>
               <div>{record.startDate}</div>
               <div>{record.endDate}</div>
               <div>
-                <Image
+                <img
+                  className="admin-table-image"
                   src={`http://localhost:9988/file-system/download/${record.imageUrl}`}
                   alt="배너 이미지"
                 />
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  backgroundColor: record.color,
-                  color: "#fff",
-                  padding: "10px",
-                  textAlign: "center",
-                  borderRadius: "5px",
-                  width: "80%",
-                  margin: "auto",
-                }}
-              >
-                {record.color}
-              </div>
+              <div style={{ backgroundColor: record.color, padding: "5px", borderRadius: "5px", height: "30px" }}>{record.color}</div>
               <div>
-                <EditButton onClick={() => handleEditBanner(record)}>
-                  수정
-                </EditButton>
-                <DeleteButton onClick={() => handleDeleteBanner(record.no)}>
-                  삭제
-                </DeleteButton>
+                <button className="admin-action-button admin-edit-button" onClick={() => handleEditBanner(record)}>수정</button>
+                <button className="admin-action-button admin-delete-button" onClick={() => handleDeleteBanner(record.no)}>삭제</button>
               </div>
-            </TableRow>
+            </div>
           ))}
-        </Content>
+          <div className="admin-pagination">
+            {nowPage > 1 && (
+              <span className="admin-page-item">
+                <a className="admin-page-link" onClick={() => getBannerList(nowPage - 1)}>
+                  Previous
+                </a>
+              </span>
+            )}
+            {getPageNumbers().map((pg) => (
+              <span key={pg} className="admin-page-item">
+                <a
+                  className={`admin-page-link ${nowPage === pg ? "active" : ""}`}
+                  onClick={() => getBannerList(pg)}
+                >
+                  {pg}
+                </a>
+              </span>
+            ))}
+            {nowPage < totalPage && (
+              <span className="admin-page-item">
+                <a className="admin-page-link" onClick={() => getBannerList(nowPage + 1)}>
+                  Next
+                </a>
+              </span>
+            )}
+          </div>
+          <div className="button-container">
+            <button className="admin-button" onClick={handleCreateBanner}>배너 생성</button>
+          </div>
+        </div>
       </div>
-      <ButtonContainer>
-        <Button onClick={handleCreateBanner}>배너 생성</Button>
-      </ButtonContainer>
 
       {isModalOpen && (
-        <ModalOverlay>
-          <ModalContent>
-            <ModalHeader>배너 수정</ModalHeader>
-            <ModalForm onSubmit={handleSave}>
-              <ModalFormGroup>
-                <FormLabel>번호</FormLabel>
-                <FormInput
-                  type="text"
-                  name="eventNo"
-                  value={formData.eventNo}
-                  readOnly
-                />
-              </ModalFormGroup>
-
-              <ModalFormGroup>
-                <FormLabel>시작일</FormLabel>
-                <FormInput
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleInputChange}
-                  required
-                />
-              </ModalFormGroup>
-
-              <ModalFormGroup>
-                <FormLabel>종료일</FormLabel>
-                <FormInput
-                  type="date"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleInputChange}
-                  required
-                />
-              </ModalFormGroup>
-
-              <ModalFormGroup>
-                <FormLabel>파일 ID</FormLabel>
-                <FormInput
-                  type="text"
-                  name="fileId"
-                  value={formData.fileId}
-                  onChange={handleInputChange}
-                  required
-                />
-              </ModalFormGroup>
-
-              <ModalFormGroup>
-                <FormLabel>배경색</FormLabel>
-                <ColorPickerContainer
-                  style={{ position: "relative", width: "100%" }}
-                >
-                  <FormInput
-                    type="text"
-                    name="color"
-                    value={formData.color}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        color: e.target.value,
-                      }))
-                    }
-                    required
-                    style={{ paddingRight: "40px" }}
-                  />
-
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setShowColorPicker(!showColorPicker);
-                    }}
-                    style={{
-                      position: "absolute",
-                      right: "10px",
-                      top: "50%",
-                      transform: "translateY(-50%)",
-                      backgroundColor: formData.color || "#fff",
-                      width: "100px",
-                      height: "30px",
-                      borderRadius: "4px",
-                      border: "1px solid #ccc",
-                      cursor: "pointer",
-                    }}
-                  />
-                  {showColorPicker && (
-                    <div
-                      style={{
-                        position: "absolute",
-                        top: "100%",
-                        left: "0",
-                        zIndex: 1000,
-                        background: "#fff",
-                        padding: "10px",
-                        borderRadius: "8px",
-                        boxShadow: "0px 0px 10px rgba(0,0,0,0.2)",
-                        width: "100%",
-                      }}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <HexColorPicker
-                        color={formData.color}
-                        onChange={(color) =>
-                          setFormData((prev) => ({ ...prev, color }))
-                        }
-                      />
-                    </div>
-                  )}
-                </ColorPickerContainer>
-              </ModalFormGroup>
-
-              <ModalButtons>
-                <SaveButton type="submit">저장</SaveButton>
-                <CancelButton type="button" onClick={handleModalClose}>
-                  취소
-                </CancelButton>
-              </ModalButtons>
-            </ModalForm>
-          </ModalContent>
-        </ModalOverlay>
+        <div className="admin-modal-overlay">
+          <div className="admin-modal-content">
+            <div className="admin-modal-header">배너 수정</div>
+            <form className="admin-modal-form" onSubmit={handleSave}>
+              <div className="admin-form-group">
+                <label className="admin-form-label">번호</label>
+                <input className="admin-form-input" type="text" name="eventNo" value={formData.eventNo} readOnly />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">시작일</label>
+                <input className="admin-form-input" type="date" name="startDate" value={formData.startDate} onChange={handleInputChange} required />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">종료일</label>
+                <input className="admin-form-input" type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} required />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">파일 ID</label>
+                <input className="admin-form-input" type="text" name="fileId" value={formData.fileId} onChange={handleInputChange} required />
+              </div>
+              <div className="admin-form-group">
+                <label className="admin-form-label">배경색</label>
+                <div className="admin-color-picker-container">
+                  <input className="admin-form-input" type="text" name="color" value={formData.color} onChange={handleInputChange} required />
+                  <div style={{ position: "relative" }}>
+                    <button className="admin-button" type="button" onClick={() => setShowColorPicker(!showColorPicker)}>색상 선택</button>
+                    {showColorPicker && (
+                      <div className="admin-color-picker-popup" style={{ top: "70px", left: "0" }}>
+                        <HexColorPicker color={formData.color} onChange={(color) => setFormData((prev) => ({ ...prev, color }))} />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <div className="admin-modal-buttons">
+                <button className="admin-save-button" type="submit">저장</button>
+                <button className="admin-cancel-button" type="button" onClick={handleModalClose}>취소</button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

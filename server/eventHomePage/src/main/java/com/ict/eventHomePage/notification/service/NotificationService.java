@@ -5,6 +5,7 @@ import com.ict.eventHomePage.notification.controller.request.NotificationRequest
 import com.ict.eventHomePage.notification.controller.response.AnnounceResponse;
 import com.ict.eventHomePage.notification.domain.Announcement;
 import com.ict.eventHomePage.notification.domain.Notification;
+import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface NotificationService {
 
     int getNotificationCount(String userId);
 
-    List<Notification> getNotificationList(String userId);
+    List<Notification> getNotificationList(String userId, List<NotificationStatus> statuses);
 
     int readNotification(String userId, List<Integer> notificationNoList);
 

@@ -26,6 +26,8 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private int announcementId;
+
     private int userNo;
 
     @Column(nullable = false, length = 200)

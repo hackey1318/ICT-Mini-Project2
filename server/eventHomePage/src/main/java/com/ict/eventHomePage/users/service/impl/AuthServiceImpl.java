@@ -6,17 +6,22 @@ import com.ict.eventHomePage.common.exception.custom.UserStatusException;
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import com.ict.eventHomePage.users.controller.request.AuthRequest;
+import com.ict.eventHomePage.users.controller.response.UserResponse;
 import com.ict.eventHomePage.users.repository.UsersRepository;
+import com.ict.eventHomePage.users.repository.impl.UsersRepositoryImpl;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final UsersRepository usersRepository;
+    private final UsersRepositoryImpl usersRepositoryImpl;
 
     private final JwtTokenProvider jwtTokenProvider;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -40,5 +45,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public Users getUser(String userId) {
         return usersRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("없는 사용자입니다."));
+    }
+
+    @Override
+    public List<UserResponse> getUserInRegion(List<String> regionList) {
+        return usersRepositoryImpl.getUserInRegion(regionList);
     }
 }

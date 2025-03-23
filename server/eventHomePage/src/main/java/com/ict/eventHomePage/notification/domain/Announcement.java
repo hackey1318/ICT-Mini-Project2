@@ -1,6 +1,7 @@
 package com.ict.eventHomePage.notification.domain;
 
 import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
+import com.ict.eventHomePage.notification.domain.constant.NotificationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,6 +32,12 @@ public class Announcement {
 
     @Column(nullable = false, length = 500)
     private String content; // 공지 내용
+
+    @Column(nullable = false, length = 255)
+    private String location;
+
+    @Enumerated(value = EnumType.STRING)
+    private NotificationType type;
 
     @Enumerated(value = EnumType.STRING)
     private NotificationStatus status;

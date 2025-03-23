@@ -1,10 +1,8 @@
 import axios from "axios";
 import { useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import addFile from '../../img/plus.jpg';
-import apiFileClient from './../axiosFileConfig';
-import apiClient from './../axiosConfig';
-
+import addFile from '../img/plus.jpg';
+import apiClient from "../js/axiosConfig";
 
 function ReviewEdit() {
     const { no } = useParams();
@@ -28,7 +26,7 @@ function ReviewEdit() {
         console.log(content);
     }
 
-    async function addReply(event) {
+    async function editReply(event) {
         event.preventDefault();
 
         // let formData = new FormData();
@@ -44,11 +42,15 @@ function ReviewEdit() {
             formData.append("files", runfile.current.files[i]);
         }
 
-        const fileUpload = await apiFileClient.post("/file-system/upload", formData)
+        const fileUpload = await axios.post("http://192.168.1.252:9988/file-system/upload", formData, {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        })
 
         replyData.imageIdList = fileUpload.data.map(item => item.imageId);
 
-        apiClient.post("/reply/addReply", replyData)
+        apiClient.post("/reply/editReply", replyData)
             .then(function (response) {
                 console.log(response.data);
                 console.log(replyData)
@@ -120,9 +122,9 @@ function ReviewEdit() {
     return (
         <div className="editContainer">
             <div className='writeForm' >
-                <form onSubmit={addReply}>
-                    <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue} /><br />
-                    <textarea type='text' className='festival-modal-textarea' placeholder="후기내용을 입력하세요" value={content} onChange={setContentValue} />
+                <form onSubmit={editReply}>
+                    <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={no.title} onChange={setTitleValue} /><br />
+                    <textarea type='text' className='festival-modal-textarea' placeholder="후기내용을 입력하세요" value={no.content} onChange={setContentValue} />
 
                     <label style={{ fontSize: '0.7em', position: 'relative', left: '20px', top: '15px' }}>사진첨부(최대 3장)</label><br />
                     <input type='file' multiple ref={runfile}
@@ -137,7 +139,7 @@ function ReviewEdit() {
 
                     <div className='imgList'></div>
 
-                    <input type='submit' value='등 록' />
+                    <input type='submit' value='수 정' />
                     <input type='button' value='취 소' onClick={() => setIsModalOpen(false)} />
                 </form>
             </div>

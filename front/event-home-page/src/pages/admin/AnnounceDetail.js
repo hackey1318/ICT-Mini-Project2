@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import apiClient from "../../js/axiosConfig";
 
 const generateDateFormat = (date) => {
     const d = new Date(date);
@@ -22,11 +23,7 @@ export default function AnnouncementDetail({ announcementNo, accessToken, onClos
         const fetchAnnouncementDetail = async () => {
             setLoading(true);
             try {
-                const response = await axios.get(`http://localhost:9988/announce/${announcementNo}`, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-                    }
-                });
+                const response = await apiClient.get(`/announce/${announcementNo}`);
                 setAnnouncementInfo(response.data);
             } catch (err) {
                 setError('공지사항을 불러오는 데 실패했습니다.');
@@ -72,12 +69,24 @@ export default function AnnouncementDetail({ announcementNo, accessToken, onClos
                             <p>
                                 <strong>공지 명단</strong>
                                 <br/>
-                                {announcementInfo.recipientList.length > 0 ?
-                                    (
-                                        announcementInfo.recipientList.map(function(record) {
-                                            return(<><span>{record?.email} : {record?.status}</span><br/></>);
-                                        })
-                                ) : <></>}
+                                {announcementInfo.recipientList.length > 0 ? (
+                                    <table className="table table-hover" style={{marginTop: '10px'}}>
+                                        <thead>
+                                            <tr style={{borderBottom: '1px solid #ddd'}}>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {announcementInfo.recipientList.map((record, index) => (
+                                                <tr key={index} style={{borderBottom: '1px solid #ddd'}}>
+                                                    <td>{record?.email}</td>
+                                                    <td>{record?.status}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                ) : null}
                             </p>
                         </div>
                     </div>

@@ -3,6 +3,7 @@ import "../../css/my/likesGrid.css"
 import axios from "axios"
 import ErrorModal from "../common/ErrorModal"
 import { useNavigate } from "react-router-dom";
+import apiClient from "../../js/axiosConfig";
 
 function LikePage() {
     const navigate = useNavigate();
@@ -19,12 +20,7 @@ function LikePage() {
             try {
                 setLoading(true)
                 const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
-                const response = await axios.get("http://localhost:9988/like", {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-                    }
-                }
-                )
+                const response = await apiClient.get("/like")
 
                 if (!response.data) {
                     throw new Error("찜 목록을 불러오는데 실패했습니다.")
@@ -53,11 +49,7 @@ function LikePage() {
     const toggleFavorite = async (itemNo) => {
         const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         try {
-            const response = await axios.patch(`http://localhost:9988/like/${itemNo}`, {}, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-                }
-            })
+            const response = await apiClient.patch(`/like/${itemNo}`, {})
 
             if (!response.data) {
                 throw new Error("찜 업데이트에 실패했습니다.")

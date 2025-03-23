@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./../../css/admin.css";
+import apiClient from "../../js/axiosConfig";
 
 function MemberDelList() {
   const [withdrawalData, setWithdrawalData] = useState([]);
@@ -18,8 +19,8 @@ function MemberDelList() {
   }, []);
 
   function getMemberDelList(page) {
-    let url = `http://localhost:9988/member/memberDelList?nowPage=${page}`;
-    axios
+    let url = `/member/memberDelList?nowPage=${page}`;
+    apiClient
       .get(url)
       .then((response) => {
         setWithdrawalData(

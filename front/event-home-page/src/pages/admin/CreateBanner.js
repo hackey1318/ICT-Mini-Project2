@@ -3,6 +3,8 @@ import { useState, useRef } from "react";
 import "./../../css/admin.css";
 import { HexColorPicker } from "react-colorful";
 import axios from "axios";
+import apiClient from "../../js/axiosConfig";
+import apiFileClient from "../../js/axiosFileConfig";
 
 function CreateBanner() {
 	const [selectedImage, setSelectedImage] = useState(null);
@@ -47,8 +49,8 @@ function CreateBanner() {
 	const handleSearchClickModal = async () => {
 		setIsLoading(true);
 		try {
-			const response = await axios.post(
-				"http://localhost:9988/banner/searchEvents",
+			const response = await apiClient.post(
+				"/banner/searchEvents",
 				searchParams
 			);
 			setSearchResults(response.data.list || []);
@@ -81,18 +83,13 @@ function CreateBanner() {
 
 		const accessToken = sessionStorage.getItem("accessToken");
 		try {
-			const fileUpload = await axios.post(
-				"http://localhost:9988/file-system/upload",
-				formData,
-				{
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-				}
+			const fileUpload = await apiFileClient.post(
+				"/file-system/upload",
+				formData
 			);
 
-			const response = await axios.post(
-				"http://localhost:9988/banner/create",
+			const response = await apiClient.post(
+				"/banner/create",
 				{
 					eventNo: bannerInfo.eventNo,
 					title: searchParams.title,
@@ -101,11 +98,6 @@ function CreateBanner() {
 					color: bannerInfo.bannerColor,
 					fileId: fileUpload.data[0].imageId,
 					status: bannerInfo.status,
-				},
-				{
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
 				}
 			);
 
@@ -413,7 +405,7 @@ function CreateBanner() {
 									</form>
 
 									{searchResults.length > 0 ? (
-										<ul className="admin-search-results">
+										<ul className="admin-search-results" style={{ maxHeight: "300px", overflowY: "auto", paddingRight: "10px" }}>
 											{searchResults.map((event) => (
 												<li key={event.no} onClick={() => handleSelectEvent(event)}>
 													{event.no} - {event.title} - {formatDate(event.startDate)} - {event.addr}

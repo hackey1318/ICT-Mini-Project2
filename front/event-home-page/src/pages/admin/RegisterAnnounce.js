@@ -1,5 +1,6 @@
 import axios from "axios"
 import { useState } from "react"
+import apiClient from "../../js/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken");
 
@@ -44,16 +45,12 @@ export default function RegisterAnnounce({ show, onClose, onSave }) {
         // Simulate server delay
         const { subject, content, userIdList, selectedCities } = announcement;
 
-        const announceRegister = await axios.post("http://localhost:9988/announce", {
+        const announceRegister = await apiClient.post("/announce", {
             userIdList: userIdList,
             titie: subject,
             message: content,
             regionList: selectedCities,
             type: "ALERT"
-        }, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
         })
         console.log(announceRegister);
 
@@ -70,11 +67,7 @@ export default function RegisterAnnounce({ show, onClose, onSave }) {
         setIsSaving(true)
         try {
 
-            const userList = await axios.post("http://localhost:9988/auth/region", selectedCities, {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                }
-            })
+            const userList = await apiClient.post("/auth/region", selectedCities)
             const userIdList = userList.data.map(item => item.no);
 
             // Save announcement to server

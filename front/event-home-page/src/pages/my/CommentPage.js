@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import apiClient from "../../js/axiosConfig";
 
 const formatDate = (dateTimeString) => dateTimeString?.split('T')[0] || '';
 const StyledLink = styled(Link)`
@@ -31,11 +32,7 @@ function CommentsPage() {
     async function getReplyList() {
         const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         try {
-            const response = await axios.get("http://localhost:9988/reply/replyList", {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-            });
+            const response = await apiClient.get("/reply/replyList");
             console.log(response.data);
             setReplyData(response.data.list);
         } catch (error) {
@@ -60,11 +57,7 @@ function CommentsPage() {
         if (window.confirm("댓글을 삭제하시겠습니까?")) {
             const accessToken = sessionStorage.getItem("accessToken");
             try {
-                await axios.patch(`http://localhost:9988/reply/${replyNo}`, {}, {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    },
-                });
+                await apiClient.patch(`/reply/${replyNo}`, {});
                 alert("댓글이 삭제 되었습니다.");
                 getReplyList();
             } catch (error) {

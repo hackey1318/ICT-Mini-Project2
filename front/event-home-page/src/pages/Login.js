@@ -3,6 +3,7 @@ import "./../css/Login.css";
 import { useRef, useState } from 'react';
 import axios from 'axios';
 import arrow from '../img/arrow.png';
+import apiNoAccessClient from './../js/axiosConfigNoAccess';
 
 function Login(){
     // 폼의 아이디와 비밀번호를 보관할 변수
@@ -59,7 +60,7 @@ function Login(){
         }
 
         // 비동기식으로 백엔드 
-        axios.post("http://localhost:9988/member/loginOk", {
+        apiNoAccessClient.post("/member/loginOk", {
             userId:loginForm.userId,
             pw:loginForm.pw
         })

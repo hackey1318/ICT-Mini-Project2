@@ -11,6 +11,7 @@ import myIcon from '../img/user.png';
 import NotificationSystem from "../js/notification/notificationInfo";
 import likeIcon from '../img/heart.png';
 import BannerInfo from "../pages/banner/bannerInfo";
+import apiNoAccessClient from "../js/axiosConfigNoAccess";
 
 function MainPage() {
     const StyledLink = styled(Link)`
@@ -50,7 +51,7 @@ function MainPage() {
     useEffect(() => {
         const fetchEvents = async () => {
             try {
-                const response = await axios.get('http://localhost:9988/api/events/ongoing');
+                const response = await apiNoAccessClient.get('/api/events/ongoing');
                 setImageData(response.data);
             } catch (error) {
                 console.error('Error fetching events:', error);
@@ -78,7 +79,7 @@ function MainPage() {
 
                 apiUrl = apiUrl.replace(/&$/, '');
 
-                const response = await axios.get('http://localhost:9988' + apiUrl);
+                const response = await apiNoAccessClient.get(apiUrl);
 
                 setFilteredImageData(response.data.content);
                 setTotalPages(response.data.paging.totalPage);

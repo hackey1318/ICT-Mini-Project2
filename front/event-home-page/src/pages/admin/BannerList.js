@@ -3,6 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { HexColorPicker } from "react-colorful";
 import "./../../css/admin.css";
+import apiNoAccessClient from "../../js/axiosConfigNoAccess";
+import apiClient from "../../js/axiosConfig";
 
 function BannerList() {
   const [bannerData, setBannerData] = useState([]);
@@ -33,11 +35,11 @@ function BannerList() {
   }, [location.state?.refresh]);
 
   function getBannerList(page) {
-    let url = `http://localhost:9988/banner/bannerList?page=${page}&size=${pageSize}`;
+    let url = `/banner/bannerList?page=${page}&size=${pageSize}`;
     if (searchWord) {
       url += `&searchWord=${searchWord}`;
     }
-    axios
+    apiClient
       .get(url)
       .then((response) => {
         const banners = response.data.list || [];
@@ -82,8 +84,8 @@ function BannerList() {
 
   const handleDeleteBanner = (no) => {
     if (window.confirm("정말로 이 배너를 삭제하시겠습니까?")) {
-      axios
-        .delete(`http://localhost:9988/banner/delete/${no}`)
+      apiClient
+        .delete(`/banner/delete/${no}`)
         .then(() => {
           alert("배너가 삭제되었습니다.");
           getBannerList(nowPage);
@@ -113,13 +115,13 @@ function BannerList() {
     e.preventDefault();
     const updatedBanner = {
       eventNo: formData.eventNo,
-      fileId: formData.fileId,
+      // fileId: formData.fileId,
       color: formData.color,
       startDate: formData.startDate,
       endDate: formData.endDate,
     };
-    axios
-      .put(`http://localhost:9988/banner/update/${selectedBanner.no}`, updatedBanner)
+    apiClient
+      .put(`/banner/update/${selectedBanner.no}`, updatedBanner)
       .then(() => {
         alert("배너가 수정되었습니다.");
         handleModalClose();
@@ -191,7 +193,7 @@ function BannerList() {
               <div>
                 <img
                   className="admin-table-image"
-                  src={`http://localhost:9988/file-system/download/${record.imageUrl}`}
+                  src={`http://192.168.1.252:9988/file-system/download/${record.imageUrl}`}
                   alt="배너 이미지"
                 />
               </div>
@@ -251,10 +253,10 @@ function BannerList() {
                 <label className="admin-form-label">종료일</label>
                 <input className="admin-form-input" type="date" name="endDate" value={formData.endDate} onChange={handleInputChange} required />
               </div>
-              <div className="admin-form-group">
+              {/* <div className="admin-form-group">
                 <label className="admin-form-label">파일 ID</label>
                 <input className="admin-form-input" type="text" name="fileId" value={formData.fileId} onChange={handleInputChange} required />
-              </div>
+              </div> */}
               <div className="admin-form-group">
                 <label className="admin-form-label">배경색</label>
                 <div className="admin-color-picker-container">

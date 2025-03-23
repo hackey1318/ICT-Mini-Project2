@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import apiClient from "../../js/axiosConfig";
 
 const StyledLink = styled(Link)`
         text-decoration:none;
@@ -30,11 +31,11 @@ function WithdrawalList() {
     }, []);
 
     function getWithdrawalList(page) {
-        let url = "http://localhost:9988/member/withdrawalList?nowPage=" + page;
+        let url = "/member/withdrawalList?nowPage=" + page;
         if (searchWord != null && searchWord != '') {
             url += "&searchWord=" + searchWord;
         }
-        axios.get(url)
+        apiClient.get(url)
             .then(function (response) {
                 console.log(response.data);
                 setWithdrawalData([]);

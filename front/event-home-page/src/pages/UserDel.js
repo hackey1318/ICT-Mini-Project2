@@ -51,7 +51,7 @@ function UserDel() {
                 }
             ).then(function(response){
                 console.log(response.data);
-                alert("회원탈퇴가 완료되었습니다. 메인페이지로 갑니다.");
+                alert("회원탈퇴가 완료되었습니다. 메인페이지로 이동합니다.");
                 handleLogout(); //세션에서 토큰 삭제.
                 window.location.href = "/";
             }).catch(function(error){

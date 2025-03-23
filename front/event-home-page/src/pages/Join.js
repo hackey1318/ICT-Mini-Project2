@@ -32,33 +32,35 @@ function Join(){
     //아이디 중복확인 함수
     const handleIdCheck = () => {
         console.log(joinData.user_id);
-
-        //아이디가 비어있으면 중복확인 X
-        if(joinData.user_id==null || joinData.user_id=="") return;
-
-        //아이디 길이 검사 추가
-        if (joinData.user_id.length < 5) {
-            setIdCheckMessage('아이디는 최소 5자 이상이어야 합니다.');
-            setIdChecked(false); // 중복확인 상태 초기화
-            return;
-        }
         
-        axios.post("http://127.0.0.1:9988/member/checkId", {userId : joinData.user_id}).then(response =>{
-            console.log(response.data); //중복이면 true, 중복이 아니면 false를 반환.
-            const isExist = response.data; 
-            if (isExist) {
-                setIdChecked(true); //아이디 중복확인을 했으면 true
-                setIdValid(false);
-                setIdCheckMessage('이미 사용 중인 아이디입니다.');
-            } else {
-                setIdChecked(true); //아이디 중복확인을 했으면 true
-                setIdValid(true);
-                setIdCheckMessage('사용 가능한 아이디입니다.');
+        if(idValid){
+            //아이디가 비어있으면 중복확인 X
+            if(joinData.user_id==null || joinData.user_id=="") return;
+
+            //아이디 길이 검사 추가
+            if (joinData.user_id.length < 5) {
+                setIdCheckMessage('아이디는 최소 5자 이상이어야 합니다.');
+                setIdChecked(false); // 중복확인 상태 초기화
+                return;
             }
-        }).catch(error => {
-            console.error("아이디 중복 확인 실패", error);
-            setIdCheckMessage("아이디 중복 확인 실패. 다시 시도해주세요.");
-        });
+            
+            axios.post("http://127.0.0.1:9988/member/checkId", {userId : joinData.user_id}).then(response =>{
+                console.log(response.data); //중복이면 true, 중복이 아니면 false를 반환.
+                const isExist = response.data; 
+                if (isExist) {
+                    setIdChecked(true); //아이디 중복확인을 했으면 true
+                    setIdValid(false);
+                    setIdCheckMessage('이미 사용 중인 아이디입니다.');
+                } else {
+                    setIdChecked(true); //아이디 중복확인을 했으면 true
+                    setIdValid(true);
+                    setIdCheckMessage('사용 가능한 아이디입니다.');
+                }
+            }).catch(error => {
+                console.error("아이디 중복 확인 실패", error);
+                setIdCheckMessage("아이디 중복 확인 실패. 다시 시도해주세요.");
+            });
+        }
     }
     // end ----------------------------------------------
 

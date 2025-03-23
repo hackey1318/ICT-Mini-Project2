@@ -44,7 +44,7 @@ function MyPage() {
                 </div>
 
                 {/* 메인 콘텐츠 */}
-                <div className="col-md-9">
+                <div className="col-md-9" style={{height:'800px'}}>
                     <Outlet />
                 </div>
             </div>

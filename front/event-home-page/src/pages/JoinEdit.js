@@ -253,21 +253,24 @@ function JoinEdit(){
     return (
         !pwFound ? (
             <>
-                <form onSubmit={pwdCheck}>
-                    <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>확인</span></h2>
-                    <div className="id-find-input">
-                        <label htmlFor="pw">비밀번호</label>
-                        <input type="password" id="pw" name="pw" className="pw-style" value={joinData.pw} onChange={setFormData}/>
+                <form onSubmit={pwdCheck} className='joinEdit-pwFind'>
+                    <h3 className='mb-4 d-none d-md-block'>내 정보 수정</h3>
+                    <div className='joinEdit-pwFind-inner'>
+                        <span className='joinEdit-pwFind-text'>본인 확인을 위해 비밀번호를 한 번 더 입력해 주세요.</span>
+                        <div className="pw-find-input">
+                            <label htmlFor="pw">비밀번호</label><br/>
+                            <input type="password" id="pw" name="pw" className="joinEdit-pw-style" value={joinData.pw} onChange={setFormData} placeholder='비밀번호를 입력하세요.'/>
+                        </div>
+                        <input type="submit" value="비밀번호 확인" className='join-btn joinEdit-pw-btn'/>
                     </div>
-                    <input type="submit" value="비밀번호확인" className='join-btn'/>
                 </form>
             </>
         ) : (
             <>
                 <div>
                     <form onSubmit={formCheck}>
-                        <h3>회원정보수정</h3>
-                        <div className='edit-form-inner'>
+                        <h3 className='mb-4 d-none d-md-block'>내 정보 수정</h3>
+                        <div className='edit-form-inner join-edit-form'>
                             <div className='join-form-line'>
                                 <div className='join-title'>아이디</div>
                                 <div className='join-input-box'>
@@ -324,8 +327,10 @@ function JoinEdit(){
                             <div>
                                 <input type="submit" value="회원정보수정" className='join-btn'/>
                             </div>
+                            
                         </div>
                     </form>
+                    <a href="/userDel" className='user-del-btn'>회원탈퇴</a>
                 </div>
             </>
         )

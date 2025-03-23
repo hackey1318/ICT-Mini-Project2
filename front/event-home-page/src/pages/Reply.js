@@ -5,6 +5,7 @@ import addFile from '../img/plus.jpg';
 import { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import AddReply from '../js/event/AddReply';
+import apiClient from '../js/axiosConfig';
 
 function Reply() {
 
@@ -25,7 +26,7 @@ function Reply() {
 
     function addReply() {
 
-        axios.post("http://localhost:9988/reply/addReply")
+        apiClient.post("/reply/addReply")
         .then(function(response) {
             console.log(response.data);
 

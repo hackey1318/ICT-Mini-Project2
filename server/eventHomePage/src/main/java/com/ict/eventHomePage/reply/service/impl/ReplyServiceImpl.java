@@ -6,12 +6,14 @@ import com.ict.eventHomePage.domain.ReplyImages;
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
+import com.ict.eventHomePage.reply.controller.response.ReplyResponse;
 import com.ict.eventHomePage.reply.repository.ReplyImagesRepository;
 import com.ict.eventHomePage.reply.repository.ReplyRepository;
 import com.ict.eventHomePage.reply.service.ReplyService;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,6 @@ public class ReplyServiceImpl implements ReplyService {
     public boolean addReply(ReplyRequest request) {
 
         try{
-
             Replies saveEntity = replyRepository.save(Replies.builder()
                     .userNo(request.getUserNo())
                     .eventNo(request.getEventNo())
@@ -57,7 +58,6 @@ public class ReplyServiceImpl implements ReplyService {
             log.error("리뷰 작성 실패{} : {}", request.getTitle(), e.getMessage());
             return false;
         }
-
         return true;
     }
 
@@ -92,9 +92,14 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public List<Replies> getReplies(int eventNo) {
+    public List<ReplyResponse> getReplies(int eventNo) {
 
-        return replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
+        List<ReplyResponse> replyList = replyRepository.findByEventNoOrderByEventNoDesc(eventNo);
+        for(ReplyResponse response : replyList) {
+            response.setImageIdList(replyImagesRepository.getImageIdList(response.getNo(), StatusInfo.ACTIVE));
+        }
+
+        return replyList;
     }
 
     @Override
@@ -111,5 +116,34 @@ public class ReplyServiceImpl implements ReplyService {
         replies.setStatus(StatusInfo.DELETE);
 
         replyRepository.save(replies);
+    }
+
+    @Override
+    public boolean editReply(int no, ReplyRequest request) {
+
+        try {
+
+            Replies replies = replyRepository.findById(no)
+                    .orElseThrow(() -> new RuntimeException("Replies not found"));
+            replies.setTitle(request.getTitle());
+            replies.setContent(request.getContent());
+
+            List<ReplyImages> replyImages = replyImagesRepository.getReplyImages(replies.getNo(), StatusInfo.ACTIVE);
+            for (ReplyImages replyImage : replyImages) {
+                replyImage.setStatus(StatusInfo.DELETE);
+            }
+            for (String imageId : request.getImageIdList()) {
+                replyImages.add(ReplyImages.builder()
+                        .replyNo(replies.getNo())
+                        .fileId(imageId)
+                        .status(StatusInfo.ACTIVE).build());
+            }
+
+            replyImagesRepository.saveAll(replyImages);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }

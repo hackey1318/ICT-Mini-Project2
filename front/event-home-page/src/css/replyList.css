@@ -1,84 +1,161 @@
+
 .replies {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
 }
 
+.list-container {
+    width: 100%;
+}
+
 #openWriteForm {
+    position: sticky;
+    top: 90%;
+    left: 100%;
     width: 90px;
     height: 35px;
-    margin-right: 20px;
+    transform: translateX(40px);
     border: 0;
     border-radius: 15px;
     background-color: #D7E6FF;
     color: #507ABF;
     line-height: 35px;
     cursor: pointer;
+    margin-right: -80px;
 }
 
 .replyList {
     width: 100%;
+    height: 100%;
     overflow: auto;
+    border-bottom: 1px solid gray;
 }
 
 .replyList>ul {
+    position: relative;
     width: 100%;
-    padding: 0;
-    height: 50px;
-    margin: 15px 0;
+    height: 40px;
+    margin-top: 20px;
 }
 
 .replyList>ul>li {
     float: left;
     list-style-type: none;
-    height: 50px;
     line-height: 50px;
 }
 
-.replyList>ul>li:first-child {
-    width: 50px;
-    border: 1px solid gray;
-    border-radius: 25px;
-    /*background-color: #CBDAFB;
-    text-align: center;
-    color: #46487A;*/
+#title-container {
+    width: 100%;
+    margin-bottom: 20px;
 }
 
-.replyList>ul>li:nth-of-type(2) {
-    width: 60%;
-    margin: 0 30px;
+#img-container {
+    margin: 20px 0;
+}
+
+#img-container>img {
+    width: 60px;
+    height: 60px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+#title {
+    width: 30%;
+    height: 50px;
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2em;
+    margin-top: -10px;
+}
+
+#content {
+    width: 65%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -15px;
 }
 
 #username {
-    width: 10%;
-}
-
-#edit-container {
-    width: 100px;
-}
-
-.editor {
-    margin-left: 20px;
-    cursor: pointer;
-    width: 30px;
+    width: 35%;
     height: 30px;
+    line-height: 30px;
+    font-size: 1.5em;
+}
+
+#date {
+    width: 45%;
+    height: 30px;
+    margin-top: -20px;
+    line-height: 30px;
+    font-size: 0.8em;
+}
+
+.editor1 {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
     opacity: 0.5;
 }
 
-.editor:hover {
+.editor2 {
     cursor: pointer;
-    width: 30px;
-    height: 30px;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.editor1:hover {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
     opacity: 1;
     transition: all 500ms;
 }
 
-#openWriteForm {
+.editor2:hover {
     cursor: pointer;
-    position: relative;
-    left: 83%;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transition: all 500ms;
 }
 
- 
+@media (max-width: 1000px) {
 
+    #openWriteForm {
+        position: relative;
+        left: 85%;
+    }
+}
+
+@media (min-width: 880px) {  /**/
+
+    .editor1 {
+        position: absolute;
+        left: 90%;
+    }
+
+    .editor2 {
+        position: absolute;
+        left: 95%;
+    }
+}
+
+@media (max-width: 880px) {
+
+    .editor1 {
+        position: absolute;
+        right: 10%;
+    }
+
+    .editor2 {
+        position: absolute;
+        right: 5%;
+    }
+}
 

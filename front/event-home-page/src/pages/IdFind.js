@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import "./../css/IdpwFind.css";
-import axios from "axios";
 import arrow from '../img/arrow.png';
+import apiNoAccessClient from "../js/axiosConfigNoAccess";
 
 function IdFind(){
 
@@ -46,7 +46,7 @@ function IdFind(){
         }
 
         // 비동기식으로 백엔드 
-        axios.post("http://localhost:9988/member/idFindOk", {
+        apiNoAccessClient.post("/member/idFindOk", {
             name: idFindForm.name,
             email: idFindForm.email
         })

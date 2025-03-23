@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import ErrorModal from "../common/ErrorModal";
 import RegisterAnnounce from "./RegisterAnnounce";
 import AnnouncementDetail from "./AnnounceDetail";
+import apiClient from './../../js/axiosConfig';
 
 const accessToken = sessionStorage.getItem("accessToken"); 
 
@@ -44,11 +45,7 @@ function Announce() {
 
     function getAnnounce() {
 
-        axios.get("http://localhost:9988/announce",{
-            headers: {
-                Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-            }
-        }).then(function(res) {
+        apiClient.get("/announce").then(function(res) {
             setAnnouncements([])
             res.data.map(function (record) {
                 setAnnouncements(prev => {
@@ -97,7 +94,7 @@ function Announce() {
                 <div style={{ display: "flex" }}>
                 <div className="admin-content">
                     <div className="admin-table-header" style={{ gridTemplateColumns: "1fr 2fr 3fr 2fr" }}>
-                        <div className="col-sm-1 p-2">no</div>
+                            <div>no</div>
                             <div>제목</div>
                             <div>내용</div>
                             <div>생성일</div>
@@ -106,7 +103,7 @@ function Announce() {
                     { announcements.length > 0 ?
                         (announcements.map(function (record) {
                             return (
-                                <div onClick={() => handleAnnounceDetail(record.no)} className="admin-table-row" style={{ gridTemplateColumns: "1fr 2fr 3fr 2fr" }}>
+                                <div onClick={() => handleAnnounceDetail(record.no)} className="admin-table-row" style={{cursor: 'pointer', gridTemplateColumns: "1fr 2fr 3fr 2fr" }}>
                                     <div>{record.no}</div>
                                     <div>{record.title}</div>
                                     <div>{record.content}</div>

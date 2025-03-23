@@ -12,8 +12,8 @@ import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
 import com.ict.eventHomePage.notification.repository.AnnouncementRecipientRepository;
 import com.ict.eventHomePage.notification.repository.AnnouncementRepository;
 import com.ict.eventHomePage.notification.repository.NotificationRepository;
-
 import com.ict.eventHomePage.notification.service.NotificationService;
+import com.ict.eventHomePage.notification.service.dto.AnnounceRecipientInfo;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,15 +43,18 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getNotificationList(String userId) {
+    public List<Notification> getNotificationList(String userId, List<NotificationStatus> statuses) {
 
         Users user = this.getMember(userId);
-        return notificationRepository.getReadableNotificationListForUser(user.getNo(), NotificationStatus.READABLE);
+        return notificationRepository.getReadableNotificationListForUser(user.getNo(), statuses);
     }
 
     @Override
     public int readNotification(String userId, List<Integer> notificationNoList) {
         Users user = this.getMember(userId);
+        List<Integer> announceIdList = notificationRepository.getAnnounceId(notificationNoList);
+
+        announcementRecipientRepository.readAnnounce(NotificationStatus.READ, user.getNo(), notificationNoList);
         return notificationRepository.readNotification(NotificationStatus.READ, user.getNo(), notificationNoList);
     }
 
@@ -66,6 +69,8 @@ public class NotificationServiceImpl implements NotificationService {
                     .adminNo(this.getMember(adminId).getNo())
                     .title(request.getTitie())
                     .content(request.getMessage())
+                    .type(request.getType())
+                    .location(String.join(",", request.getRegionList()))
                     .status(NotificationStatus.READABLE).build());
 
             List<Notification> notifications = new ArrayList<>();
@@ -74,12 +79,15 @@ public class NotificationServiceImpl implements NotificationService {
                 notifications.add(Notification.builder()
                         .userNo(userId)
                         .content(request.getMessage())
+                        .announcementId(announcement.getId())
                         .status(NotificationStatus.READABLE).build());
                 announcementRecipients.add(AnnouncementRecipient.builder()
                         .announcementId(announcement.getId())
-                        .userNo(userId).build());
+                        .userNo(userId)
+                        .status(NotificationStatus.READABLE).build());
             }
             notificationRepository.saveAll(notifications);
+            announcementRecipientRepository.saveAll(announcementRecipients);
         } catch (Exception e) {
             res = false;
             log.error("announce generate error : {}", e.getMessage());
@@ -99,10 +107,10 @@ public class NotificationServiceImpl implements NotificationService {
 
         Announcement announcement = announcementRepository.findById(announceId).orElseThrow(() -> new NotFoundException("알림을 찾지 못하였습니다."));
 
-        List<String> recipientList = announcementRecipientRepository.getAnnouncementRecipient(announceId);
+        List<AnnounceRecipientInfo> recipientList = announcementRecipientRepository.getAnnouncementRecipient(announceId);
 
         AnnounceResponse res = modelMapper.map(announcement, AnnounceResponse.class);
-        res.setUserEmailList(recipientList);
+        res.setRecipientList(recipientList);
         return res;
     }
 

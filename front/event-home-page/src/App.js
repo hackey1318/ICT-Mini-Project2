@@ -20,11 +20,11 @@ import ReplyList from './pages/mypage/ReplyList';
 import Announce from './pages/admin/Announce';
 
 import MyPage from './pages/my/MyPage';
-import ProfilePage from './pages/my/ProfilePage';
 import LikePage from './pages/my/likePage';
 import CommentsPage from './pages/my/CommentPage';
 import UserDel from './pages/UserDel';
 import Menubar from './pages/MenuBar';
+import NoticePage from './pages/my/noticePage';
 
 function App() {
   return (
@@ -36,7 +36,7 @@ function App() {
         <Route path='/login' element={<Login />}></Route>
         <Route path='/join' element={<Join />}></Route>
 
-        <Route path="/admin" element={<MyPage />}>
+        <Route path="/admin" element={<Admin />}>
           <Route index element={<MemberList />}></Route>
           <Route path="memberList" element={<MemberList />}></Route>
           <Route path="memberDelList" element={<MemberDelList />}></Route>
@@ -59,8 +59,10 @@ function App() {
 
         <Route path="/my" element={<MyPage />}>
           <Route index element={<LikePage />} />
+          <Route path='likes' element={<LikePage />} />
           <Route path="joinEdit" element={<JoinEdit />} />
           <Route path="comments" element={<CommentsPage />} />
+          <Route path='notice' element={<NoticePage/>}/>
         </Route>
 
       </Routes>

@@ -4,13 +4,13 @@
   max-width: 1400px;
   margin: 0 auto;
   background-color: #f4f6f8;
-  min-height: 100vh;
+  height: 100%;
 }
 
 .admin-title {
   text-align: center;
   font-size: 28px;
-  color: #1a1a1a;
+  color: #ffffff;
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 2px solid #007bff;
@@ -21,7 +21,7 @@
   width: 250px;
   padding: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-  height: 250px;
+
   position: sticky;
   top: 20px;
   border-radius: 15px;

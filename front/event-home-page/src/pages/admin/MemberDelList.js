@@ -50,28 +50,11 @@ function MemberDelList() {
   }
 
   return (
+    <>
+      <h3 className="mb-4 d-none d-md-block">회원 탈퇴 명단</h3>
+
     <div className="admin-container">
-      <h1 className="admin-title">회원 탈퇴 명단</h1>
       <div style={{ display: "flex" }}>
-        <div className="admin-sidebar">
-          <ul>
-            <li className="admin-nav-item">
-              <Link className="admin-nav-link" to="/admin/memberList">
-                회원 정보 조회
-              </Link>
-            </li>
-            <li className="admin-nav-item">
-              <Link className="admin-nav-link" to="/admin/memberDelList">
-                회원 탈퇴 명단
-              </Link>
-            </li>
-            <li className="admin-nav-item">
-              <Link className="admin-nav-link" to="/admin/bannerList">
-                배너관리
-              </Link>
-            </li>
-          </ul>
-        </div>
         <div className="admin-content">
           <div
             className="admin-table-header"
@@ -129,6 +112,7 @@ function MemberDelList() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

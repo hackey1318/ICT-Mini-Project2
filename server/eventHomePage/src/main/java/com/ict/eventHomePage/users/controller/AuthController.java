@@ -1,6 +1,7 @@
 package com.ict.eventHomePage.users.controller;
 
 import com.ict.eventHomePage.common.config.AuthCheck;
+import com.ict.eventHomePage.common.config.AuthRequired;
 import com.ict.eventHomePage.common.exception.custom.UserAuthenticationException;
 import com.ict.eventHomePage.common.response.SuccessOfFailResponse;
 import com.ict.eventHomePage.domain.Users;
@@ -13,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -53,5 +56,11 @@ public class AuthController {
         Users user = authService.getUser(AuthCheck.getUserId(UserRole.ADMIN, UserRole.USER));
 
         return modelMapper.map(user, UserResponse.class);
+    }
+
+    @PostMapping("/region")
+    @AuthRequired(UserRole.ADMIN)
+    public List<UserResponse> getUserInfoList(@RequestBody List<String> regionList) {
+        return authService.getUserInRegion(regionList);
     }
 }

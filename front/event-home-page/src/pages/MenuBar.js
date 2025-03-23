@@ -114,7 +114,6 @@ function Menubar() {
     };
 
     const getMyPageLink = () => {
-        console.log("유저롤롤", userRole);
         if (userRole && userRole.result === true) {
             return '/admin';
         } else if (isLoggedIn) {
@@ -150,7 +149,7 @@ function Menubar() {
                         ) : (
                             <StyledLink to="/login">로그인</StyledLink>
                         )}</li>
-                        <li><StyledLink to="/notice">공지사항</StyledLink></li>
+                        {userRole && userRole.result === false ? <li><StyledLink to="/my/notice">공지사항</StyledLink></li> : null}
                     </ul>
                 </Nav>
             </HeaderMenu>

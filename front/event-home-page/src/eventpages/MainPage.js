@@ -154,15 +154,9 @@ function MainPage() {
                 <BannerInfo />
                 <div className="header-menu">
                     <ul>
-                        <Link to={isLoggedIn ? `/my` : `/login`}>
-                            <img src={myIcon} alt="My Page" style={{ margin: '5px', width: '40px', height: '40px' }} />
-                        </Link>
                         {isLoggedIn ? (
                             <>
                                 <NotificationSystem />
-                                <Link to={`/like`}>
-                                    <img src={likeIcon} alt="Like" style={{ margin: '5px', width: '40px', height: '40px' }} />
-                                </Link>
                             </>
                         ) : null}
                     </ul>

@@ -18,6 +18,8 @@ public class NotificationRequest {
 
     private String titie;
 
+    private List<String> regionList;
+
     private String message;
 
     private NotificationType type;

@@ -151,8 +151,15 @@
     left: -95px;
 }
 .pw-find-input{
-    width: 208px;
+    width: 330px;
     margin: 12px auto;
+}
+.joinEdit-pwFind-text{
+    display: block;
+    width: 350px;
+    margin: 30px auto;
+    text-align: center;
+    font-size: 16.5px;
 }
 .joinEdit-pw-style{
     width: 100%;
@@ -164,6 +171,9 @@
     font-size: 12px;
     margin-top: 5px;
     font-family: 'Gowun Batang', sans-serif;
+}
+.joinEdit-pw-btn{
+    width: 330px;
 }
 .pw-style::placeholder, .joinEdit-pw-style::placeholder {
     font-family: 'Cafe24Dangdanghae'; /* input에 반영한 폰트로는 글자가 안보여서 추가함 */

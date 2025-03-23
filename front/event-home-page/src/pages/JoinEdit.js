@@ -268,19 +268,21 @@ function JoinEdit(){
         !pwFound ? (
             <>
                 <form onSubmit={pwdCheck} className='joinEdit-pwFind'>
-                    <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>확인</span></h2>
+                    {/* <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>확인</span></h2> */}
+                    <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>내 정보 수정</h2>
+                    <span className='joinEdit-pwFind-text'>본인 확인을 위해 비밀번호를 한 번 더 입력해 주세요.</span>
                     <div className="pw-find-input">
                         <label htmlFor="pw">비밀번호</label><br/>
                         <input type="password" id="pw" name="pw" className="joinEdit-pw-style" value={joinData.pw} onChange={setFormData} placeholder='비밀번호를 입력하세요.'/>
                     </div>
-                    <input type="submit" value="비밀번호 확인" className='join-btn'/>
+                    <input type="submit" value="비밀번호 확인" className='join-btn joinEdit-pw-btn'/>
                 </form>
             </>
         ) : (
             <>
                 <div className='join-edit-form container'>
                     <form onSubmit={formCheck}>
-                        <h3 className='edit-form-title mb-4 d-none d-md-block'>회원정보수정</h3>
+                        <h3 className='edit-form-title mb-4 d-none d-md-block'>내 정보 수정</h3>
                         <div className='edit-form-inner'>
                             <div className='join-form-line'>
                                 <div className='join-title'>아이디</div>

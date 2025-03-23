@@ -31,7 +31,7 @@
 }
 .join-edit-form{
     width: 500px;
-    margin: 0 auto;
+    /* margin: 0 auto; */
     scale: 1.2;
 }
 .edit-form-title{
@@ -46,8 +46,8 @@
 .edit-form-inner{
     width: 560px;
     height: 100%;
-    margin-top: 60px;
-    margin: 0 auto;
+    margin-top: 10%;
+    margin-left: 10%;
 }
 .join-form-line{
     width: 420px;
@@ -154,11 +154,16 @@
     width: 330px;
     margin: 12px auto;
 }
+.joinEdit-pwFind-inner{
+    margin-left: 10%;
+    margin-top: 10%;
+    width: 300px;
+}
 .joinEdit-pwFind-text{
     display: block;
     width: 350px;
     margin: 30px auto;
-    text-align: center;
+    text-align: left;
     font-size: 16.5px;
 }
 .joinEdit-pw-style{
@@ -183,9 +188,8 @@
     color: inherit;
     display: block;
     width: 55px;
-    margin-left: auto;
+    margin-left: 70%;
     margin-top: 50px;
-    font-size: 13px;
 }
 .user-del-btn:hover{
     text-decoration: underline;

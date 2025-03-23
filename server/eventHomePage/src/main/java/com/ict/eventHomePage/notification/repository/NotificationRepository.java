@@ -17,11 +17,14 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     @Query("SELECT COUNT(n.id) FROM Notification AS n WHERE n.userNo = :userNo AND n.status = :status")
     int getReadableNotificationCountForUser(@Param("userNo") int userNo, @Param("status") NotificationStatus status);
 
-    @Query("SELECT n FROM Notification AS n WHERE n.userNo = :userNo AND n.status = :status")
-    List<Notification> getReadableNotificationListForUser(@Param("userNo")int userNo, @Param("status") NotificationStatus status);
+    @Query("SELECT n FROM Notification AS n WHERE n.userNo = :userNo AND n.status IN (:statusList)")
+    List<Notification> getReadableNotificationListForUser(@Param("userNo")int userNo, @Param("statusList") List<NotificationStatus> statusList);
 
     @Modifying
     @Transactional
     @Query("UPDATE Notification AS n SET n.status = :status WHERE n.userNo = :userNo AND n.id in (:notificationNoList)")
     int readNotification(@Param("status") NotificationStatus status, @Param("userNo")int userNo, @Param("notificationNoList") List<Integer> notificationNoList);
+
+    @Query("SELECT n.announcementId FROM Notification AS n WHERE n.id in (:notificationNoList)")
+    List<Integer> getAnnounceId(@Param("notificationNoList") List<Integer> notificationNoList);
 }

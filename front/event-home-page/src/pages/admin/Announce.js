@@ -1,12 +1,17 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import ErrorModal from "../common/ErrorModal";
+import RegisterAnnounce from "./RegisterAnnounce";
+import AnnouncementDetail from "./AnnounceDetail";
 
 const accessToken = sessionStorage.getItem("accessToken"); 
 
 function Announce() {
 
-    let [announceData, setAnnounceData] = useState([]);
+    const [showModal, setShowModal] = useState(false)
+    const [DetailModal, setDetailModal] = useState(false)
+    const [DetailNo, setDetailNo] = useState(null)
+    const [announcements, setAnnouncements] = useState(null)
     const [showError, setShowError] = useState(false);
     const [loading, setLoading] = useState(true)
 
@@ -14,11 +19,28 @@ function Announce() {
     const mounted = useRef(false);
     useEffect(() => {
         if (!mounted.current) {
-            mounted.current = true;
-        } else {
             getAnnounce();
+            mounted.current = true;
         }
     }, []);
+
+    const handleAddAnnouncement = (newAnnouncement) => {
+            setAnnouncements([
+            ...announcements, newAnnouncement])
+        setShowModal(false)
+    }
+
+    function generateDateFormat(date) {
+        const dateInfo = new Date(date);
+        const formattedDate = dateInfo.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+        return formattedDate
+    }
 
     function getAnnounce() {
 
@@ -27,9 +49,9 @@ function Announce() {
                 Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
             }
         }).then(function(res) {
-            setAnnounceData([])
+            setAnnouncements([])
             res.data.map(function (record) {
-                setAnnounceData(prev => {
+                setAnnouncements(prev => {
                     return [...prev, {
                         no: record.id,
                         title: record.title,
@@ -51,40 +73,62 @@ function Announce() {
     if (loading) {
         return <div className="text-center py-5">로딩 중...</div>
     }
+
+    const handleAnnounceDetail = (announcementNo) => {
+        setDetailNo(announcementNo)
+        setDetailModal(true);
+    };
+
+    const handleCloseDetail = () => {
+        setDetailModal(false);
+        setDetailNo(null); // 모달 닫을 때 선택된 공지의 번호 초기화
+    };
+
+    const handleRegisterAnnounce = () => {
+        setShowModal(false)
+        getAnnounce()
+    }
     
     return(
         <div>
             <h3 className="mb-4 d-none d-md-block">공지 목록</h3>
             <ErrorModal show={showError} onClose={() => setShowError(false)} />
-
-            <div style={{ display: "flex" }}>
-                <div className="right" style={{ flex: 1, padding: "30px" }}>
-                    <div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
+			<div className="admin-container">
+                <div style={{ display: "flex" }}>
+                <div className="admin-content">
+                    <div className="admin-table-header" style={{ gridTemplateColumns: "1fr 2fr 3fr 2fr" }}>
                         <div className="col-sm-1 p-2">no</div>
-                        <div className="col-sm-3 p-2">제목</div>
-                        <div className="col-sm-6 p-2">내용</div>
-                        <div className="col-sm-2 p-2">생성일</div>
-                    </div>
-                
-                { announceData.length > 0 ? 
-                    (announceData.map(function (record) {
-                        return (
-                            <div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
-                                <div className="col-sm-1 p-2">{record.no}</div>
-                                <div className="col-sm-3 p-2">{record.title}</div>
-                                <div className="col-sm-6 p-2">{record.content}</div>
-                                <div className="col-sm-2 p-2">{record.createAt}</div>
-                            </div>
+                            <div>제목</div>
+                            <div>내용</div>
+                            <div>생성일</div>
+                        </div>
+
+                    { announcements.length > 0 ?
+                        (announcements.map(function (record) {
+                            return (
+                                <div onClick={() => handleAnnounceDetail(record.no)} className="admin-table-row" style={{ gridTemplateColumns: "1fr 2fr 3fr 2fr" }}>
+                                    <div>{record.no}</div>
+                                    <div>{record.title}</div>
+                                    <div>{record.content}</div>
+                                    <div>{generateDateFormat(record.createdAt)}</div>
+                                </div>
+                            )
+                        })) : ( <div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
+                                    <div style={{textAlign: "center"}} className="col-sm-11 p-2">등록된 공지가 없습니다</div>
+                                </div>
                         )
-                    })) : ( <div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
-                                <div style={{textAlign: "center"}} className="col-sm-11 p-2">등록된 공지가 없습니다</div>
-                            </div>
-                    )
-                }
+                    }
+                    </div>
                 </div>
-            </div>
-            <div className="text-center mt-2">
-                <button className="btn btn-outline-primary btn rounded-pill px-3">공지 등록</button>
+                <div className="text-center mt-2">
+                    <button onClick={() => setShowModal(true)} className="btn btn-outline-primary btn rounded-pill px-3">공지 등록</button>
+                </div>
+                {showModal && (
+                    <RegisterAnnounce show={showModal} onClose={() => handleRegisterAnnounce()} onSave={handleAddAnnouncement} />
+                )}
+                {DetailModal && DetailNo && (
+                    <AnnouncementDetail announcementNo={DetailNo} accessToken={accessToken} onClose={handleCloseDetail}/>
+                )}
             </div>
         </div>
     );

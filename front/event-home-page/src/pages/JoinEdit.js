@@ -267,20 +267,20 @@ function JoinEdit(){
     return (
         !pwFound ? (
             <>
-                <form onSubmit={pwdCheck}>
+                <form onSubmit={pwdCheck} className='joinEdit-pwFind'>
                     <h2 style={{textAlign:'center', fontWeight:'600', textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'}}>비밀번호 <span style={{color:'#3e9ca7'}}>확인</span></h2>
-                    <div className="id-find-input">
-                        <label htmlFor="pw">비밀번호</label>
-                        <input type="password" id="pw" name="pw" className="pw-style" value={joinData.pw} onChange={setFormData}/>
+                    <div className="pw-find-input">
+                        <label htmlFor="pw">비밀번호</label><br/>
+                        <input type="password" id="pw" name="pw" className="joinEdit-pw-style" value={joinData.pw} onChange={setFormData} placeholder='비밀번호를 입력하세요.'/>
                     </div>
-                    <input type="submit" value="비밀번호확인" className='join-btn'/>
+                    <input type="submit" value="비밀번호 확인" className='join-btn'/>
                 </form>
             </>
         ) : (
             <>
-                <div>
+                <div className='join-edit-form container'>
                     <form onSubmit={formCheck}>
-                        <h3>회원정보수정</h3>
+                        <h3 className='edit-form-title mb-4 d-none d-md-block'>회원정보수정</h3>
                         <div className='edit-form-inner'>
                             <div className='join-form-line'>
                                 <div className='join-title'>아이디</div>
@@ -338,8 +338,10 @@ function JoinEdit(){
                             <div>
                                 <input type="submit" value="회원정보수정" className='join-btn'/>
                             </div>
+                            
                         </div>
                     </form>
+                    <a href="/userDel" className='user-del-btn'>회원탈퇴</a>
                 </div>
             </>
         )

@@ -7,6 +7,8 @@ function UserDel() {
     const [selectReason, setSelectReason] = useState('');
     const [writeReason, setWriteReason] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
+    const [userRole, setUserRole] = useState();
 
     const handleReasonChange = (e) => {
         setSelectReason(e.target.value);
@@ -50,6 +52,7 @@ function UserDel() {
             ).then(function(response){
                 console.log(response.data);
                 alert("회원탈퇴가 완료되었습니다. 메인페이지로 갑니다.");
+                handleLogout(); //세션에서 토큰 삭제.
                 window.location.href = "/";
             }).catch(function(error){
                 console.log(error);
@@ -60,6 +63,13 @@ function UserDel() {
         } finally {
             setIsSubmitting(false);
         }
+    };
+
+    //세션에 있는 토큰 삭제.
+    const handleLogout = () => {
+        sessionStorage.removeItem('accessToken');
+        setIsLoggedIn(false);
+        setUserRole(null);
     };
 
     return (

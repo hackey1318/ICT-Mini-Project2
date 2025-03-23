@@ -24,6 +24,7 @@ import LikePage from './pages/my/likePage';
 import CommentsPage from './pages/my/CommentPage';
 import UserDel from './pages/UserDel';
 import Menubar from './pages/MenuBar';
+import Footer from './pages/Footer';
 import NoticePage from './pages/my/noticePage';
 
 function App() {
@@ -66,6 +67,7 @@ function App() {
         </Route>
 
       </Routes>
+      <Footer/>
     </BrowserRouter>
   );
 }

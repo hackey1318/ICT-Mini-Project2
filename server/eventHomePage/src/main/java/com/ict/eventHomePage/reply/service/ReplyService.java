@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ReplyService {
 
-    boolean addReply(ReplyResponse response);
+    boolean addReply(ReplyRequest request);
 
     Replies dataInsert(Replies replies);
 
@@ -18,6 +18,6 @@ public interface ReplyService {
 
     public void replyDel(int no);
 
-    int editReply(int no);
+    boolean editReply(int no, ReplyRequest request);
 }
 

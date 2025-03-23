@@ -30,11 +30,11 @@ public class ReplyController {
 
     @AuthRequired({USER, ADMIN})
     @PostMapping("/addReply")
-    public SuccessOfFailResponse addReply(@RequestBody ReplyResponse response) {
+    public SuccessOfFailResponse addReply(@RequestBody ReplyRequest request) {
 
         int userNo = authService.getUser(AuthCheck.getUserId(USER, ADMIN)).getNo();
-        response.setUserNo(userNo);
-        return SuccessOfFailResponse.builder().result(replyService.addReply(response)).build();
+        request.setUserNo(userNo);
+        return SuccessOfFailResponse.builder().result(replyService.addReply(request)).build();
     }
 
     @GetMapping("/getReplies")
@@ -62,11 +62,9 @@ public class ReplyController {
     }
 
     @PostMapping("/editReply/{no}")
-    public SuccessOfFailResponse editReply(@PathVariable("no") int no) {
+    public SuccessOfFailResponse editReply(@PathVariable("no") int no, @RequestBody ReplyRequest request) {
 
-        /*int userNo = replyService.editReply(no);
-        return SuccessOfFailResponse.builder().result(replyService.editReply(userNo)).build();*/
-        return null;
+        return SuccessOfFailResponse.builder().result(replyService.editReply(no, request)).build();
     }
 }
 

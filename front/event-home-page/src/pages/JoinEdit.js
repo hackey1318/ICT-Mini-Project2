@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import '../css/Join.css';
-import axios from 'axios';
+import apiClient from './../js/axiosConfig';
 
 function JoinEdit(){
     //회원정보를 보관할 변수
@@ -125,19 +125,13 @@ function JoinEdit(){
     
         // 현재 로그인한 회원정보 가져오기
         try {
-            const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
     
             // 비동기 요청을 처리하기 위해 await 사용
-            const response = await axios.post(
-                "http://localhost:9988/member/pwdCheck",
+            const response = await apiClient.post(
+                "/member/pwdCheck",
                 {
                     userId: joinData.user_id,
                     pw: joinData.pw
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`
-                    }
                 }
             );
     
@@ -188,8 +182,8 @@ function JoinEdit(){
 
         //비동기식으로 회원수정 요청
         const accessToken = sessionStorage.getItem("accessToken");
-        const response = axios.post(
-            "http://localhost:9988/member/joinEditOk",
+        const response = apiClient.post(
+            "/member/joinEditOk",
             {
                 userId: joinData.user_id,
                 name: joinData.user_name,
@@ -218,16 +212,8 @@ function JoinEdit(){
     async function getJoinEdit(){
         //현재 로그인한 회원정보 가져오기
         try{
-            const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
 
-            const response = await axios.post(
-                "http://localhost:9988/member/joinEdit",
-                {},
-                {
-                    headers: {
-                            Authorization: `Bearer ${accessToken}`
-                    }
-            });
+            const response = await apiClient.post("/member/joinEdit",{});
 
             console.log(response.data);
 

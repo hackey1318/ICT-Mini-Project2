@@ -8,6 +8,7 @@ import StartImage from '../../img/btn_slide_play.png'; // 재시작 이미지 �
 import ArrowImage from '../../img/btn_left.png'; // 왼쪽 화살표 이미지 (오른쪽 화살표는 회전시켜서 사용)
 import moment from "moment";
 import { useNavigate } from 'react-router-dom';
+import apiNoAccessClient from "../../js/axiosConfigNoAccess";
 
 function BannerInfo() {
 
@@ -54,7 +55,7 @@ function BannerInfo() {
 
     async function getBannerList() {
         try {
-            const res = await axios.get("http://localhost:9988/banner");
+            const res = await apiNoAccessClient.get("/banner");
             setBannerList(res.data);  // API 응답 데이터가 올바르게 들어오는지 확인
         } catch (error) {
             console.error("Failed to fetch banner list", error);
@@ -101,7 +102,7 @@ function BannerInfo() {
                     </div>
                     <div className="banner-img">
                         <img 
-                            src={`http://localhost:9988/file-system/download/${bannerList[currentSlide].fileId}`} 
+                            src={`http://192.168.1.252:9988/file-system/download/${bannerList[currentSlide].fileId}`}
                             alt={`banner-${bannerList[currentSlide].no}`} 
                             className="banner-image"
                         />

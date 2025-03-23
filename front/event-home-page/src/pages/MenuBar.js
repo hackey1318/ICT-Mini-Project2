@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../img/logo.png';
-import axios from 'axios';
+import apiClient from './../js/axiosConfig';
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -54,7 +54,7 @@ const HeaderMenu = styled.div`
         width : 130px;
         text-align : center;
     }   
-    margin-left:23%;
+    margin-left:0%;
 `;
 
 const Nav = styled.nav`
@@ -86,11 +86,7 @@ function Menubar() {
         const fetchUserRole = async () => {
             if (isLoggedIn) {
                 try {
-                    const response = await axios.get('http://localhost:9988/auth', {
-                        headers: {
-                            Authorization: `Bearer ${sessionStorage.getItem('accessToken')}`,
-                        },
-                    });
+                    const response = await apiClient.get('/auth');
                     setUserRole(response.data);
                 } catch (error) {
                     console.error('Error fetching user role:', error);
@@ -141,14 +137,22 @@ function Menubar() {
                 <Nav>
                     <ul>
                         <li><StyledLink to="/">홈</StyledLink></li>
-                        <li><StyledLink to={getMyPageLink()}>
-                            {userRole && userRole.result === true ? '관리자 페이지' : '마이페이지'}
-                        </StyledLink></li>
-                        <li>{isLoggedIn ? (
-                            <StyledLink to="/" onClick={handleLogout}>로그아웃</StyledLink>
+                        
+                        {isLoggedIn ? (
+                            <>
+                                <li>
+                                    <StyledLink to={getMyPageLink()}>
+                                        {userRole && userRole.result === true ? '관리자 페이지' : '마이페이지'}
+                                    </StyledLink>
+                                </li>
+                                <li><StyledLink to="/" onClick={handleLogout}>로그아웃</StyledLink></li>
+                            </>
                         ) : (
-                            <StyledLink to="/login">로그인</StyledLink>
-                        )}</li>
+                            <>
+                                <li><StyledLink to="/login">로그인</StyledLink></li>
+                                <li><StyledLink to="/join">회원가입</StyledLink></li>
+                            </>
+                        )}
                         {userRole && userRole.result === false ? <li><StyledLink to="/my/notice">공지사항</StyledLink></li> : null}
                     </ul>
                 </Nav>

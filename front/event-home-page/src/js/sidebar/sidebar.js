@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import "../../css/sidebar/sidebar.css"
 import { useEffect, useState } from "react"
-import axios from "axios";
+import apiClient from "../axiosConfig";
 
 function Sidebar({ activeMenu }) {
 
@@ -13,7 +13,7 @@ function Sidebar({ activeMenu }) {
 
             
                 const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
-                const response = await axios.get("http://localhost:9988/auth", {
+                const response = await apiClient.get("/auth", {
                     headers: {
                         Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
                     }

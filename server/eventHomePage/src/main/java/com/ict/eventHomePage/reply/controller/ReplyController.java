@@ -7,7 +7,7 @@ import com.ict.eventHomePage.domain.Replies;
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.reply.controller.request.ReplyRequest;
 import com.ict.eventHomePage.reply.controller.response.ReplyResponse;
-import com.ict.eventHomePage.reply.service.impl.ReplyServiceImpl;
+import com.ict.eventHomePage.reply.service.ReplyService;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,9 +25,8 @@ import static com.ict.eventHomePage.domain.constant.UserRole.USER;
 @RequiredArgsConstructor
 public class ReplyController {
 
-    private final ReplyServiceImpl replyService;
+    private final ReplyService replyService;
     private final AuthService authService;
-    private static String FILE_PATH = null;
 
     @AuthRequired({USER, ADMIN})
     @PostMapping("/addReply")
@@ -35,7 +34,6 @@ public class ReplyController {
 
         int userNo = authService.getUser(AuthCheck.getUserId(USER, ADMIN)).getNo();
         request.setUserNo(userNo);
-
         return SuccessOfFailResponse.builder().result(replyService.addReply(request)).build();
     }
 
@@ -43,7 +41,6 @@ public class ReplyController {
     public List<ReplyResponse> getReplies(@RequestParam int eventNo) {
 
         List<ReplyResponse> replies = replyService.getReplies(eventNo);
-
         return replies;
     }
 
@@ -62,6 +59,12 @@ public class ReplyController {
 
         replyService.replyDel(no);
         return "deleted";
+    }
+
+    @PostMapping("/editReply/{no}")
+    public SuccessOfFailResponse editReply(@PathVariable("no") int no, @RequestBody ReplyRequest request) {
+
+        return SuccessOfFailResponse.builder().result(replyService.editReply(no, request)).build();
     }
 }
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { markNotificationAsRead } from "../../js/notification/notificationService";
+import apiClient from "../../js/axiosConfig";
 
 const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
 const formatDate = (dateTimeString) => dateTimeString?.split('T')[0] || '';
@@ -22,11 +23,7 @@ function NoticePage () {
     async function getNoticeList() {
 
         try {
-            const response = await axios.get("http://localhost:9988/noti/ALL", {
-                headers: {
-                    Authorization: `Bearer ${accessToken}`
-                },
-            });
+            const response = await apiClient.get("/noti/ALL");
             setNoticeList(response.data);
         } catch (error) {
             console.error("댓글 목록 가져오기 실패:", error);

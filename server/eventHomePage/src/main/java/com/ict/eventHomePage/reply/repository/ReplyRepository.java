@@ -16,7 +16,7 @@ import java.util.Map;
 @Repository
 public interface ReplyRepository extends JpaRepository<Replies, Integer> {
 
-    @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no, r.userNo, u.name, r.title, r.content, r.status, r.createdAt, r.updatedAt) FROM Replies AS r LEFT JOIN Users AS u ON r.userNo = u.no WHERE r.eventNo = :eventNo ORDER BY r.createdAt DESC")
+    @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no as no, r.userNo as userNo, u.name as name, r.title as title, r.content as content, r.status as status, r.createdAt as createdAt, r.updatedAt as updatedAt) FROM Replies r left join Users u on r.userNo = u.no WHERE r.eventNo = :eventNo ORDER BY r.createdAt DESC")
     List<ReplyResponse> findByEventNoOrderByEventNoDesc(@Param("eventNo") int eventNo);
 
     @Query(value = "SELECT r.no, r.user_no AS userNo, e.title AS joinedTitle, r.content, r.created_at AS createdAt, " +

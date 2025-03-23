@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./../../css/admin.css";
+import apiClient from "../../js/axiosConfig";
 
 const formatDate = (dateTimeString) => dateTimeString?.split("T")[0] || "";
 
@@ -21,11 +22,11 @@ function MemberList() {
 	}, []);
 
 	function getMemberList(page) {
-		let url = `http://localhost:9988/member/memberList?nowPage=${page}`;
+		let url = `/member/memberList?nowPage=${page}`;
 		if (searchWord) {
 			url += `&searchWord=${searchWord}`;
 		}
-		axios
+		apiClient
 			.get(url)
 			.then((response) => {
 				setMemberData(response.data.list);

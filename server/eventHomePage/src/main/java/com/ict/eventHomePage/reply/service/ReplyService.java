@@ -17,5 +17,7 @@ public interface ReplyService {
     List<ReplyResponse> getReplies(int eventNo);
 
     public void replyDel(int no);
+
+    boolean editReply(int no, ReplyRequest request);
 }
 

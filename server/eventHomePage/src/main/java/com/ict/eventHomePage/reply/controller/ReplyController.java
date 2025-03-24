@@ -10,12 +10,17 @@ import com.ict.eventHomePage.reply.controller.response.ReplyResponse;
 import com.ict.eventHomePage.reply.service.ReplyService;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.ict.eventHomePage.domain.constant.UserRole.ADMIN;
 import static com.ict.eventHomePage.domain.constant.UserRole.USER;
@@ -46,11 +51,28 @@ public class ReplyController {
 
     @AuthRequired({USER, ADMIN})
     @GetMapping("/replyList")
-    public ResponseEntity<Map<String, Object>> getReplyList() {
+    public ResponseEntity<Map<String, Object>> getReplyList(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-        List<Replies> replyList = replyService.getReplyList();
+       Page<Replies> replyPage = replyService.getReplyList(pageable, user.getNo());
+
         Map<String, Object> response = new HashMap<>();
-        response.put("list", replyList);
+        List<ReplyResponse> replyResponses = replyPage.getContent().stream()
+                .map(reply -> {
+                    ReplyResponse replyResponse = new ReplyResponse();
+                    replyResponse.setNo(reply.getNo());
+                    replyResponse.setContent(reply.getContent());
+                    replyResponse.setCreatedAt(reply.getCreatedAt());
+                    replyResponse.setEventNo(reply.getEventNo());
+                    // Assuming you have a method or relation to get the event title
+                    // Replace with actual logic
+                    replyResponse.setTitle("Sample Event Title"); // Or fetch title from event
+                    return replyResponse;
+                })
+                .collect(Collectors.toList());
+        response.put("list", replyResponses);
+        response.put("totalPages", replyPage.getTotalPages());
+
         return ResponseEntity.ok(response);
     }
 
@@ -67,6 +89,3 @@ public class ReplyController {
         return SuccessOfFailResponse.builder().result(replyService.editReply(no, request)).build();
     }
 }
-
-
-

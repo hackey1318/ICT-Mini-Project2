@@ -20,6 +20,10 @@ function CommentsPage() {
     let [replyData, setReplyData] = useState([]);
     const navigate = useNavigate();
 
+    const [currentPage, setCurrentPage] = useState(0); // Initialize currentPage to 0
+    const [itemsPerPage, setItemsPerPage] = useState(5);
+    const [totalPages, setTotalPages] = useState(1);
+
     const mounted = useRef(false);
     useEffect(() => {
         if (mounted.current) {
@@ -27,14 +31,15 @@ function CommentsPage() {
         } else {
             getReplyList();
         }
-    }, []);
+    }, [currentPage, itemsPerPage]);
 
     async function getReplyList() {
         const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         try {
-            const response = await apiClient.get("/reply/replyList");
-            console.log(response.data);
+            const response = await apiClient.get(`/reply/replyList?page=${currentPage}&size=${itemsPerPage}`);
+            console.log("Reply list data:", response.data);
             setReplyData(response.data.list);
+            setTotalPages(response.data.totalPages);
         } catch (error) {
             console.error("댓글 목록 가져오기 실패:", error);
             if (error.response && error.response.status === 401) {
@@ -66,6 +71,9 @@ function CommentsPage() {
             }
         }
     };
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber - 1); 
+    };
 
     return (
         <div className="container">
@@ -94,6 +102,17 @@ function CommentsPage() {
                     })
                     }
                 </div>
+            </div>
+            <div className="d-flex justify-content-center mt-4">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNumber) => (
+                    <button
+                        key={pageNumber}
+                        className={`btn btn-outline-primary mx-1 ${currentPage + 1 === pageNumber ? "active" : ""}`} 
+                        onClick={() => handlePageChange(pageNumber)}
+                    >
+                        {pageNumber}
+                    </button>
+                ))}
             </div>
         </div >
     );

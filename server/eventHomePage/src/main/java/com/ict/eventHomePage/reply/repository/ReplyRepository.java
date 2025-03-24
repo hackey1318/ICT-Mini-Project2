@@ -3,6 +3,8 @@ package com.ict.eventHomePage.reply.repository;
 import com.ict.eventHomePage.domain.Replies;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import com.ict.eventHomePage.reply.controller.response.ReplyResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +37,6 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
     @Transactional
     @Query("UPDATE Replies r SET r.status = :status WHERE r.no = :replyNo")
     void updateStatusByReplyNo(@Param("replyNo") int replyNo, @Param("status") StatusInfo status);
+
+    Page<Replies> findAllByUserNo(Pageable pageable, int id);
 }

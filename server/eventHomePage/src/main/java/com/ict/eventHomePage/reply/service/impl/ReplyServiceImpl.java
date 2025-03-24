@@ -13,7 +13,8 @@ import com.ict.eventHomePage.reply.service.ReplyService;
 import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +34,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final AuthService authService;
     private final ReplyRepository replyRepository;
     private final ReplyImagesRepository replyImagesRepository;
+
+    @Override
+    public Page<Replies> getReplyList(Pageable pageable, int id) {
+        return replyRepository.findAllByUserNo(pageable, id);
+    }
 
     @Override
     @Transactional
@@ -63,32 +69,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public List<Replies> getReplyList() {
-        Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-        int currentUserNo = user.getNo();
-        List<Map<String, Object>> replyData = replyRepository.getReplyListByUserNo(currentUserNo, StatusInfo.ACTIVE.name());
-        List<Replies> replyList = new ArrayList<>();
-
-        for (Map<String, Object> record : replyData) {
-            Replies reply = new Replies();
-            reply.setNo(((Number) record.get("no")).intValue());
-            reply.setUserNo(((Number) record.get("userNo")).intValue());
-            reply.setEventNo(((Number) record.get("eventNo")).intValue());
-            reply.setTitle((String) record.get("joinedTitle"));
-            reply.setContent((String) record.get("content"));
-
-            // createdAt 변환 (Timestamp -> LocalDateTime)
-            Object createdAtObj = record.get("createdAt");
-            if (createdAtObj instanceof java.sql.Timestamp) {
-                reply.setCreatedAt(((java.sql.Timestamp) createdAtObj).toLocalDateTime());
-            } else if (createdAtObj instanceof String) {
-                reply.setCreatedAt(LocalDateTime.parse((String) createdAtObj));
-            } else {
-                reply.setCreatedAt(null);
-            }
-
-            replyList.add(reply);
-        }
-        return replyList;
+        return null;
     }
 
     @Override

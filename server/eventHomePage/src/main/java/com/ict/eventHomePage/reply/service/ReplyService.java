@@ -22,5 +22,5 @@ public interface ReplyService {
 
     boolean editReply(int no, ReplyRequest request);
 
-    Page<Replies> getReplyList(Pageable pageable,int id);
+    Page<ReplyResponse> getReplyList(Pageable pageable,int id);
 }

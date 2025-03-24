@@ -51,33 +51,21 @@ public class ReplyController {
 
     @AuthRequired({USER, ADMIN})
     @GetMapping("/replyList")
-    public ResponseEntity<Map<String, Object>> getReplyList(
+    public Page<ReplyResponse> getReplyList(
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
-       Page<Replies> replyPage = replyService.getReplyList(pageable, user.getNo());
-
-        Map<String, Object> response = new HashMap<>();
-        List<ReplyResponse> replyResponses = replyPage.getContent().stream()
-                .map(reply -> {
-                    ReplyResponse replyResponse = new ReplyResponse();
-                    replyResponse.setNo(reply.getNo());
-                    replyResponse.setContent(reply.getContent());
-                    replyResponse.setCreatedAt(reply.getCreatedAt());
-                    replyResponse.setEventNo(reply.getEventNo());
-                    // Assuming you have a method or relation to get the event title
-                    // Replace with actual logic
-                    replyResponse.setTitle("Sample Event Title"); // Or fetch title from event
-                    return replyResponse;
-                })
-                .collect(Collectors.toList());
-        response.put("list", replyResponses);
-        response.put("totalPages", replyPage.getTotalPages());
-
-        return ResponseEntity.ok(response);
+        return replyService.getReplyList(pageable, user.getNo());
     }
 
     @GetMapping("/replyDel/{no}")
     public String replyDel(@PathVariable("no") int no) {
+
+        replyService.replyDel(no);
+        return "deleted";
+    }
+
+    @PatchMapping("/{no}")
+    public String handleDelete(@PathVariable("no") int no) {
 
         replyService.replyDel(no);
         return "deleted";

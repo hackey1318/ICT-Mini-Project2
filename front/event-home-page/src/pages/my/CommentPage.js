@@ -34,12 +34,14 @@ function CommentsPage() {
     }, [currentPage, itemsPerPage]);
 
     async function getReplyList() {
-        const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         try {
             const response = await apiClient.get(`/reply/replyList?page=${currentPage}&size=${itemsPerPage}`);
-            console.log("Reply list data:", response.data);
-            setReplyData(response.data.list);
-            setTotalPages(response.data.totalPages);
+            const data = response.data.content;  // 페이지네이션을 고려하여 content에서 데이터 추출
+            const totalPages = response.data.totalPages;  // 전체 페이지 수
+
+            setReplyData(data);
+            setTotalPages(totalPages);
+
         } catch (error) {
             console.error("댓글 목록 가져오기 실패:", error);
             if (error.response && error.response.status === 401) {

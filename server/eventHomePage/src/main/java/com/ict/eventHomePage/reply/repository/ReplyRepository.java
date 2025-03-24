@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,11 +33,11 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
             "WHERE r.user_no = :currentUserNo AND r.status = 'active'", nativeQuery = true)
     List<Map<String, Object>> getReplyListByUserNo(int currentUserNo);
 
-
     @Modifying
     @Transactional
     @Query("UPDATE Replies r SET r.status = :status WHERE r.no = :replyNo")
     void updateStatusByReplyNo(@Param("replyNo") int replyNo, @Param("status") StatusInfo status);
 
-    Page<Replies> findAllByUserNo(Pageable pageable, int id);
+    @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no as no, e.title as title, r.content as content, r.status as status, r.createdAt as createdAt, r.updatedAt as updatedAt) FROM Replies r left join Events e on r.eventNo = e.no WHERE r.userNo = :userNo")
+    Page<ReplyResponse> findAllByUserNo(Pageable pageable, @Param("userNo") int id);
 }

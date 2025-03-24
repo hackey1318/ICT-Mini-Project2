@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import './../../css/myPageStyle.css';
 import apiClient from "../../js/axiosConfig";
@@ -18,6 +18,7 @@ const formatDate = (dateTimeString) => dateTimeString?.split('T')[0] || '';
 
 function ReplyList() {
     let [replyData, setReplyData] = useState([]);
+    let {replyNo} = useParams();
     const navigate = useNavigate();
 
     const mounted = useRef(false);
@@ -52,12 +53,11 @@ function ReplyList() {
         navigate(`/eventview/${eventNo}`);
     };
 
-    const handleDelete = async (replyNo) => {
-        console.log(`댓글 ${replyNo} 삭제`);
+    const handleDelete = async (no) => {
         if (window.confirm("댓글을 삭제하시겠습니까?")) {
             const accessToken = sessionStorage.getItem("accessToken");
             try {
-                await apiClient.put(`/reply/${replyNo}`, {});
+                await apiClient.put(`/reply/${no}`, {});
                 alert("댓글이 삭제 되었습니다.");
                 getReplyList();
             } catch (error) {

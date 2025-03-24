@@ -3,6 +3,8 @@ package com.ict.eventHomePage.notification.repository;
 import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +20,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Inte
     int getReadableNotificationCountForUser(@Param("userNo") int userNo, @Param("status") NotificationStatus status);
 
     @Query("SELECT n FROM Notification AS n WHERE n.userNo = :userNo AND n.status IN (:statusList)")
-    List<Notification> getReadableNotificationListForUser(@Param("userNo")int userNo, @Param("statusList") List<NotificationStatus> statusList);
+    Page<Notification> getReadableNotificationListForUser(@Param("userNo")int userNo, @Param("statusList") List<NotificationStatus> statusList, Pageable pageable);
 
     @Modifying
     @Transactional

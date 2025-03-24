@@ -15,32 +15,41 @@ export default function NotificationSystem() {
     const [showNotifications, setShowNotifications] = useState(false)
     const [allNotifications, setAllNotifications] = useState([])
     const [loading, setLoading] = useState(false)
-    const [page, setPage] = useState(1)
+    const [page, setPage] = useState(0)
     const [totalPages, setTotalPages] = useState(1)
-    const ITEMS_PER_PAGE = 3 // 페이지당 알림 수
+    const [size, setSize] = useState(3); // 페이지 당 항목 수
 
     useEffect(() => {
         // const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         if (!!sessionStorage.getItem('accessToken')) {
             loadNotificationCount()
+            loadNotifications(page, size)
         }
-    }, [])
+    }, [page, size])
 
     const loadNotificationCount = async () => {
         const count = await fetchNotificationCount()
         setNotificationCount(count)
     }
 
-    const handleBellClick = async () => {
-        if (!showNotifications) {
-            setLoading(true)
-            const data = await fetchNotifications()
-            setAllNotifications(data)
-            setTotalPages(Math.ceil(data.length / ITEMS_PER_PAGE) || 1)
-            setPage(1)
+    const loadNotifications = async (pageNumber, pageSize) => {
+        setLoading(true)
+        try {
+            const data = await fetchNotifications(pageNumber, pageSize)
+            setAllNotifications(data.content)  // 현재 페이지의 알림 목록
+            setTotalPages(data.totalPages)  // 전체 페이지 수
+        } catch (error) {
+            console.error("Failed to load notifications", error)
+        } finally {
             setLoading(false)
         }
+    }
+
+    const handleBellClick = async () => {
         setShowNotifications(!showNotifications)
+        if (!showNotifications) {
+            loadNotifications(page, size)  // 알림 목록을 새로 로드
+        }
     }
 
     const handleMarkAsRead = async (notificationId) => {
@@ -54,7 +63,7 @@ export default function NotificationSystem() {
             setNotificationCount((prev) => Math.max(0, prev - 1))
             
             // Update total pages
-            const newTotalPages = Math.ceil(updatedNotifications.length / ITEMS_PER_PAGE) || 1
+            const newTotalPages = Math.ceil(updatedNotifications.length / size) || 1
             setTotalPages(newTotalPages)
 
             // Adjust current page if needed
@@ -79,31 +88,21 @@ export default function NotificationSystem() {
             setNotificationCount(0)
 
             // Reset pagination
-            setPage(1)
-            setTotalPages(1)
+            setPage(0)
+            setTotalPages(0)
         } catch (error) {
             console.error("Failed to mark all notifications as read:", error)
         }
     }
 
-    const nextPage = () => {
-        if (page < totalPages) {
-            setPage((prev) => prev + 1)
-        }
-    }
-    
+    // 페이지네이션 처리 함수
     const prevPage = () => {
-        if (page > 1) {
-            setPage((prev) => prev - 1)
-        }
-    }
+        if (page > 0) setPage(page - 1);
+    };
     
-    // Get current page notifications
-    const getCurrentPageNotifications = () => {
-        const startIndex = (page - 1) * ITEMS_PER_PAGE
-        const endIndex = startIndex + ITEMS_PER_PAGE
-        return allNotifications.slice(startIndex, endIndex)
-    }
+    const nextPage = () => {
+        if (page < totalPages - 1) setPage(page + 1);
+    };
 
     return (
         <div className="notification-container">
@@ -131,7 +130,8 @@ export default function NotificationSystem() {
                         ) : allNotifications.length > 0 ? (
                             <>
                                 <ul className="notification-list">
-                                    {getCurrentPageNotifications().map((notification) => (
+                                    {allNotifications.map(function (notification) {
+                                        return (
                                         <li key={notification.id} className="notification-item">
                                             <div className="notification-content">
                                                 <div className="notification-message-container">
@@ -150,17 +150,18 @@ export default function NotificationSystem() {
                                                 </div>
                                             </div>
                                         </li>
-                                    ))}
+                                        )})
+                                    }
                                 </ul>
-                                {allNotifications.length > ITEMS_PER_PAGE && (
+                                {totalPages > 1 && (
                                     <div className="noti-pagination">
-                                        <button className="noti-pagination-button" onClick={prevPage} disabled={page === 1}>
+                                        <button className="noti-pagination-button" onClick={prevPage} disabled={page === 0}>
                                             ←
                                         </button>
                                         <span className="noti-pagination-info">
-                                            {page} / {totalPages}
+                                            {page + 1} / {totalPages}
                                         </span>
-                                        <button className="noti-pagination-button" onClick={nextPage} disabled={page === totalPages}>
+                                        <button className="noti-pagination-button" onClick={nextPage} disabled={page === totalPages - 1}>
                                             →
                                         </button>
                                     </div>

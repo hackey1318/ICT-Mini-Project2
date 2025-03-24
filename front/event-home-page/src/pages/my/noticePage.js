@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { markNotificationAsRead } from "../../js/notification/notificationService";
 import apiClient from "../../js/axiosConfig";
 
-const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
 const formatDate = (dateTimeString) => dateTimeString?.split('T')[0] || '';
 
 function NoticePage () {
     const navigate = useNavigate(); 
+    const [noticeCount, setNoticeCount] = useState(0)
     const [noticeList, setNoticeList] = useState([])
+
+    const [page, setPage] = useState(0); // 현재 페이지
+    const [size, setSize] = useState(10); // 페이지 당 항목 수
+    const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
 
     const mounted = useRef(false);
     useEffect(() => {
@@ -18,21 +22,32 @@ function NoticePage () {
         } else {
             getNoticeList();
         }
-    }, []);
+    }, [page, size]);
 
     async function getNoticeList() {
 
         try {
-            const response = await apiClient.get("/noti/ALL");
-            setNoticeList(response.data);
+            const response = await apiClient.get("/noti/ALL", {
+                params: {
+                    page: page,  // 페이지 번호
+                    size: size   // 페이지 크기
+                }
+            });
+            if (!response.data) {
+                throw new Error("공지 목록을 불러오는데 실패했습니다.");
+            }
+            const data = response.data.content;
+            const totalPages = response.data.totalPages;
+            setTotalPages(totalPages);
+            setNoticeList(data);
         } catch (error) {
-            console.error("댓글 목록 가져오기 실패:", error);
+            console.error("공지 목록 가져오기 실패:", error);
             if (error.response && error.response.status === 401) {
                 // 토큰 만료 처리 (예: 로그인 페이지로 이동)
                 alert("세션이 만료되었습니다. 다시 로그인해주세요.");
                 navigate('/login');
             } else {
-                alert("댓글 목록을 불러오는데 실패했습니다.");
+                alert("공지 목록을 불러오는데 실패했습니다.");
             }
         }
     }
@@ -42,6 +57,17 @@ function NoticePage () {
         getNoticeList(); // ✅ 읽음 처리 후 목록 다시 로딩
     }
 
+    // 페이지 변경 처리
+    const handlePageChange = (newPage) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            setPage(newPage);
+        }
+    };
+    // 페이지 크기 변경 처리
+    const handleSizeChange = (newSize) => {
+        setSize(newSize);
+        setPage(0); // 페이지 크기 변경 시 첫 번째 페이지로 이동
+    };
 
     return(
         <div className="container">
@@ -74,6 +100,35 @@ function NoticePage () {
                     })}
                 </div>
             </div>
+            {/* 페이지네이션 버튼 */}
+            {totalPages > 0 && (
+                <>
+                    <div className="d-flex justify-content-center align-items-center mt-4">
+                        <button
+                            onClick={() => handlePageChange(page - 1)}
+                            disabled={page === 0}
+                            className="btn btn-dark me-2"
+                        >
+                            이전
+                        </button>
+                        <span>{totalPages > 0 ? `${page + 1} / ${totalPages}` : '0 / 0'}</span>
+                        <button
+                            onClick={() => handlePageChange(page + 1)}
+                            disabled={page === totalPages - 1}
+                            className="btn btn-dark ms-2"
+                        >
+                            다음
+                        </button>
+                    </div>
+                    <div className="d-flex justify-content-center mt-3">
+                        <select onChange={(e) => handleSizeChange(e.target.value)} value={size} className="form-select w-auto">
+                            <option value={10}>10개씩</option>
+                            <option value={20}>20개씩</option>
+                            <option value={100}>100개씩</option>
+                        </select>
+                    </div>
+                </>
+            )}
         </div>
     );
 }

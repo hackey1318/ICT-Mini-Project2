@@ -2,6 +2,8 @@ package com.ict.eventHomePage.users.service;
 
 import com.ict.eventHomePage.domain.Users;
 import com.ict.eventHomePage.users.controller.response.LikesResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -11,7 +13,7 @@ public interface LikesService {
 
     boolean likeEvent(Users users, int eventId);
 
-    List<LikesResponse> getLikeEvent(Users users);
+    Page<LikesResponse> getLikeEvent(Users users, Pageable pageable);
 
     boolean changeLikeEvent(Users users, int eventId);
 }

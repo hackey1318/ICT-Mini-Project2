@@ -9,6 +9,9 @@ import com.ict.eventHomePage.users.service.AuthService;
 import com.ict.eventHomePage.users.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,11 +49,11 @@ public class LikeController {
 
     @GetMapping
     @AuthRequired({USER, ADMIN})
-    public List<LikesResponse> getLikeEvent() {
+    public Page<LikesResponse> getLikeEvent(@PageableDefault(page = 0, size = 6, sort = {"createdAt"}) Pageable pageable) {
 
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
 
-        return likesService.getLikeEvent(user);
+        return likesService.getLikeEvent(user, pageable);
     }
 
     @PatchMapping("/{eventId}")

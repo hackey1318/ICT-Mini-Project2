@@ -3,6 +3,8 @@ package com.ict.eventHomePage.users.repository;
 import com.ict.eventHomePage.domain.Likes;
 import com.ict.eventHomePage.domain.constant.StatusInfo;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,7 +21,7 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
 
     Optional<Likes> findByUserNoAndEventNoAndStatus(int userNo, int eventNo, StatusInfo status);
 
-    List<Likes> findByUserNo(int userNo);
+    Page<Likes> findByUserNoAndStatus(int userNo, StatusInfo status, Pageable pageable);
 
     @Modifying
     @Transactional

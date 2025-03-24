@@ -3,12 +3,7 @@ import apiClient from './../axiosConfig';
 
 export async function fetchNotificationCount() {
     try {
-        const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
-        const response = await apiClient.get("/noti/count", {
-            headers: {
-                Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
-            }
-        });
+        const response = await apiClient.get("/noti/count");
         return await response.data
     } catch (error) {
         console.error("Failed to fetch notification count:", error)
@@ -16,16 +11,19 @@ export async function fetchNotificationCount() {
     }
 }
 
-export async function fetchNotifications() {
+export async function fetchNotifications(page, size) {
     try {
         const status = "READABLE"
-        const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         const response = await apiClient.get(`/noti/${status}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}` // 헤더에 토큰 추가
+            params: {
+                page: page,  // 페이지 번호
+                size: size   // 페이지 크기
             }
         })
-        return await response.data
+        if (!response.data) {
+            throw new Error("공지 목록을 불러오는데 실패했습니다.");
+        }
+        return response.data
     } catch (error) {
         console.error("Failed to fetch notifications:", error)
         return []
@@ -34,17 +32,9 @@ export async function fetchNotifications() {
 
 export async function markNotificationAsRead(notificationId) {
     try {
-        const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         const requestData = Array.isArray(notificationId) ? notificationId : [notificationId];
 
-        const response = await apiClient.patch("/noti",
-            requestData, 
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`
-                },
-            })
+        const response = await apiClient.patch("/noti", requestData)
         return await response.data
     } catch (error) {
         console.error("Failed to mark notification as read:", error)

@@ -31,11 +31,6 @@ function MyPage() {
 
     return (
         <div className="container main-content" style={{marginTop: "4vh"}}>
-            <div className="page-header d-flex align-items-center">
-                <button className="btn btn-link p-0 me-3" onClick={() => navigate(-1)} style={{fontSize:'20px', position:'absolute', top:'30px', left:'30px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
-                    <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />
-                </button>
-            </div>
 
             <div className="row">
                 {/* 사이드바 */}

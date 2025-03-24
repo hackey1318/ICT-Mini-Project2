@@ -15,8 +15,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -59,17 +63,17 @@ public class LikesServiceImpl implements LikesService {
     }
 
     @Override
-    public List<LikesResponse> getLikeEvent(Users users) {
+    public Page<LikesResponse> getLikeEvent(Users users, Pageable pageable) {
 
         // 결과 정보를 위한 객체 생성
-        List<Likes> likeList = likesRepository.findByUserNo(users.getNo());
-        Map<Integer, LikesResponse> likesMap = likeList.stream()
+        Page<Likes> likePage  = likesRepository.findByUserNoAndStatus(users.getNo(), StatusInfo.ACTIVE , pageable);
+        Map<Integer, LikesResponse> likesMap = likePage .getContent().stream()
                 .collect(Collectors.toMap(Likes::getEventNo, like -> {
                     LikesResponse response = modelMapper.map(like, LikesResponse.class);
                     return response;
                 }));
 
-        List<Integer> eventNoList = likeList.stream().map(Likes::getEventNo).toList();
+        List<Integer> eventNoList = likePage.getContent().stream().map(Likes::getEventNo).toList();
         // 행사 및 이미지 정보 조회
         Map<Integer, String> eventTitleMap = eventsRepository.findAllById(eventNoList)
                 .stream().collect(Collectors.toMap(Events::getNo, Events::getTitle));
@@ -82,9 +86,7 @@ public class LikesServiceImpl implements LikesService {
             response.setImageInfo(eventImageMap.get(eventNo));
         });
 
-        return likesMap.values().stream()
-                .sorted(Comparator.comparing(LikesResponse::getCreatedAt)) // created 기준 오름차순 정렬
-                .toList();
+        return new PageImpl<>( new ArrayList<>(likesMap.values()), pageable, likePage.getTotalElements());
     }
 
     @Override

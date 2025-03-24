@@ -18,6 +18,8 @@ import com.ict.eventHomePage.users.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -43,10 +45,10 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public List<Notification> getNotificationList(String userId, List<NotificationStatus> statuses) {
+    public Page<Notification> getNotificationList(String userId, List<NotificationStatus> statuses, Pageable pageable) {
 
         Users user = this.getMember(userId);
-        return notificationRepository.getReadableNotificationListForUser(user.getNo(), statuses);
+        return notificationRepository.getReadableNotificationListForUser(user.getNo(), statuses, pageable);
     }
 
     @Override

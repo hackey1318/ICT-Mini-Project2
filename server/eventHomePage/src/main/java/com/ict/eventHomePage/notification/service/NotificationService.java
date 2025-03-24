@@ -6,6 +6,8 @@ import com.ict.eventHomePage.notification.controller.response.AnnounceResponse;
 import com.ict.eventHomePage.notification.domain.Announcement;
 import com.ict.eventHomePage.notification.domain.Notification;
 import com.ict.eventHomePage.notification.domain.constant.NotificationStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public interface NotificationService {
 
     int getNotificationCount(String userId);
 
-    List<Notification> getNotificationList(String userId, List<NotificationStatus> statuses);
+    Page<Notification> getNotificationList(String userId, List<NotificationStatus> statuses, Pageable pageable);
 
     int readNotification(String userId, List<Integer> notificationNoList);
 

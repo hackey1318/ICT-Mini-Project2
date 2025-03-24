@@ -51,7 +51,7 @@ function AdminSidebar({ activeMenu }) {
                 <li className="admin-nav-item">
                     <Link
                         to="/admin/bannerList"
-                        className={`admin-nav-link ${activeMenu === "bannerList" ? "active text-primary" : ""}`}
+                        className={`admin-nav-link ${activeMenu === "bannerList" || activeMenu === "createBanner" ? "active text-primary" : ""}`}
                     >
                         배너관리
                     </Link>

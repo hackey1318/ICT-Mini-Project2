@@ -348,7 +348,7 @@ function EventView() {
 			for (let i = 0; i < runfile.current.files.length; i++) {
 				formData.append("files", runfile.current.files[i])
 			}
-			const fileUpload = await apiFileClient.post("/file-system/download", formData, {
+			const fileUpload = await apiFileClient.post("/file-system/upload", formData, {
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 					"Content-Type": "multipart/form-data",

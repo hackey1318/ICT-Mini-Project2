@@ -111,15 +111,6 @@ function MemberList() {
 								)
 							})
 						}
-						<ul className="pagination justify-content-center" style={{ margin: '20px 0' }}>
-							{
-								(function () {
-									if (nowPage > 1) {
-										return (<li className="page-item"><a className="page-link" onClick={() => getMemberList(nowPage - 1)}>Previous</a></li>)
-									}
-								})()
-							}
-						</ul>
 						<ul className="admin-pagination">
 							{nowPage > 1 && (
 								<li className="admin-page-item">

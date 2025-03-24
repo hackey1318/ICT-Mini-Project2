@@ -290,7 +290,7 @@ function JoinEdit(){
                                             type="text"
                                             name="user_id"
                                             value={joinData.user_id}
-                                            className='text-box'
+                                            className="text-box readonly-style"
                                             readOnly
                                         />
                                     </div>
@@ -303,7 +303,7 @@ function JoinEdit(){
                                             type="text"
                                             name="user_name"
                                             value={joinData.user_name}
-                                            className='text-box'
+                                            className='text-box readonly-style'
                                             minLength={2}
                                             readOnly
                                         />
@@ -313,9 +313,9 @@ function JoinEdit(){
                                 <div className='join-form-line'>
                                     <div className='join-title'>생년월일</div>
                                     <div className='join-input-box'>
-                                        <input type="text" value={`${year}년`} className='text-box birth' readOnly />
-                                        <input type="text" value={`${month}월`} className='text-box birth' readOnly />
-                                        <input type="text" value={`${day}일`} className='text-box birth' readOnly />
+                                        <input type="text" value={`${year}년`} className='text-box birth readonly-style' readOnly />
+                                        <input type="text" value={`${month}월`} className='text-box birth readonly-style' readOnly />
+                                        <input type="text" value={`${day}일`} className='text-box birth readonly-style' readOnly />
                                     </div>
                                 </div>
                                 <div className='join-form-line'>

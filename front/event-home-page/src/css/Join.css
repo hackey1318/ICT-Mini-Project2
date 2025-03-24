@@ -195,3 +195,7 @@
     text-decoration: underline;
     text-underline-offset: 3px;
 }
+
+.readonly-style{
+    background-color: #eeebeb;
+}

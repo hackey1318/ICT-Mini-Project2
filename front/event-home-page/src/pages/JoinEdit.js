@@ -20,13 +20,9 @@ function JoinEdit(){
     });
 
     //회원정보페이지 접속하면 데이터 불러오기
-    const mounted = useRef(false);
     useEffect(()=>{
-        if(!mounted.current){
-            mounted.current = true;
-        }else{
-            getJoinEdit(); //회원정보 불러오는 함수
-        }
+        getJoinEdit(); //회원정보 불러오는 함수
+
     },[]);
 
     //입력하는 값이 변경되면 호출됨
@@ -212,7 +208,6 @@ function JoinEdit(){
     async function getJoinEdit(){
         //현재 로그인한 회원정보 가져오기
         try{
-
             const response = await apiClient.post("/member/joinEdit",{});
 
             console.log(response.data);

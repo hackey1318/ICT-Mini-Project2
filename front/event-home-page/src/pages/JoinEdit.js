@@ -164,6 +164,13 @@ function JoinEdit(){
             document.querySelector('input[name="email"]').focus();
             return false;
         }
+        //이메일 유효성 검사
+        let regEmail = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z]{2,6}$/;
+        if(!regEmail.test(joinData.email)){
+            alert('이메일 형식에 맞지 않습니다');
+            document.querySelector('input[name="email"]').focus();
+            return false;
+        }
 
         // 연락처에 빈칸이거나 숫자가 아닌 값이 들어가면 확인
         if (tel1 === "" || tel2 === "" || tel3 === "") {

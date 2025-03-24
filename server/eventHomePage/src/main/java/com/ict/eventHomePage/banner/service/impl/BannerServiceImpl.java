@@ -56,9 +56,9 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
-    public Map<String, Object> getAllBanners(int page, int size) {
+    public Map<String, Object> getAllBanners(int page, int size, String searchWord) {
         Pageable pageable = PageRequest.of(page - 1, size); // 0-based index
-        Page<Object[]> results = bannerRepository.findAllBannersWithEventTitle(pageable);
+        Page<Object[]> results = bannerRepository.getBannerInfo(searchWord, pageable);
         List<Map<String, Object>> banners = new ArrayList<>();
 
         for (Object[] result : results.getContent()) {

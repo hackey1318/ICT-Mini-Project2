@@ -14,13 +14,13 @@ section {
 
 section .left ul {
 	list-style-type: none;
-	padding-left: 120px;
+	/* padding-left: 120px; */
 	margin: 0;
 }
 
 section .right ul {
 	list-style-type: none;
-	padding-right: 200px; 
+	/* padding-right: 200px;  */
 	margin: 0;
 }
 

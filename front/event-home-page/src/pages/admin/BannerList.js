@@ -123,7 +123,7 @@ function BannerList() {
     e.preventDefault();
     const updatedBanner = {
       eventNo: formData.eventNo,
-      // fileId: formData.fileId,
+      fileId: formData.fileId,
       color: formData.color,
       startDate: formData.startDate,
       endDate: formData.endDate,

@@ -16,7 +16,7 @@ public interface BannerService {
     boolean createBanner(BannerRequest request);
 
     // 페이지네이션 지원 메서드만 유지
-    Map<String, Object> getAllBanners(int page, int size);
+    Map<String, Object> getAllBanners(int page, int size, String searchWord);
 
     void updateBanner(Integer no, Integer eventNo, String fileId, String color, LocalDateTime startDate, LocalDateTime endDate);
 

@@ -51,8 +51,9 @@ public class BannerManagerController {
     @GetMapping("/bannerList")
     public ResponseEntity<Map<String, Object>> getBannerList(
             @RequestParam(name = "page", defaultValue = "1") int page,
-            @RequestParam(name = "size", defaultValue = "5") int size) {
-        Map<String, Object> response = bannerService.getAllBanners(page, size);
+            @RequestParam(name = "size", defaultValue = "5") int size,
+            @RequestParam(name = "searchWord", required = false) String searchWord) {
+        Map<String, Object> response = bannerService.getAllBanners(page, size, searchWord);
         return ResponseEntity.ok(response);
     }
 

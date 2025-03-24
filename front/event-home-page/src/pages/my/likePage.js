@@ -115,7 +115,7 @@ function LikePage() {
                 {wishlistItems && wishlistItems.length > 0 ? (wishlistItems.map((item) => (
                     <div key={item.no} className="col">
                         <div className="wishlist-item">
-                            <div className="fw-medium mb-2">{item.title}</div>
+                            <div className="fw-medium mb-2 item-title">{item.title}</div>
                             <div className="position-relative rounded overflow-hidden">
                                 <img
                                     src={item.imageInfo || "/placeholder.svg"}

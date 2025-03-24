@@ -1,11 +1,19 @@
 import {Link} from 'react-router-dom';
 import "./../css/Login.css";
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import arrow from '../img/arrow.png';
 import apiNoAccessClient from './../js/axiosConfigNoAccess';
 
 function Login(){
+    //footer의 margin-top 제거를 위해 추가 
+    useEffect(() => {
+        document.body.classList.add("login-page");
+        return () => {
+            document.body.classList.remove("login-page");
+        };
+    }, []);
+
     // 폼의 아이디와 비밀번호를 보관할 변수
     const [loginForm, setLoginForm] = useState({
         userId: '',

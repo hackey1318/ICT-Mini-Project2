@@ -25,7 +25,7 @@ function Sidebar({ activeMenu }) {
     
 
     return (
-        <div className="sidebar-menu" style={{marginTop: "13vh"}}>
+        <div className="sidebar-menu" style={{marginTop: "13vh", marginBottom:"150px"}}>
             <div className="list-group list-group-flush border-0" style={{ backgroundColor: "#E7F0FF", width: "250px", borderRadius: "12px", padding: "15px" }}>
                 <Link
                     to="/my/likes"

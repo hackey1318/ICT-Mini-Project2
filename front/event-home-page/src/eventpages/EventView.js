@@ -346,7 +346,7 @@ function EventView() {
 			for (let i = 0; i < runfile.current.files.length; i++) {
 				formData.append("files", runfile.current.files[i])
 			}
-			const fileUpload = await apiFileClient.post("/file-system/upload", formData, {
+			const fileUpload = await apiFileClient.post("/file-system/download", formData, {
 				headers: {
 					Authorization: `Bearer ${accessToken}`,
 					"Content-Type": "multipart/form-data",
@@ -694,7 +694,7 @@ function EventView() {
 												</div>
 											</li>
 											<li id="title">제목 : {reply.title}</li>
-											<li id="content">후기 : {reply.content}</li>
+											<li id="content">{reply.content}</li>
 										</ul>
 									</div>
 								</div>

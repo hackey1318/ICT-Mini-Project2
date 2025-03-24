@@ -1,10 +1,17 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import axios from "axios";
 import arrow from '../img/arrow.png';
 import apiNoAccessClient from './../js/axiosConfigNoAccess';
 
 function PwFind(){
+    //footer의 margin-top 제거를 위해 추가 
+    useEffect(() => {
+        document.body.classList.add("pwFind-page");
+        return () => {
+            document.body.classList.remove("pwFind-page");
+        };
+    }, []);
 
     // 폼의 이름과 이메일과 연락처를 보관할 변수
     let [pwFindForm, setPwFindForm] = useState({});

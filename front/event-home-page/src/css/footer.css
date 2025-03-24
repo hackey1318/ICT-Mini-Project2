@@ -1,3 +1,4 @@
+
 .footer {
 	white-space:nowrap;
 	padding:0;
@@ -10,6 +11,15 @@
 	display:flex;
     border-top: 1px solid #ddd;
     background-color: transparent;
+	margin-top: 135px;
+}
+
+/* 로그인페이지, 아이디 및 비밀번호찾기 페이지, 회원가입 페이지의 footer의 margin-top 제거를 위해 추가 */
+body.login-page .footer,
+body.idFind-page .footer,
+body.pwFind-page .footer,
+body.join-page .footer{
+	margin-top: 0 !important;
 }
 
 .footer a {

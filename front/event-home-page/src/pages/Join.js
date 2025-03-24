@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import '../css/Join.css';
 import arrow from '../img/arrow.png';
 
@@ -10,6 +10,14 @@ import apiClient from './../js/axiosConfig';
 import apiNoAccessClient from '../js/axiosConfigNoAccess';
 
 function Join(){
+    //footer의 margin-top 제거를 위해 추가 
+    useEffect(() => {
+        document.body.classList.add("join-page");
+        return () => {
+            document.body.classList.remove("join-page");
+        };
+    }, []);
+
     //회원정보를 보관할 변수
     let [joinData, setJoinData] = useState({
         user_id: '',
@@ -330,7 +338,7 @@ function Join(){
                         </div>
                         <div className='join-form-line'>
                             <div className='join-title'>생년월일</div>
-                            <div className='join-input-box'>
+                            <div className='join-input-box'> 
                             <DatePicker
                                 selected={startDate}
                                 onChange={handleDateChange}
@@ -342,6 +350,7 @@ function Join(){
                                 showYearDropdown // 년도 드롭다운 추가
                                 yearDropdownItemNumber={100} // 선택할 수 있는 연도 범위 (예: 최근 100년)
                                 scrollableYearDropdown // 스크롤 가능한 연도 드롭다운
+                                onKeyDown={(e) => e.preventDefault()} // 👈 키보드 입력 막기!
                             />
                             </div>
                         </div>

@@ -6,6 +6,8 @@ import arrow from '../img/arrow.png';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"; 
 import axios from 'axios';
+import apiClient from './../js/axiosConfig';
+import apiNoAccessClient from '../js/axiosConfigNoAccess';
 
 function Join(){
     //회원정보를 보관할 변수
@@ -44,7 +46,7 @@ function Join(){
                 return;
             }
             
-            axios.post("http://127.0.0.1:9988/member/checkId", {userId : joinData.user_id}).then(response =>{
+            apiNoAccessClient.post("/member/checkId", {userId : joinData.user_id}).then(response =>{
                 console.log(response.data); //중복이면 true, 중복이 아니면 false를 반환.
                 const isExist = response.data; 
                 if (isExist) {
@@ -254,7 +256,7 @@ function Join(){
         }
 
         //비동기식으로 회원가입 요청
-        axios.post("http://127.0.0.1:9988/member/joinFormOk",
+        apiNoAccessClient.post("/member/joinFormOk",
             {
                 userId: joinData.user_id,
                 pw: joinData.user_pw,

@@ -36,7 +36,7 @@ public class LikesServiceImpl implements LikesService {
     @Override
     public boolean getLikeEvent(Users users, int eventId) {
 
-        Likes likes = likesRepository.findByUserNoAndEventNo(users.getNo(), eventId).orElse(null);
+        Likes likes = likesRepository.findByUserNoAndEventNoAndStatus(users.getNo(), eventId, StatusInfo.ACTIVE).orElse(null);
         return likes != null;
     }
 

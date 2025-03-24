@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import '../css/userDel.css';
 import arrow from '../img/arrow.png';
+import apiClient from '../js/axiosConfig';
 
 function UserDel() {
     const [selectReason, setSelectReason] = useState('');
@@ -41,14 +42,9 @@ function UserDel() {
         try {
             setIsSubmitting(true);
             const accessToken = sessionStorage.getItem("accessToken");
-            const response = await axios.post(
-                "http://127.0.0.1:9988/member/userDelOk",
-                { content: finalReason },
-                {
-                    headers: {
-                            Authorization: `Bearer ${accessToken}`
-                    }
-                }
+            const response = await apiClient.post(
+                "/member/userDelOk",
+                { content: finalReason }
             ).then(function(response){
                 console.log(response.data);
                 alert("회원탈퇴가 완료되었습니다. 메인페이지로 이동합니다.");

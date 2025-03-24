@@ -21,6 +21,16 @@ function MemberList() {
 		}
 	}, []);
 
+	function generateDateFormat(date) {
+        const dateInfo = new Date(date);
+        const formattedDate = dateInfo.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        });
+        return formattedDate
+    }
+
 	function getMemberList(page) {
 		let url = `/member/memberList?nowPage=${page}`;
 		if (searchWord) {
@@ -75,10 +85,10 @@ function MemberList() {
 					<div className="right" style={{ flex: 1, padding: "30px" }}>
 						<div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
 							<div className="col-sm-1 p-2">이름</div>
-							<div className="col-sm-2 p-2">아이디</div>
-							<div className="col-sm-3 p-2">이메일</div>
+							<div className="col-sm-1 p-2">아이디</div>
+							<div className="col-sm-2 p-2">이메일</div>
 							<div className="col-sm-2 p-2">연락처</div>
-							<div className="col-sm-2 p-2">주소</div>
+							<div className="col-sm-4 p-2">주소</div>
 							<div className="col-sm-2 p-2">생성일</div>
 						</div>
 						{
@@ -86,11 +96,11 @@ function MemberList() {
 								return (
 									<div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
 										<div className="col-sm-1 p-2">{record.name}</div>
-										<div className="col-sm-2 p-2">{record.userId}</div>
-										<div className="col-sm-3 p-2">{record.email}</div>
+										<div className="col-sm-1 p-2">{record.userId}</div>
+										<div className="col-sm-2 p-2">{record.email}</div>
 										<div className="col-sm-2 p-2">{record.tel}</div>
-										<div className="col-sm-2 p-2">{record.addr}</div>
-										<div className="col-sm-2 p-2">{record.createdAt}</div>
+										<div className="col-sm-4 p-2">{record.addr}</div>
+										<div className="col-sm-2 p-2">{generateDateFormat(record.createdAt)}</div>
 									</div>
 								)
 							})

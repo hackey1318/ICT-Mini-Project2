@@ -17,6 +17,8 @@ public interface LikesRepository extends JpaRepository<Likes, Integer> {
 
     Optional<Likes> findByUserNoAndEventNo(int userNo, int eventNo);
 
+    Optional<Likes> findByUserNoAndEventNoAndStatus(int userNo, int eventNo, StatusInfo status);
+
     List<Likes> findByUserNo(int userNo);
 
     @Modifying

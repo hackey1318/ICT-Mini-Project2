@@ -3,12 +3,12 @@ import '../css/footer.css';
 function Footer(){
     return(
         <>        
-        <ul class="footer">
+        <ul className="footer" style={{marginTop: '135px'}}>
             <li id="footer-logo">
                 <ul>
-                    <li><a href="${pageContext.request.contextPath}/page/policies/privacy-policy">Privacy Policy</a></li>
-                    <li><a href="${pageContext.request.contextPath}/page/policies/terms-of-use">Site Terms of Use</a></li>
-                    <li><a href="${pageContext.request.contextPath}/page/policies/cookie-preferences">Cookie Preferences</a></li>
+                    <li>Privacy Policy</li>
+                    <li>Site Terms of Use</li>
+                    <li>Cookie Preferences</li>
                 </ul>
             </li>
                 <li id="footer-contact">

@@ -100,6 +100,7 @@ function MainPage() {
 
     const setCurrenDate2 = (date) => {
         setCurrentDate(date);
+        setCurrentPage(1);
     };
 
     const DatePicker = ({ currentDate, setCurrenDate2 }) => {

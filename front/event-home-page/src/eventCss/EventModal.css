@@ -27,11 +27,12 @@
   margin-bottom: 10px;
 }
 
-.close-button {
+.event-detail-close-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 2em;
   cursor: pointer;
+  font-family: 'Gowun Batang', sans-serif;
 }
 
 .modal-body {

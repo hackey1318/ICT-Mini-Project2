@@ -27,10 +27,12 @@ import UserDel from './pages/UserDel';
 import Menubar from './pages/MenuBar';
 import Footer from './pages/Footer';
 import NoticePage from './pages/my/noticePage';
+import ScrollToTop from './pages/common/ScrollToTop';
 
 function App() {
   return (
     <BrowserRouter>
+     <ScrollToTop />
       <Menubar />
       <Routes>
         <Route path="/" element={<MainPage />}></Route>

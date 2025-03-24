@@ -54,7 +54,7 @@ function EventModal({ event, onClose }) {
       <div className="modal-contents2">
         <div className="modal-header">
           <h2>{event.title}</h2>
-          <button className="close-button" onClick={onClose}>
+          <button className="event-detail-close-button" onClick={onClose}>
             ×
           </button>
         </div>

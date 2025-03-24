@@ -46,6 +46,10 @@ function EventView() {
 	const [replyToEdit, setReplyToEdit] = useState(null)
 
 	useEffect(() => {
+		window.scrollTo(0, 0); // 페이지 로드 시 최상단으로 이동
+	}, []);
+
+	useEffect(() => {
 		const fetchEvent = async () => {
 			try {
 				const response = await apiNoAccessClient.get(`/api/events/${no}`)

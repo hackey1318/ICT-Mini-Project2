@@ -62,7 +62,6 @@ function Announce() {
         }).catch(function(err) {
             console.log(err)
             if (err.status === 403) {
-                sessionStorage.removeItem("accessToken");
                 setShowError(true);
             }
         }) 

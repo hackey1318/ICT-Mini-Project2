@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import logo from '../img/logo.png';
 import apiClient from './../js/axiosConfig';
+import { AuthContext } from './common/AuthContext';
 
 const StyledLink = styled(Link)`
     text-decoration: none;
@@ -80,7 +81,8 @@ const Nav = styled.nav`
 function Menubar() {
     const navigate = useNavigate();
     const location = useLocation();
-    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
+    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    // const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [userRole, setUserRole] = useState();
 
     useEffect(() => {

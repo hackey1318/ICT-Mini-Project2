@@ -28,52 +28,55 @@ import Menubar from './pages/MenuBar';
 import Footer from './pages/Footer';
 import NoticePage from './pages/my/noticePage';
 import ScrollToTop from './pages/common/ScrollToTop';
+import { AuthProvider } from './pages/common/AuthContext';
 
 function App() {
-  return (
-    <BrowserRouter>
-     <ScrollToTop />
-      <Menubar />
-      <Routes>
-        <Route path="/" element={<MainPage />}></Route>
-        <Route path="/eventView/:no" element={<EventView />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/join' element={<Join />}></Route>
-        <Route path='/editReply/:no' element={<ReviewEdit />}></Route>
+	return (
+		<AuthProvider>
+			<BrowserRouter>
+				<ScrollToTop />
+				<Menubar />
+				<Routes>
+					<Route path="/" element={<MainPage />}></Route>
+					<Route path="/eventView/:no" element={<EventView />}></Route>
+					<Route path='/login' element={<Login />}></Route>
+					<Route path='/join' element={<Join />}></Route>
+					<Route path='/editReply/:no' element={<ReviewEdit />}></Route>
 
-        <Route path="/admin" element={<Admin />}>
-          <Route index element={<MemberList />}></Route>
-          <Route path="memberList" element={<MemberList />}></Route>
-          <Route path="memberDelList" element={<MemberDelList />}></Route>
-          <Route path="bannerList" element={<BannerList />}></Route>
-          <Route path="createBanner" element={<CreateBanner />}></Route>
-          <Route path='announce' element={<Announce />}></Route>
-        </Route>
+					<Route path="/admin" element={<Admin />}>
+						<Route index element={<MemberList />}></Route>
+						<Route path="memberList" element={<MemberList />}></Route>
+						<Route path="memberDelList" element={<MemberDelList />}></Route>
+						<Route path="bannerList" element={<BannerList />}></Route>
+						<Route path="createBanner" element={<CreateBanner />}></Route>
+						<Route path='announce' element={<Announce />}></Route>
+					</Route>
 
-        <Route path="/mypage" element={<MypageLayout />}>
-          <Route index element={<Mypage />}></Route>
-          <Route path="updateMyInfo" element={<UpdateMyInfo />}></Route>
-          <Route path="zzimList" element={<zzimList />}></Route>
-          <Route path="replyList" element={<ReplyList />}></Route>
-        </Route>
+					<Route path="/mypage" element={<MypageLayout />}>
+						<Route index element={<Mypage />}></Route>
+						<Route path="updateMyInfo" element={<UpdateMyInfo />}></Route>
+						<Route path="zzimList" element={<zzimList />}></Route>
+						<Route path="replyList" element={<ReplyList />}></Route>
+					</Route>
 
-        <Route path="/joinEdit" element={<JoinEdit />}></Route>
-        <Route path="/idFind" element={<IdFind />}></Route>
-        <Route path="/pwFind" element={<PwFind />}></Route>
-        <Route path="/userDel" element={<UserDel />}></Route>
+					<Route path="/joinEdit" element={<JoinEdit />}></Route>
+					<Route path="/idFind" element={<IdFind />}></Route>
+					<Route path="/pwFind" element={<PwFind />}></Route>
+					<Route path="/userDel" element={<UserDel />}></Route>
 
-        <Route path="/my" element={<MyPage />}>
-          <Route index element={<LikePage />} />
-          <Route path='likes' element={<LikePage />} />
-          <Route path="joinEdit" element={<JoinEdit />} />
-          <Route path="comments" element={<CommentsPage />} />
-          <Route path='notice' element={<NoticePage/>}/>
-        </Route>
+					<Route path="/my" element={<MyPage />}>
+						<Route index element={<LikePage />} />
+						<Route path='likes' element={<LikePage />} />
+						<Route path="joinEdit" element={<JoinEdit />} />
+						<Route path="comments" element={<CommentsPage />} />
+						<Route path='notice' element={<NoticePage />} />
+					</Route>
 
-      </Routes>
-      <Footer/>
-    </BrowserRouter>
-  );
+				</Routes>
+				<Footer />
+			</BrowserRouter>
+		</AuthProvider>
+	);
 }
 
 export default App;

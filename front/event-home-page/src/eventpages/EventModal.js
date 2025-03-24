@@ -9,7 +9,6 @@ function EventModal({ event, onClose }) {
   const navigate = useNavigate(); 
 
   useEffect(() => {
-    console.log(event);
     const checkOverflow = () => {
       if (textRef.current) {
         setIsOverflowing(textRef.current.scrollHeight > textRef.current.clientHeight);

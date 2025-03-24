@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import '../css/Join.css';
 import apiClient from './../js/axiosConfig';
+import ErrorModal from './common/ErrorModal';
 
 function JoinEdit(){
+
+    const [showErrorModal, setShowErrorModal] = useState(false)
     //회원정보를 보관할 변수
     let [joinData, setJoinData] = useState({
         user_id: '',
@@ -139,6 +142,7 @@ function JoinEdit(){
             if (response.data === "pwdOk") {
                 alert("비밀번호 확인 성공");
                 setPwFound(true);  // 비밀번호 찾기 성공 상태로 변경
+                getJoinEdit();
             } else {
                 alert("비밀번호 확인 실패");
             }
@@ -181,7 +185,6 @@ function JoinEdit(){
         }
 
         //비동기식으로 회원수정 요청
-        const accessToken = sessionStorage.getItem("accessToken");
         const response = apiClient.post(
             "/member/joinEditOk",
             {
@@ -191,12 +194,7 @@ function JoinEdit(){
                 email: joinData.email,
                 tel: tel1+'-'+tel2+'-'+tel3,
                 postalCode: joinData.zipcode,
-                addr: joinData.addr},
-            {
-                headers: {
-                        Authorization: `Bearer ${accessToken}`
-                }
-        }).then(function(response){
+                addr: joinData.addr}).then(function(response){
             if (response.data === "ok") {
                 alert("회원정보 수정 성공. 메인페이지로 이동합니다.");
                 window.location.href = "/";
@@ -205,6 +203,9 @@ function JoinEdit(){
             }
         }).catch(error => {
             console.error("회원정보 수정 중 에러 발생:", error);
+            if (error.status === 403) {
+				setShowErrorModal(true)
+			}
             alert("회원정보 수정 실패. 다시 시도해 주세요.");
         });
     }
@@ -251,90 +252,158 @@ function JoinEdit(){
     }
 
     return (
-        !pwFound ? (
-            <>
-                <form onSubmit={pwdCheck} className='joinEdit-pwFind'>
-                    <h3 className='mb-4 d-none d-md-block'>내 정보 수정</h3>
-                    <div className='joinEdit-pwFind-inner'>
-                        <span className='joinEdit-pwFind-text'>본인 확인을 위해 비밀번호를 한 번 더 입력해 주세요.</span>
-                        <div className="pw-find-input">
-                            <label htmlFor="pw">비밀번호</label><br/>
-                            <input type="password" id="pw" name="pw" className="joinEdit-pw-style" value={joinData.pw} onChange={setFormData} placeholder='비밀번호를 입력하세요.'/>
-                        </div>
-                        <input type="submit" value="비밀번호 확인" className='join-btn joinEdit-pw-btn'/>
-                    </div>
-                </form>
-            </>
-        ) : (
-            <>
-                <div>
-                    <form onSubmit={formCheck}>
+        <>
+            {showErrorModal && <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />}
+            
+            {!pwFound ? (
+                <>
+                    <form onSubmit={pwdCheck} className='joinEdit-pwFind'>
                         <h3 className='mb-4 d-none d-md-block'>내 정보 수정</h3>
-                        <div className='edit-form-inner join-edit-form'>
-                            <div className='join-form-line'>
-                                <div className='join-title'>아이디</div>
-                                <div className='join-input-box'>
-                                    <input type="text" name="user_id" value={joinData.user_id} className='text-box' readOnly/>
-                                </div>
-                                <div id='alert-id' className='alert-text'></div>
+                        <div className='joinEdit-pwFind-inner'>
+                            <span className='joinEdit-pwFind-text'>본인 확인을 위해 비밀번호를 한 번 더 입력해 주세요.</span>
+                            <div className="pw-find-input">
+                                <label htmlFor="pw">비밀번호</label><br />
+                                <input
+                                    type="password"
+                                    id="pw"
+                                    name="pw"
+                                    className="joinEdit-pw-style"
+                                    value={joinData.pw}
+                                    onChange={setFormData}
+                                    placeholder='비밀번호를 입력하세요.'
+                                />
                             </div>
-                            <div className='join-form-line'>
-                                <div className='join-title'>이름</div>
-                                <div className='join-input-box'>
-                                    <input type="text" name="user_name" value={joinData.user_name} className='text-box' minLength={2} readOnly/>
-                                </div>
-                                <div id='alert-username' className='alert-text'></div>
-                            </div>
-                            <div className='join-form-line'>
-                                <div className='join-title'>생년월일</div>
-                                <div className='join-input-box'>
-                                    <input type="text" value={`${year}년`} className='text-box birth' readOnly/>
-                                    <input type="text" value={`${month}월`} className='text-box birth' readOnly/>
-                                    <input type="text" value={`${day}일`} className='text-box birth' readOnly/>
-                                </div>
-                            </div>
-                            <div className='join-form-line'>
-                                <div className='join-title'>이메일</div>
-                                <div className='join-input-box'>
-                                    <input type="email" name="email" value={joinData.email} className='text-box' onChange={setFormData}/>
-                                </div>
-                                <div id='alert-email' className='alert-text'></div>
-                            </div>
-                            <div className='join-form-line'>
-                                <div className='join-title'>연락처</div>
-                                <div className='join-input-box'>
-                                    <input type="text" name="tel1" value={tel1} className='text-box tel' minLength={2} maxLength={3} onChange={(event)=>handleTelChange('tel1',event.target.value)}/>
-                                    -<input type="text" name="tel2" value={tel2} className='text-box tel' minLength={3} maxLength={4} onChange={(event)=>handleTelChange('tel2',event.target.value)}/>
-                                    -<input type="text" name="tel3" value={tel3} className='text-box tel' maxLength={4} minLength={4} onChange={(event)=>handleTelChange('tel3',event.target.value)}/>
-                                    <div id='alert-tel' className='alert-text'></div>
-                                </div>
-                            </div>
-                            <div className='join-form-line addr-zipcode'>
-                                <div className='join-title'>주소</div>
-                                <div className='join-input-box'>
-                                    <input type="text" name="zipcode" value={joinData.zipcode} className='text-box zipcode' onChange={setFormData} readOnly/>
-                                </div>
-                                <br/>
-                                <div id='alert-zipcode' className='alert-text'></div>
-                            </div>
-                            <input type="button" value="우편번호" className='text-box zipcode-btn' onClick={daumPostCodeSearch}/>
-                            <div className='join-form-line'>
-                                <div className='join-title'></div>
-                                <div className='join-input-box'>
-                                    <input type="text" name="addr" value={joinData.addr} className='addr-input' onChange={setFormData} readOnly/>
-                                </div>
-                            </div>
-                            <div>
-                                <input type="submit" value="회원정보수정" className='join-btn'/>
-                            </div>
-                            
+                            <input type="submit" value="비밀번호 확인" className='join-btn joinEdit-pw-btn' />
                         </div>
                     </form>
-                    <a href="/userDel" className='user-del-btn'>회원탈퇴</a>
-                </div>
-            </>
-        )
-    );
+                </>
+            ) : (
+                <>
+                    <div>
+                        <form onSubmit={formCheck}>
+                            <h3 className='mb-4 d-none d-md-block'>내 정보 수정</h3>
+                            <div className='edit-form-inner join-edit-form'>
+                                <div className='join-form-line'>
+                                    <div className='join-title'>아이디</div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="text"
+                                            name="user_id"
+                                            value={joinData.user_id}
+                                            className='text-box'
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div id='alert-id' className='alert-text'></div>
+                                </div>
+                                <div className='join-form-line'>
+                                    <div className='join-title'>이름</div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="text"
+                                            name="user_name"
+                                            value={joinData.user_name}
+                                            className='text-box'
+                                            minLength={2}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <div id='alert-username' className='alert-text'></div>
+                                </div>
+                                <div className='join-form-line'>
+                                    <div className='join-title'>생년월일</div>
+                                    <div className='join-input-box'>
+                                        <input type="text" value={`${year}년`} className='text-box birth' readOnly />
+                                        <input type="text" value={`${month}월`} className='text-box birth' readOnly />
+                                        <input type="text" value={`${day}일`} className='text-box birth' readOnly />
+                                    </div>
+                                </div>
+                                <div className='join-form-line'>
+                                    <div className='join-title'>이메일</div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={joinData.email}
+                                            className='text-box'
+                                            onChange={setFormData}
+                                        />
+                                    </div>
+                                    <div id='alert-email' className='alert-text'></div>
+                                </div>
+                                <div className='join-form-line'>
+                                    <div className='join-title'>연락처</div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="text"
+                                            name="tel1"
+                                            value={tel1}
+                                            className='text-box tel'
+                                            minLength={2}
+                                            maxLength={3}
+                                            onChange={(event) => handleTelChange('tel1', event.target.value)}
+                                        />
+                                        -<input
+                                            type="text"
+                                            name="tel2"
+                                            value={tel2}
+                                            className='text-box tel'
+                                            minLength={3}
+                                            maxLength={4}
+                                            onChange={(event) => handleTelChange('tel2', event.target.value)}
+                                        />
+                                        -<input
+                                            type="text"
+                                            name="tel3"
+                                            value={tel3}
+                                            className='text-box tel'
+                                            maxLength={4}
+                                            minLength={4}
+                                            onChange={(event) => handleTelChange('tel3', event.target.value)}
+                                        />
+                                        <div id='alert-tel' className='alert-text'></div>
+                                    </div>
+                                </div>
+                                <div className='join-form-line addr-zipcode'>
+                                    <div className='join-title'>주소</div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="text"
+                                            name="zipcode"
+                                            value={joinData.zipcode}
+                                            className='text-box zipcode'
+                                            onChange={setFormData}
+                                            readOnly
+                                        />
+                                    </div>
+                                    <br />
+                                    <div id='alert-zipcode' className='alert-text'></div>
+                                </div>
+                                <input type="button" value="우편번호" className='text-box zipcode-btn' onClick={daumPostCodeSearch} />
+                                <div className='join-form-line'>
+                                    <div className='join-title'></div>
+                                    <div className='join-input-box'>
+                                        <input
+                                            type="text"
+                                            name="addr"
+                                            value={joinData.addr}
+                                            className='addr-input'
+                                            onChange={setFormData}
+                                            readOnly
+                                        />
+                                    </div>
+                                </div>
+                                <div>
+                                    <input type="submit" value="회원정보수정" className='join-btn' />
+                                </div>
+                            </div>
+                        </form>
+                        <a href="/userDel" className='user-del-btn'>회원탈퇴</a>
+                    </div>
+                </>
+            )}
+        </>
+    );    
 }
 
 export default JoinEdit;

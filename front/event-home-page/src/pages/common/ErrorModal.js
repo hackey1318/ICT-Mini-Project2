@@ -8,7 +8,12 @@ function ErrorModal({ show, onClose }) {
         console.log("🔍 ErrorModal 렌더링됨, show 상태:", show);
     }, [show]);
 
-    if (!show) return null;
+    if (!show) {
+        return null;
+    } else {
+        sessionStorage.removeItem("accessToken");
+    }
+
 
     return (
         <>

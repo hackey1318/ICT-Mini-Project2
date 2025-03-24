@@ -15,6 +15,7 @@ import del from "../img/del.jpg"
 import apiClient from "../js/axiosConfig"
 import apiNoAccessClient from "./../js/axiosConfigNoAccess"
 import apiFileClient from './../js/axiosFileConfig';
+import ErrorModal from "../pages/common/ErrorModal"
 
 function EventView() {
 	const [eventData, setEventData] = useState({})
@@ -35,6 +36,7 @@ function EventView() {
 	const userNo = sessionStorage.getItem("userNo")
 	const [favorites, setFavorites] = useState(0)
 	const [showError, setShowError] = useState(false)
+	const [showErrorModal, setShowErrorModal] = useState(false)
 
 	const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
 	const [selectedReviewImages, setSelectedReviewImages] = useState([])
@@ -146,9 +148,9 @@ function EventView() {
 					const options = {
 						center: new window.kakao.maps.LatLng(eventData.lat, eventData.lng),
 						level: 3,
-						draggable: false, // 드래그로 지도 이동 막기
+						draggable: true, // 드래그로 지도 이동 막기
 						disableDoubleClickZoom: true, // 더블클릭 확대/축소 막기
-						scrollwheel: false, // 스크롤 휠 확대/축소 막기
+						scrollwheel: true, // 스크롤 휠 확대/축소 막기
 						disableDoubleClick: true, // 더블 클릭 이벤트 막기
 					}
 					const map = new window.kakao.maps.Map(container, options)
@@ -388,6 +390,10 @@ function EventView() {
 			})
 			.catch((error) => {
 				console.log(error)
+				if (error.status === 403) {
+					setShowErrorModal(true)
+				}
+
 			})
 	}
 
@@ -451,8 +457,8 @@ function EventView() {
 
 	function ReviewDelete(no) {
 		if (window.confirm("글을 삭제하시겠습니까?")) {
-			axios
-				.get(`http://192.168.1.252:9988/reply/replyDel/${no}`)
+			apiClient
+				.get(`/reply/replyDel/${no}`)
 				.then((response) => {
 					if (response.data == "deleted") {
 						setReplies((prev) => prev.filter((reply) => reply.no !== no))
@@ -463,6 +469,9 @@ function EventView() {
 				})
 				.catch((error) => {
 					console.log(error)
+					if (error.status === 403) {
+						setShowErrorModal(true)
+					}
 				})
 		}
 	}
@@ -482,7 +491,6 @@ function EventView() {
 			}
 		} catch (err) {
 			if (err.response.status === 403) {
-				sessionStorage.removeItem("accessToken")
 				setShowError(true)
 			}
 		}
@@ -495,6 +503,7 @@ function EventView() {
 
 	return (
 		<div className="event-view-container">
+			<ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
 			<div className="content-wrapper">
 				<button className="back-button" onClick={BackButton}>
 					<span>🠔</span>

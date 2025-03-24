@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import "./../../css/admin.css";
 import apiClient from "../../js/axiosConfig";
+import ErrorModal from "../common/ErrorModal";
 
 const formatDate = (dateTimeString) => dateTimeString?.split("T")[0] || "";
 
@@ -13,6 +14,7 @@ function MemberList() {
 	const [totalPage, setTotalPage] = useState(1);
 	const [searchWord, setSearchWord] = useState("");
 	const mounted = useRef(false);
+	const [showErrorModal, setShowErrorModal] = useState(false)
 
 	useEffect(() => {
 		if (!mounted.current) {
@@ -57,6 +59,9 @@ function MemberList() {
 			})
 			.catch((error) => {
 				console.error(error);
+				if (error.status === 403) {
+					setShowErrorModal(true)
+				}
 			});
 	}
 
@@ -66,6 +71,7 @@ function MemberList() {
 
 	return (
 		<>
+			<ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
 			<h3 className="mb-4 d-none d-md-block">회원 정보 조회</h3>
 			<div className="admin-search-container">
 				<label className="admin-form-label">이름:</label>
@@ -83,24 +89,24 @@ function MemberList() {
 			<div className="admin-container">
 				<div style={{ display: "flex" }}>
 					<div className="right" style={{ flex: 1, padding: "30px" }}>
-						<div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
-							<div className="col-sm-1 p-2">이름</div>
-							<div className="col-sm-1 p-2">아이디</div>
-							<div className="col-sm-2 p-2">이메일</div>
-							<div className="col-sm-2 p-2">연락처</div>
-							<div className="col-sm-4 p-2">주소</div>
-							<div className="col-sm-2 p-2">생성일</div>
+						<div className="row" style={{ borderBottom: "solid #ddd 2px", display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "10px" }}>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>이름</div>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>아이디</div>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>이메일</div>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>연락처</div>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>주소</div>
+							<div className="p-2" style={{ wordBreak: "break-word" }}>생성일</div>
 						</div>
 						{
 							memberData.map(function (record) {
 								return (
-									<div className="row" style={{ borderBottom: 'solid #ddd 2px' }}>
-										<div className="col-sm-1 p-2">{record.name}</div>
-										<div className="col-sm-1 p-2">{record.userId}</div>
-										<div className="col-sm-2 p-2">{record.email}</div>
-										<div className="col-sm-2 p-2">{record.tel}</div>
-										<div className="col-sm-4 p-2">{record.addr}</div>
-										<div className="col-sm-2 p-2">{generateDateFormat(record.createdAt)}</div>
+									<div className="row" style={{ borderBottom: "solid #ddd 2px", display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: "10px" }}>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{record.name}</div>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{record.userId}</div>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{record.email}</div>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{record.tel}</div>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{record.addr}</div>
+										<div className="p-2" style={{ wordBreak: "break-word" }}>{generateDateFormat(record.createdAt)}</div>
 									</div>
 								)
 							})

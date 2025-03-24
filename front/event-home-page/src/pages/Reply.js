@@ -6,11 +6,13 @@ import { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import AddReply from '../js/event/AddReply';
 import apiClient from '../js/axiosConfig';
+import ErrorModal from './common/ErrorModal';
 
 function Reply() {
 
     let [title, setTitle] = useState('');
     let [content, setContent] = useState('');
+    const [showErrorModal, setShowErrorModal] = useState(false)
 
     //후기 제목 함수
     function setTitleValue(event) {
@@ -36,6 +38,9 @@ function Reply() {
         })
         .catch(function(error) {
             console.log(error);
+            if (error.status === 403) {
+                setShowErrorModal(true)
+            }
         })
     }
     
@@ -91,7 +96,8 @@ function Reply() {
     const StyledLink = styled(Link)`text-decoration: none; color: inherit;`;
 
     return (
-        <div className='container' style={{width: '100%', margin: "10% 10% 0"}}>            
+        <div className='container' style={{width: '100%', margin: "10% 10% 0"}}>
+            <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
             <div className='writeForm'>
                 <form onSubmit={addReply}>
                     <input type='text' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue}/><br/>

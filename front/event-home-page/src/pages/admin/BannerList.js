@@ -5,6 +5,7 @@ import { HexColorPicker } from "react-colorful";
 import "./../../css/admin.css";
 import apiNoAccessClient from "../../js/axiosConfigNoAccess";
 import apiClient from "../../js/axiosConfig";
+import ErrorModal from "../common/ErrorModal";
 
 function BannerList() {
   const [bannerData, setBannerData] = useState([]);
@@ -26,6 +27,7 @@ function BannerList() {
     endDate: "",
   });
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false)
 
   useEffect(() => {
     if (!mounted.current || location.state?.refresh) {
@@ -62,6 +64,9 @@ function BannerList() {
       })
       .catch((error) => {
         console.error("배너 목록 조회 오류:", error);
+        if (error.status === 403) {
+          setShowErrorModal(true)
+        }
       });
   }
 
@@ -96,6 +101,9 @@ function BannerList() {
         .catch((error) => {
           console.error("배너 삭제 오류:", error);
           alert("배너 삭제에 실패했습니다.");
+          if (error.status === 403) {
+            setShowErrorModal(true)
+          }
         });
     }
   };
@@ -130,6 +138,9 @@ function BannerList() {
       .catch((error) => {
         console.error("배너 수정 오류:", error);
         alert("배너 수정에 실패했습니다.");
+        if (error.status === 403) {
+          setShowErrorModal(true)
+        }
       });
   };
 
@@ -151,6 +162,7 @@ function BannerList() {
 
   return (
     <div>
+      <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
       <h3 className="mb-4 d-none d-md-block">배너 목록</h3>
       <div style={{ display: "flex" }}>
 

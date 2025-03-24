@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import addFile from '../../img/plus.jpg';
 import apiFileClient from './../axiosFileConfig';
 import apiClient from './../axiosConfig';
+import ErrorModal from "../../pages/common/ErrorModal";
 
 
 function ReviewEdit() {
@@ -11,6 +12,7 @@ function ReviewEdit() {
     let [title, setTitle] = useState('');
     let [content, setContent] = useState('');
     let [isModalOpen, setIsModalOpen] = useState(false);
+    const [showErrorModal, setShowErrorModal] = useState(false);
     const runfile = useRef([]);  //type==file실행 준비 및 사진 갯수제한용
     const accessToken = sessionStorage.getItem("accessToken");
     const userNo = sessionStorage.getItem("userNo");
@@ -58,7 +60,13 @@ function ReviewEdit() {
                 }
                 setIsModalOpen(false);
             })
-            .catch(function (error) { console.log(error) })
+            .catch(function (error) {
+                console.log(error)
+                if (error.status === 403) {
+
+                setShowErrorModal(true)
+                }
+            })
     }
 
     function runInputFile() {  //type=file 실행
@@ -119,6 +127,7 @@ function ReviewEdit() {
 
     return (
         <div className="editContainer">
+            <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
             <div className='writeForm' >
                 <form onSubmit={addReply}>
                     <input type='text' className='write-space' placeholder='제목을 입력해주세요.' name='title' value={title} onChange={setTitleValue} /><br />

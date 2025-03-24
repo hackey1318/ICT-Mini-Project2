@@ -5,11 +5,10 @@ import arrow from '../img/arrow.png';
 //생년월일 관련
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css"; 
-import axios from 'axios';
-import apiClient from './../js/axiosConfig';
 import apiNoAccessClient from '../js/axiosConfigNoAccess';
 
 function Join(){
+
     //footer의 margin-top 제거를 위해 추가 
     useEffect(() => {
         document.body.classList.add("join-page");

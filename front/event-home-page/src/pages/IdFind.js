@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import arrow from '../img/arrow.png';
 import apiNoAccessClient from "../js/axiosConfigNoAccess";
+import ErrorModal from "./common/ErrorModal";
 
 function IdFind(){
+
+    const [showErrorModal, setShowErrorModal] = useState(false);
     //footer의 margin-top 제거를 위해 추가 
     useEffect(() => {
         document.body.classList.add("idFind-page");
@@ -76,7 +79,11 @@ function IdFind(){
         .catch(function(error) {
             // 네트워크 오류나 서버 오류 처리
             console.error("Error:", error);
-            alert("서버와의 통신에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+            if (error.status === 403) {
+                setShowErrorModal(true);
+            } else {
+                alert("서버와의 통신에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+            }
         });
     }
 
@@ -113,6 +120,7 @@ function IdFind(){
     return(
 
         <div className="find-container">
+            <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
             <div className="find-form">
                 {!idFound ? (
                     <>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 import Calendar from "react-calendar";
 import 'react-calendar/dist/Calendar.css';
 import './../eventCss/MainPageStyle.css';
@@ -12,6 +12,7 @@ import NotificationSystem from "../js/notification/notificationInfo";
 import likeIcon from '../img/heart.png';
 import BannerInfo from "../pages/banner/bannerInfo";
 import apiNoAccessClient from "../js/axiosConfigNoAccess";
+import { AuthContext } from "../pages/common/AuthContext";
 
 function MainPage() {
     const StyledLink = styled(Link)`
@@ -27,7 +28,8 @@ function MainPage() {
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
+    const { isLoggedIn, setIsLoggedIn } = useContext(AuthContext);
+    // const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [imageData, setImageData] = useState([]);
     const [filteredImageData, setFilteredImageData] = useState([]);
     const [currentDate, setCurrentDate] = useState(new Date());

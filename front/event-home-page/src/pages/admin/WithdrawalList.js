@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { use, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import apiClient from "../../js/axiosConfig";
+import ErrorModal from "../common/ErrorModal";
 
 const StyledLink = styled(Link)`
         text-decoration:none;
@@ -20,6 +21,7 @@ function WithdrawalList() {
     let [nowPage, setNowPage] = useState(1);
     let [totalPage, setTotalPage] = useState(1)
     let [searchWord, setSearchWord] = useState('');
+    const [showErrorModal, setShowErrorModal] = useState(false)
 
     const mounted = useRef(false);
     useEffect(() => {
@@ -64,6 +66,9 @@ function WithdrawalList() {
             })
             .catch(function (error) {
                 console.log(error);
+                if (error.status === 403) {
+                    setShowErrorModal(true)
+                }
             });
     }
 
@@ -73,6 +78,7 @@ function WithdrawalList() {
 
     return (
         <div>
+            <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
             <h3 className="mb-4 d-none d-md-block">회원 탈퇴 명단</h3>
             <div style={{ display: "flex" }}>
 

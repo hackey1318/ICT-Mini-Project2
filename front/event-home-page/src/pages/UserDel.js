@@ -3,6 +3,7 @@ import { useState } from 'react';
 import '../css/userDel.css';
 import arrow from '../img/arrow.png';
 import apiClient from '../js/axiosConfig';
+import ErrorModal from './common/ErrorModal';
 
 function UserDel() {
     const [selectReason, setSelectReason] = useState('');
@@ -10,6 +11,7 @@ function UserDel() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isLoggedIn, setIsLoggedIn] = useState(!!sessionStorage.getItem('accessToken'));
     const [userRole, setUserRole] = useState();
+    const [showErrorModal, setShowErrorModal] = useState(false)
 
     const handleReasonChange = (e) => {
         setSelectReason(e.target.value);
@@ -41,8 +43,7 @@ function UserDel() {
 
         try {
             setIsSubmitting(true);
-            const accessToken = sessionStorage.getItem("accessToken");
-            const response = await apiClient.post(
+            await apiClient.post(
                 "/member/userDelOk",
                 { content: finalReason }
             ).then(function(response){
@@ -56,6 +57,9 @@ function UserDel() {
         } catch (error) {
             alert("회원탈퇴 중 오류가 발생했습니다.");
             console.error(error);
+            if (error.status === 403) {
+                setShowErrorModal(true)
+            }
         } finally {
             setIsSubmitting(false);
         }
@@ -70,6 +74,7 @@ function UserDel() {
 
     return (
         <div className="wrap">
+            <ErrorModal show={showErrorModal} onClose={() => setShowErrorModal(false)} />
             <div className="user-del-form">
                 <button onClick={() => window.history.back()} style={{fontSize:'20px', position:'absolute', top:'15px', left:'15px', background:'none', border:'none', cursor:'pointer', transition:'background-color 0.3s ease'}}>
                     <img src={arrow} alt="Back Arrow" style={{width: '20px', height:'20px', objectFit:'contain'}} />

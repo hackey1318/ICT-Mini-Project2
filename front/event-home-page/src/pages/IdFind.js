@@ -86,12 +86,28 @@ function IdFind(){
     }
 
     function copyToClipboard() {
-        // 아이디 텍스트를 복사
-        navigator.clipboard.writeText(userId).then(() => {
+        const textArea = document.createElement("textarea");
+        textArea.value = userId; // 복사할 아이디 값 설정
+    
+        // textarea를 DOM에 추가 (보이지 않도록)
+        document.body.appendChild(textArea);
+    
+        // 텍스트 선택 및 복사
+        textArea.select();
+        textArea.setSelectionRange(0, 99999); // 모바일에서도 잘 작동하게 설정
+    
+        // 클립보드에 복사 시도
+        const isCopied = document.execCommand('copy');
+    
+        // 클립보드 복사 후 textarea 제거
+        document.body.removeChild(textArea);
+    
+        // 복사 성공 또는 실패 시 알림
+        if (isCopied) {
             alert("아이디가 복사되었습니다!");
-        }).catch(err => {
+        } else {
             alert("복사에 실패했습니다. 다시 시도해주세요.");
-        });
+        }
     }
 
     return(

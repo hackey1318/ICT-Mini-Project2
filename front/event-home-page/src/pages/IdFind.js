@@ -1,9 +1,16 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./../css/IdpwFind.css";
 import arrow from '../img/arrow.png';
 import apiNoAccessClient from "../js/axiosConfigNoAccess";
 
 function IdFind(){
+    //footer의 margin-top 제거를 위해 추가 
+    useEffect(() => {
+        document.body.classList.add("idFind-page");
+        return () => {
+            document.body.classList.remove("idFind-page");
+        };
+    }, []);
 
     // 폼의 이름과 이메일과 연락처를 보관할 변수
     let [idFindForm, setIdFindForm] = useState({});

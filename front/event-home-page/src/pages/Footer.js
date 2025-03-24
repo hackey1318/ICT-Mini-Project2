@@ -3,7 +3,7 @@ import '../css/footer.css';
 function Footer(){
     return(
         <>        
-        <ul className="footer" style={{marginTop: '135px'}}>
+        <ul className="footer" >
             <li id="footer-logo">
                 <ul>
                     <li>Privacy Policy</li>

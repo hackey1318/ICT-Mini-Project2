@@ -362,7 +362,7 @@ function EventView() {
 		apiClient
 			.post(endpoint, replyData)
 			.then((response) => {
-				if (response.data["result"] === false) {
+				if (response.data["result"] === false || title === "" || content === "") {
 					alert("등록에 실패하였습니다.")
 					return false
 				}

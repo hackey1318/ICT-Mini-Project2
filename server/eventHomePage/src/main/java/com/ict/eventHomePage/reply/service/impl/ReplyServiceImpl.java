@@ -37,7 +37,7 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     public Page<ReplyResponse> getReplyList(Pageable pageable, int id) {
-        return replyRepository.findAllByUserNo(pageable, id);
+        return replyRepository.findAllByUserNo(pageable, id, StatusInfo.ACTIVE);
     }
 
     @Override

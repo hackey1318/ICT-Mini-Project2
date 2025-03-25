@@ -2,10 +2,14 @@ package com.ict.eventHomePage.events.controller;
 
 import com.ict.eventHomePage.domain.Events;
 import com.ict.eventHomePage.domain.EventsVO;
-import com.ict.eventHomePage.domain.PagingVO;
 import com.ict.eventHomePage.events.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/events")
@@ -57,35 +59,19 @@ public class EventController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Map<String, Object>> searchEvents(
-            PagingVO pagingVO,
+    public Page<EventsVO> searchEvents(
+            @PageableDefault(page = 0, size = 10, sort = "startDate", direction = Sort.Direction.DESC) Pageable pageable,
             @RequestParam(required = false, value = "searchTerm") String searchTerm,
             @RequestParam(required = false, value = "selectedDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime selectedDate) {
 
-        try {
-            List<Events> events = eventService.searchEventsWithPaging(pagingVO, searchTerm, selectedDate);
-            List<EventsVO> result = new ArrayList<>();
-            for (Events event : events) {
-                EventsVO evo = modelMapper.map(event, EventsVO.class);
-                evo.setImg_list(eventService.selectImages(event.getNo()));
-                result.add(evo);
-            }
-
-
-            int totalEvents = eventService.getTotalEventsCount(searchTerm, selectedDate);
-
-
-            pagingVO.setTotalRecord(totalEvents);
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("content", result);
-            response.put("paging", pagingVO); // PagingVO 객체 자체를 전달
-
-            return new ResponseEntity<>(response, HttpStatus.OK);
-
-        } catch (Exception e) {
-            System.err.println("Error in searchEvents: " + e.getMessage());
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); // 500 Internal Server Error 반환
+        Page<Events> events = eventService.searchEventsWithPaging(pageable, searchTerm, selectedDate);
+        List<EventsVO> eventVoList = new ArrayList<>();
+        for (Events event : events.getContent()) {
+            EventsVO evo = modelMapper.map(event, EventsVO.class);
+            evo.setImg_list(eventService.selectImages(event.getNo()));
+            eventVoList.add(evo);
         }
+        return new PageImpl<>(eventVoList, pageable, events.getTotalElements());
+
     }
 }

@@ -52,7 +52,7 @@ public class ReplyController {
     @AuthRequired({USER, ADMIN})
     @GetMapping("/replyList")
     public Page<ReplyResponse> getReplyList(
-            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Users user = authService.getUser(AuthCheck.getUserId(USER, ADMIN));
         return replyService.getReplyList(pageable, user.getNo());
     }

@@ -6,6 +6,8 @@ import com.ict.eventHomePage.domain.PagingVO;
 import com.ict.eventHomePage.events.repository.EventImagesRepository;
 import com.ict.eventHomePage.events.repository.EventsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,17 +30,9 @@ public class EventService {
         return eventsRepository.findById(no).orElse(null);
     }
 
-    public List<Events> searchEventsWithPaging(PagingVO pagingVO, String searchTerm, LocalDateTime selectedDate) {
-        List<Events> filteredEvents = eventsRepository.searchEvents(searchTerm, selectedDate);
+    public Page<Events> searchEventsWithPaging(Pageable pageable, String searchTerm, LocalDateTime selectedDate) {
 
-        int startIndex = pagingVO.getOffset();
-        int endIndex = Math.min(startIndex + pagingVO.getOnePageRecord(), filteredEvents.size());
-
-        return filteredEvents.subList(startIndex, endIndex);
-    }
-
-    public int getTotalEventsCount(String searchTerm, LocalDateTime selectedDate) {
-        return eventsRepository.searchEvents(searchTerm, selectedDate).size();
+        return eventsRepository.searchEvents(searchTerm, selectedDate, pageable);
     }
 
     // 기존 검색 로직은 유지합니다.

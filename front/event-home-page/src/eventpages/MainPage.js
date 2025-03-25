@@ -51,18 +51,6 @@ function MainPage() {
     const debouncedSetSearchTerm = useCallback(debounce(setDebouncedSearchTerm, 500), []);
 
     useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await apiNoAccessClient.get('/api/events/ongoing');
-                setImageData(response.data);
-            } catch (error) {
-                console.error('Error fetching events:', error);
-            }
-        };
-        fetchEvents();
-    }, []);
-
-    useEffect(() => {
         setIsLoggedIn(!!sessionStorage.getItem('accessToken'));
     }, []);
 
@@ -70,7 +58,6 @@ function MainPage() {
         const fetchFilteredEvents = async () => {
             try {
                 let apiUrl = `/api/events/search?`;
-                apiUrl += `nowPage=${currentPage}&onePageRecord=${itemsPerPage}&`;
 
                 if (debouncedSearchTerm) {
                     apiUrl += `searchTerm=${debouncedSearchTerm}&`;
@@ -81,10 +68,15 @@ function MainPage() {
 
                 apiUrl = apiUrl.replace(/&$/, '');
 
-                const response = await apiNoAccessClient.get(apiUrl);
+                const response = await apiNoAccessClient.get(apiUrl, {
+                    params: {
+                        page: currentPage - 1,  // 페이지 번호
+                        size: itemsPerPage   // 페이지 크기
+                    }
+                });
 
                 setFilteredImageData(response.data.content);
-                setTotalPages(response.data.paging.totalPage);
+                setTotalPages(response.data.totalPages);
 
             } catch (error) {
                 console.error('Error fetching filtered events:', error);
@@ -207,7 +199,7 @@ function MainPage() {
             {totalPages > 1 && (
                 <div className="pagination-event">
                     {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
-                        <button key={number} onClick={() => paginate(number)} className={currentPage === number ? 'active' : ''}>
+                        <button key={number} onClick={() => paginate(number)} className={currentPage === number? 'active' : ''}>
                             {number}
                         </button>
                     ))}

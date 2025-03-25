@@ -38,6 +38,6 @@ public interface ReplyRepository extends JpaRepository<Replies, Integer> {
     @Query("UPDATE Replies r SET r.status = :status WHERE r.no = :replyNo")
     void updateStatusByReplyNo(@Param("replyNo") int replyNo, @Param("status") StatusInfo status);
 
-    @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no as no, e.no as eventNo, e.title as title, r.content as content, r.status as status, r.createdAt as createdAt, r.updatedAt as updatedAt) FROM Replies r left join Events e on r.eventNo = e.no WHERE r.userNo = :userNo")
-    Page<ReplyResponse> findAllByUserNo(Pageable pageable, @Param("userNo") int id);
+    @Query("SELECT new com.ict.eventHomePage.reply.controller.response.ReplyResponse(r.no as no, e.no as eventNo, e.title as title, r.content as content, r.status as status, r.createdAt as createdAt, r.updatedAt as updatedAt) FROM Replies r left join Events e on r.eventNo = e.no WHERE r.userNo = :userNo AND r.status = :status")
+    Page<ReplyResponse> findAllByUserNo(Pageable pageable, @Param("userNo") int id, @Param("status") StatusInfo status);
 }

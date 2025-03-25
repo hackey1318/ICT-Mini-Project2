@@ -139,8 +139,9 @@ function Menubar() {
             <HeaderMenu>
                 <Nav>
                     <ul>
-                        <li><StyledLink to="/">홈</StyledLink></li>
-                        
+                        <li><StyledLink to="/">축제 / 행사</StyledLink></li>
+                        {userRole && userRole.result === false ? <li><StyledLink to="/my/notice">공지사항</StyledLink></li> : null}
+
                         {isLoggedIn ? (
                             <>
                                 <li>
@@ -156,7 +157,6 @@ function Menubar() {
                                 <li><StyledLink to="/join">회원가입</StyledLink></li>
                             </>
                         )}
-                        {userRole && userRole.result === false ? <li><StyledLink to="/my/notice">공지사항</StyledLink></li> : null}
                     </ul>
                 </Nav>
             </HeaderMenu>

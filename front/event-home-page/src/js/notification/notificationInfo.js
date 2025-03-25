@@ -20,7 +20,6 @@ export default function NotificationSystem() {
     const [size, setSize] = useState(3); // 페이지 당 항목 수
 
     useEffect(() => {
-        // const accessToken = sessionStorage.getItem("accessToken"); // 토큰 가져오기
         if (!!sessionStorage.getItem('accessToken')) {
             loadNotificationCount()
             loadNotifications(page, size)
@@ -54,26 +53,32 @@ export default function NotificationSystem() {
 
     const handleMarkAsRead = async (notificationId) => {
         try {
-            await markNotificationAsRead(notificationId)
+            // 읽음 처리 전에 UI 업데이트 (로컬 상태에서 제거)
+            const updatedNotifications = allNotifications.filter((notification) => notification.id !== notificationId);
+            setAllNotifications(updatedNotifications);
+    
+            // 알림 카운트 업데이트
+            setNotificationCount((prev) => Math.max(0, prev - 1));
+    
+            // 알림 읽음 처리 요청
+            await markNotificationAsRead(notificationId);
 
-            // Remove the notification from the list
-            const updatedNotifications = allNotifications.filter((notification) => notification.id !== notificationId)
-            setAllNotifications(updatedNotifications)
-            // Update the notification count
-            setNotificationCount((prev) => Math.max(0, prev - 1))
-            
-            // Update total pages
-            const newTotalPages = Math.ceil(updatedNotifications.length / size) || 1
-            setTotalPages(newTotalPages)
-
-            // Adjust current page if needed
-            if (page > newTotalPages) {
-                setPage(newTotalPages)
+            // 읽음 처리 후 해당 페이지의 알림을 다시 조회
+            if (updatedNotifications.length === 0 && page + 1 < totalPages) {
+                // 현재 페이지 알림이 모두 읽혀졌을 경우, 다음 페이지의 알림을 조회
+                setPage(page + 1);
+                loadNotifications(page + 1, size); // 다음 페이지의 알림 불러오기
+            } else if (updatedNotifications.length === 0 && page > 0) {
+                // 현재 페이지 알림이 모두 읽혀졌을 경우, 이전 페이지의 알림을 조회
+                setPage(page - 1);
+                loadNotifications(page - 1, size); // 이전 페이지의 알림 불러오기
+            } else {
+                loadNotifications(page, size); // 알림 목록 새로고침
             }
         } catch (error) {
-            console.error("Failed to mark notification as read:", error)
+            console.error("Failed to mark notification as read:", error);
         }
-    }
+    };
 
     const handleMarkAllAsRead = async () => {
         try {
@@ -90,6 +95,7 @@ export default function NotificationSystem() {
             // Reset pagination
             setPage(0)
             setTotalPages(0)
+            loadNotifications(0, size)
         } catch (error) {
             console.error("Failed to mark all notifications as read:", error)
         }
@@ -125,49 +131,49 @@ export default function NotificationSystem() {
                         )}
                     </div>
 
-                    {loading ? (
+                    {loading && allNotifications.length === 0 ? (
                         <div className="notification-loading">로딩 중...</div>
-                        ) : allNotifications.length > 0 ? (
-                            <>
-                                <ul className="notification-list">
-                                    {allNotifications.map(function (notification) {
-                                        return (
-                                        <li key={notification.id} className="notification-item">
-                                            <div className="notification-content">
-                                                <div className="notification-message-container">
-                                                    <p className="notification-message">{notification.content}</p>
-                                                </div>
-                                                <div className="notification-time-and-delete">
-                                                    <span className="notification-time">{moment(notification.createdAt).fromNow()}
-                                                    <button
-                                                        className="delete-button"
-                                                        onClick={() => handleMarkAsRead(notification.id)}
-                                                        aria-label="읽음 표시"
-                                                    >
-                                                        <X className="w-1 h-1" />
-                                                    </button>
-                                                    </span>
-                                                </div>
+                    ) : notificationCount > 0 ? (
+                        <>
+                            <ul className="notification-list">
+                                {allNotifications.map(function (notification) {
+                                    return (
+                                    <li key={notification.id} className="notification-item">
+                                        <div className="notification-content">
+                                            <div className="notification-message-container">
+                                                <p className="notification-message">{notification.content}</p>
                                             </div>
-                                        </li>
-                                        )})
-                                    }
-                                </ul>
-                                {totalPages > 1 && (
-                                    <div className="noti-pagination">
-                                        <button className="noti-pagination-button" onClick={prevPage} disabled={page === 0}>
-                                            ←
-                                        </button>
-                                        <span className="noti-pagination-info">
-                                            {page + 1} / {totalPages}
-                                        </span>
-                                        <button className="noti-pagination-button" onClick={nextPage} disabled={page === totalPages - 1}>
-                                            →
-                                        </button>
-                                    </div>
-                                )}
-                            </>
-                        ) : (
+                                            <div className="notification-time-and-delete">
+                                                <span className="notification-time">{moment(notification.createdAt).fromNow()}
+                                                <button
+                                                    className="delete-button"
+                                                    onClick={() => handleMarkAsRead(notification.id)}
+                                                    aria-label="읽음 표시"
+                                                >
+                                                    <X className="w-1 h-1" />
+                                                </button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    )})
+                                }
+                            </ul>
+                            {totalPages > 1 && (
+                                <div className="noti-pagination">
+                                    <button className="noti-pagination-button" onClick={prevPage} disabled={page === 0}>
+                                        ←
+                                    </button>
+                                    <span className="noti-pagination-info">
+                                        {page + 1} / {totalPages}
+                                    </span>
+                                    <button className="noti-pagination-button" onClick={nextPage} disabled={page === totalPages - 1}>
+                                        →
+                                    </button>
+                                </div>
+                            )}
+                        </>
+                    ) : (
                         <div className="notification-empty">알림이 없습니다</div>
                     )}
 
@@ -181,4 +187,3 @@ export default function NotificationSystem() {
         </div>
     )
 }
-

@@ -21,7 +21,7 @@ public class JwtTokenProvider {
 
     private SecretKey key;
 
-    public static final long JWT_TOKEN_VALIDITY = (long)1000 * 60 * 60;
+    public static final long JWT_TOKEN_VALIDITY = (long)1000 * 60 * 60 * 6;
 
     @PostConstruct
     public void init() {

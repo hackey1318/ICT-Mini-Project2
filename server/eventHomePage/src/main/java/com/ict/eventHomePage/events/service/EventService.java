@@ -8,6 +8,7 @@ import com.ict.eventHomePage.events.repository.EventsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,7 @@ public class EventService {
     }
 
     public List<Events> searchEventsWithPaging(PagingVO pagingVO, String searchTerm, LocalDateTime selectedDate) {
-        List<Events> filteredEvents = searchEvents(searchTerm, selectedDate);
+        List<Events> filteredEvents = eventsRepository.searchEvents(searchTerm, selectedDate);
 
         int startIndex = pagingVO.getOffset();
         int endIndex = Math.min(startIndex + pagingVO.getOnePageRecord(), filteredEvents.size());
@@ -37,30 +38,27 @@ public class EventService {
     }
 
     public int getTotalEventsCount(String searchTerm, LocalDateTime selectedDate) {
-        return searchEvents(searchTerm, selectedDate).size();
+        return eventsRepository.searchEvents(searchTerm, selectedDate).size();
     }
 
     // 기존 검색 로직은 유지합니다.
-    public List<Events> searchEvents(String searchTerm, LocalDateTime selectedDate) {
-        List<Events> allEvents = eventsRepository.findAll();
-
-        return allEvents.stream()
-                .filter(event -> {
-                    boolean isTitleMatch = (searchTerm == null || searchTerm.isEmpty()) ||
-                            event.getTitle().toLowerCase().contains(searchTerm.toLowerCase());
-                    boolean isAddrMatch = (searchTerm == null || searchTerm.isEmpty()) ||
-                            event.getAddr().toLowerCase().contains(searchTerm.toLowerCase());
-                    boolean isDateMatch = (selectedDate == null) ||
-                            (selectedDate.isAfter(event.getStartDate().minusDays(1)) && selectedDate.isBefore(event.getEndDate().plusDays(1)));
-                    return (isTitleMatch || isAddrMatch) && isDateMatch;
-                })
-                .collect(Collectors.toList());
-    }
+//    public List<Events> searchEvents(String searchTerm, LocalDateTime selectedDate) {
+//        List<Events> allEvents = eventsRepository.findAll();
+//
+//        return allEvents.stream()
+//                .filter(event -> {
+//                    boolean isTitleMatch = (searchTerm == null || searchTerm.isEmpty()) ||
+//                            event.getTitle().toLowerCase().contains(searchTerm.toLowerCase());
+//                    boolean isAddrMatch = (searchTerm == null || searchTerm.isEmpty()) ||
+//                            event.getAddr().toLowerCase().contains(searchTerm.toLowerCase());
+//                    boolean isDateMatch = (selectedDate == null) ||
+//                            (selectedDate.isAfter(event.getStartDate().minusDays(1)) && selectedDate.isBefore(event.getEndDate().plusDays(1)));
+//                    return (isTitleMatch || isAddrMatch) && isDateMatch;
+//                })
+//                .collect(Collectors.toList());
+//    }
     public List<Events> getOngoingEvents() {
-        LocalDateTime now = LocalDateTime.now();
-        return eventsRepository.findAll().stream()
-                .filter(event -> event.getStartDate().isBefore(now) && event.getEndDate().isAfter(now))
-                .collect(Collectors.toList());
+        return eventsRepository.findOngoingEvents();
     }
     public List<EventImages> selectImages(int id){
         return e_repo.findAllByEventNo(id);

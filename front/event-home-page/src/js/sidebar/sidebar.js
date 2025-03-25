@@ -37,7 +37,7 @@ function Sidebar({ activeMenu }) {
                     to="/my/comments"
                     className={`list-group-item list-group-item-action border-0 bg-transparent ${activeMenu === "comments" ? "active text-primary" : ""}`}
                 >
-                    작성한 댓글
+                    작성한 후기
                 </Link>
                 <Link
                     to="/my/notice"

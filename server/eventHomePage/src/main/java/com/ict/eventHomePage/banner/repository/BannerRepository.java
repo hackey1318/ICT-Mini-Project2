@@ -27,7 +27,7 @@ public interface BannerRepository extends JpaRepository<Banners, Integer> {
             @Param("addr") String addr);
 
     @Query("SELECT new com.ict.eventHomePage.banner.service.dto.HomeBannerDto(b.no, b.eventNo, e.title, e.startDate, e.endDate, b.color, b.fileId) " +
-            "FROM Banners AS b LEFT JOIN Events as e ON e.no = b.eventNo WHERE b.status = :status  AND b.startDate <= CURRENT_DATE")
+            "FROM Banners AS b LEFT JOIN Events as e ON e.no = b.eventNo WHERE b.status = :status  AND CURRENT_DATE BETWEEN b.startDate AND b.endDate")
     List<HomeBannerDto> findByStatus(@Param("status") StatusInfo status);
 
     @Query("SELECT b, e.title FROM Banners b LEFT JOIN Events e ON b.eventNo = e.no " +

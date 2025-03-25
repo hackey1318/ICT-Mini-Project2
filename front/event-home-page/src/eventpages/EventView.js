@@ -111,8 +111,6 @@ function EventView() {
 				if (likeData.data["result"] === true) {
 					setFavorites(no)
 				}
-
-				setReplies(listData.data)
 			} catch (error) {
 				console.error("Error fetching replies : ", error)
 			}

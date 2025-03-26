@@ -1,0 +1,274 @@
+/* 전체 컨테이너 스타일 */
+.event-view-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    padding: 20px;
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.event-title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.event-image {
+    width: 100%;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+}
+
+.event-image .image-slider {
+    display: flex;
+}
+
+.event-image img {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+.small-images {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+    cursor: grab;
+}
+
+.small-images img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+    border-radius: 4px;
+    object-fit: cover;
+    display: inline-block;
+    scroll-snap-align: start;
+}
+
+.event-actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.event-actions img {
+    width: 30px;
+    height: 30px;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.event-info {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.event-info p {
+    margin-bottom: 10px;
+}
+
+.map {
+    width: 100%;
+    height: 30vh;
+    background-color: beige;
+}
+
+#kakao-map {
+    width: 100%;
+    height: 400px;
+    margin-bottom: 40px;
+}
+
+.overview-container {
+    margin-bottom: 10px;
+}
+
+.overview-text {
+    white-space: pre-line;
+}
+
+.overview-toggle-button {
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.3em;
+}
+
+.overview-toggle-button:hover {
+    background-color: #ddd;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    position: relative;
+    cursor: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10vh;
+    width: auto;
+    height: auto;
+}
+.modal-button {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0 10px;
+}
+.modal-image {
+    max-width: 100%;
+    max-height: calc(90vh - 100px);
+    object-fit: contain;
+    margin: 0 auto;
+    display: block;
+    border-radius: 4px;
+}
+.modal-nav-button {
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.modal-nav-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+.modal-navigation {
+    justify-content: center;
+    margin-top: 10px;
+}
+.modal-close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    font-size: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+    z-index: 10;
+    font-weight: bolder;
+    display: inline-block;
+    line-height: 25px;
+}
+.modal-close-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+.overview-toggle-button {
+    font-family: 'Gowun Batang', sans-serif;
+}
+.back-button {
+    float: left;
+    top: 10px;
+    left: 10px;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 100;
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    font-size: 2.5em;
+    border-radius: 10px;
+    border: 0px
+}
+.modal-nav-button img {
+    width: 40px;
+    height: 40px;
+    filter: invert(100%);
+}
+.back-button:hover{
+    background-color: rgba(114, 186, 204, 0.9);
+}
+.event-info2{
+    text-align: left;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    width: 100%;
+}
+.overview-toggle-button {
+    background-color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1.3em;
+}
+.centered-button{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+@media (max-width: 768px) {
+    .modal-content {
+      padding: 15px;
+      max-width: 95vw;
+    }
+  
+    .modal-image {
+      max-height: calc(95vh - 80px);
+    }
+  
+    .modal-button {
+      padding: 0 5px;
+    }
+}
+
+.modal-close-x {
+    font-family: 'Gowun Batang', sans-serif;
+    font-size: 2em;
+}

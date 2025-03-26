@@ -1,0 +1,114 @@
+/* 전체 배경 스타일 */
+.find-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #F2EEE5, #E5C1C5, #C3E2DD, #6ECEDA);
+}
+
+/* 아이디 찾기 폼을 위한 스타일 */
+.find-form {
+    background-color: #ffffff;
+    padding: 80px 90px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 450px; /* 폼 최대 너비 설정 */
+    max-height: 380px;
+    position: relative;  /* 화살표 버튼을 절대 위치로 놓을 수 있게 함 */
+    width: 100%;
+}
+
+/* 입력 필드 스타일 */
+.id-find-input {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px; /* 각 입력 필드 사이 간격 추가 */
+}
+
+.id-find-input label {
+    margin-bottom: 5px;
+    font-size: 15px;
+    color: #333;
+}
+
+.find-form input {
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 12px;
+    box-shadow: 1px 1px 1px 1px #ddd;  /* 진하고 작은 범위의 그림자 추가 */
+}
+
+/* 버튼 스타일 */
+.idfind-btn {
+    background: #6ECEDA;
+    color: white;
+    padding: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+    width: 100%;
+    box-shadow: 1px 1px 1px 1px #ddd;  /* 진하고 작은 범위의 그림자 추가 */
+}
+
+.idfind-btn:hover {
+    background: #51c8d8;
+}
+
+/* 아이디 찾기 성공시 */
+.findIdSuccess{
+    margin-top: 25px;
+    font-size: 18px;
+}
+
+.userId-style{
+    font-size: 22px;
+    font-weight: 500;
+    text-shadow: 2px 0px 2px rgba(0, 0, 0, 0.2);
+    color:#454949;
+}
+
+.namecopy-style{
+    padding: 5px; 
+    background-color: #D3D3D3; /* 연한 회색 계열 */
+    color: rgb(87, 81, 81); /* 어두운 회색 텍스트 */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-left: 10px;
+    transition: background-color 0.3s, box-shadow 0.2s ease;
+}
+.namecopy-style:hover {
+    background-color: #BEBEBE; /* hover 시 색상 변경 */
+}
+
+/* 로그인 페이지로 이동 버튼 스타일 */
+.login-button {
+    background-color: #6ECEDA;
+    color: white;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* 버튼에 그림자 효과 */
+}
+
+.login-button:hover {
+    background-color: #5AB3B1;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 버튼 hover 시 그림자 강화 */
+}
+
+.pw-style {
+    font-family: 'Gowun Batang', sans-serif;
+    -webkit-text-security: disc; /* 웹킷 브라우저에서 *로 표시 */
+}
+
+.pw-style::placeholder {
+    font-family: 'Cafe24Dangdanghae';
+}

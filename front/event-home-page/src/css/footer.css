@@ -1,0 +1,71 @@
+
+.footer {
+	white-space:nowrap;
+	padding:0;
+	z-index:8;
+	height: 120px;
+	text-align: center;
+	/* background-color:#FFFCF9; */
+	font-size:20px;
+	color: grey;
+	display:flex;
+    border-top: 1px solid #ddd;
+    background-color: transparent;
+	margin-top: 135px;
+}
+
+/* 로그인페이지, 아이디 및 비밀번호찾기 페이지, 회원가입 페이지의 footer의 margin-top 제거를 위해 추가 */
+body.login-page .footer,
+body.idFind-page .footer,
+body.pwFind-page .footer,
+body.join-page .footer{
+	margin-top: 0 !important;
+}
+
+.footer a {
+    color: grey;
+}
+
+#footer-logo{
+	float:left;
+	width:30%;
+	font-size:19px;
+}
+
+#footer-contact{
+	padding:0;
+	font-size:18px;
+	float:left;
+	width:40%;
+}
+
+#footer-logo > ul {
+	padding:0;
+	margin:0;
+	padding-top:25px;
+}
+#footer-logo > ul > li {
+	text-align:left;
+	padding-left:30px;
+}
+#footer-logo > ul > li > a{
+	text-decoration: none;
+}
+
+#footer-contact > p {
+	padding:0;
+	line-height:6px;
+}
+
+#footer-contact > img {
+	margin-left:7px;
+	margin-right:7px;
+}
+
+#footer-copyright{
+	line-height:140px;
+	float:left;
+	width:30%;
+	font-size:20px;
+    text-align: right;
+}

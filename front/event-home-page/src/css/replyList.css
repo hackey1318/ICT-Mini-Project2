@@ -1,0 +1,167 @@
+
+.replies {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.list-container {
+    width: 100%;
+}
+
+#openWriteForm {
+    position: sticky;
+    top: 90%;
+    left: 100%;
+    width: 90px;
+    height: 35px;
+    transform: translateX(40px);
+    border: 0;
+    border-radius: 15px;
+    background-color: #D7E6FF;
+    color: #507ABF;
+    line-height: 35px;
+    cursor: pointer;
+    margin-right: -80px;
+}
+
+.replyList {
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    margin: 30px auto;
+    border: 3px solid #D7E6FF;
+    border-radius: 20px;
+    box-shadow: 0 19px 38px rgba(0, 0, 0, 0.05), 0 10px 20px rgba(0, 0, 0, 0.10);
+}
+
+.replyList>ul {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    margin-top: 20px;
+}
+
+.replyList>ul>li {
+    float: left;
+    list-style-type: none;
+    line-height: 50px;
+}
+
+#title-container {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#img-container {
+    margin: 20px 0;
+}
+
+#img-container>img {
+    width: 60px;
+    height: 60px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+#title {
+    width: 100%;
+    height: 50px;
+    line-height: 30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 1.2em;
+    margin-top: 0px;
+}
+
+#content {
+    width: 100%;
+    height: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow: hidden;
+    overflow-wrap: break-word;
+    text-overflow: ellipsis;
+    max-width: 100%; 
+}
+
+#username {
+    width: 35%;
+    height: 30px;
+    line-height: 30px;
+    font-size: 1.5em;
+}
+
+#date {
+    width: 45%;
+    height: 30px;
+    margin-top: -20px;
+    line-height: 30px;
+    font-size: 0.8em;
+}
+
+.editor1 {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.editor2 {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 0.5;
+}
+
+.editor1:hover {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transition: all 500ms;
+}
+
+.editor2:hover {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
+    transition: all 500ms;
+}
+
+@media (max-width: 1000px) {
+
+    #openWriteForm {
+        position: relative;
+        left: 85%;
+    }
+}
+
+@media (min-width: 880px) {  /**/
+
+    .editor1 {
+        position: absolute;
+        left: 90%;
+    }
+
+    .editor2 {
+        position: absolute;
+        left: 95%;
+    }
+}
+
+@media (max-width: 880px) {
+
+    .editor1 {
+        position: absolute;
+        right: 10%;
+    }
+
+    .editor2 {
+        position: absolute;
+        right: 5%;
+    }
+}
+
